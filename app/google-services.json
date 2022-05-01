@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381207367866",
+    "project_id": "tiemed-192e6",
+    "storage_bucket": "tiemed-192e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381207367866:android:066bb57a3d18780fd8b283",
+        "android_client_info": {
+          "package_name": "com.adrpien.tiemed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381207367866-sphumd4d05k48fbivi6m9iqidobrbkgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCur-O_UOYPmz478svw9mzgf06qVVFOJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381207367866-sphumd4d05k48fbivi6m9iqidobrbkgj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
