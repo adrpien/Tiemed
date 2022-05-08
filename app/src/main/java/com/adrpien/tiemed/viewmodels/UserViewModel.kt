@@ -1,24 +1,25 @@
 package com.adrpien.tiemed.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.adrpien.tiemed.data.User
-import com.adrpien.tiemed.repositories.UserRepository
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.runBlocking
+import com.adrpien.tiemed.datamodels.User
+import com.adrpien.tiemed.repositories.FirebaseRepository
 
 // User ViewModel class
 class UserViewModel: ViewModel() {
 
+    // User stored in MuatableLiveData
     private lateinit var user: MutableLiveData<User>
 
-    val userRepository = UserRepository()
+    // Repository initalization
+    private val userRepository = FirebaseRepository()
 
+    // Returns User
     fun getUser(): MutableLiveData<User> {
         return userRepository.getUserData()
     }
 
+    // Sets User
     fun setUser(user: User){
         userRepository.setUserData(user)
     }

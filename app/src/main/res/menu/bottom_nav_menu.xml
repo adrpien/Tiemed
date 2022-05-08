@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/repairListFragment"
+        android:title="Repairs" />
+    <item
+        android:id="@+id/inspectionsListFragment"
+        android:title="Inspections" />
 </menu>

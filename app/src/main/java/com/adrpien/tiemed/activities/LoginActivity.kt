@@ -3,14 +3,13 @@ package com.adrpien.tiemed.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
 
+    // ViewBinding
     private lateinit var binding: ActivityLoginBinding
-
     // Instace of Firebase Authentication
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -18,18 +17,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Hiding supportActionBar
+        supportActionBar?.hide()
     }
-
-    override fun onStart() {
-        super.onStart()
-
+    override fun onStart() { super.onStart()
         // If user is already logged, go to MainActivity
         isCurrentUser()
     }
 
     private fun isCurrentUser() {
         firebaseAuth.currentUser?.let { auth ->
-
             /*
             FLAG_ACTIVITY_CLEAR_TASK If set in an Intent passed to Context.startActivity(),
             this flag will cause any existing task that would be associated with the activity

@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.data
+package com.adrpien.tiemed.datamodels
 
 enum class UserType {
     HospitalWorker,

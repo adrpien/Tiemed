@@ -5,4 +5,13 @@
     <string name="login">Login</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="id">id</string>
+    <string name="state">state</string>
+    <string name="save">save</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="log_out">Log out</string>
+    <string name="sort">Sort</string>
+    <string name="groupitem">Group</string>
+    <string name="filterItem">Filter</string>
 </resources>
