@@ -1,19 +1,33 @@
 package com.adrpien.tiemed.fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.*
+import android.widget.DatePicker
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.adrpien.tiemed.R
+import com.adrpien.tiemed.TiemedDatePickerDialog
+import com.adrpien.tiemed.activities.MainActivity
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
+import com.adrpien.tiemed.datamodels.Repair
+import com.adrpien.tiemed.viewmodels.EditRepairViewModel
+import com.adrpien.tiemed.viewmodels.RepairListViewModel
 
 
-class EditRepairFragment : Fragment() {
+class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var _binding: FragmentEditRepairBinding? = null
     private val binding
         get() = _binding!!
+
+    val viewModelProvider by viewModels<EditRepairViewModel>()
+
+    init{
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +38,48 @@ class EditRepairFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.idEditText.setText(arguments?.getString("id"))
+
+
+       binding.openingDateButton.setOnClickListener {
+            // Create MyTimePicker
+            val dialog = TiemedDatePickerDialog()
+            // show MyTimePicker
+            dialog.show(childFragmentManager, "time_picker")
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.edit_repair_options_menu, menu)
+    }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId){
+        R.id.saveItem -> {
+            if (arguments?.getString("id") != null){
+                viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
+            }
+            else {
+                viewModelProvider.createRepair(Repair(id = binding.idEditText.text.toString()))
+            }
+            return true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        Toast.makeText(activity, "Date: $year/$month/$dayOfMonth", Toast.LENGTH_SHORT).show()
     }
 
 }

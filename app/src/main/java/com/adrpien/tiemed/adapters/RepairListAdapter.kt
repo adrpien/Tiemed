@@ -4,13 +4,12 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.State
-import com.adrpien.tiemed.fragments.RepairListFragmentDirections
 
 class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItemClickListener)
     : RecyclerView.Adapter<RepairListAdapter.RepairViewHolder>() {
@@ -24,6 +23,14 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
     override fun onBindViewHolder(holder: RepairViewHolder, position: Int) {
         holder.idTextView.text = repairList[position].id.toString()
         holder.stateTextView.text = repairList[position].state.toString()
+
+        holder.viewRepairButton.setOnClickListener {
+            listener.setOnRepairItemClick(holder.itemView)
+        }
+
+        holder.editRepairButton.setOnClickListener {
+            listener.setOnRepairItemClick(holder.itemView)
+        }
 
         if(repairList[position].state == State.Naprawiony){ holder.stateMarker.setBackgroundColor(Color.GREEN) }
         if(repairList[position].state == State.Zgloszony){ holder.stateMarker.setBackgroundColor(Color.RED) }
@@ -39,16 +46,20 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         val idTextView = itemView.findViewById<TextView>(R.id.idTextView)
         val stateTextView = itemView.findViewById<TextView>(R.id.stateTextView)
         val stateMarker = itemView.findViewById<View>(R.id.stateMarker)
+        val editRepairButton = itemView.findViewById<ImageButton>(R.id.editRepairButton)
+        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.viewRepairButton)
 
-        init {
+       /*
+       init {
             itemView.setOnClickListener {
-                listener.setOnRepairItemClick()
+                listener.setOnRepairItemClick(itemView)
             }
         }
+        */
 
     }
 }
 
 interface onRepairItemClickListener{
-    fun setOnRepairItemClick()
+    fun setOnRepairItemClick(itemView: View)
 }

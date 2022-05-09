@@ -3,10 +3,14 @@ package com.adrpien.tiemed.fragments
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.adapters.RepairListAdapter
@@ -15,6 +19,7 @@ import com.adrpien.tiemed.viewmodels.RepairListViewModel
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.State
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class RepairListFragment : Fragment(), onRepairItemClickListener {
@@ -26,6 +31,10 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
     // Lazy creating ViewModelProvider
     val viewModelProvider by viewModels<RepairListViewModel>()
+
+    init{
+        setHasOptionsMenu(true)
+    }
 
     // Creating Fragment Options Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,6 +72,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
         // Setting RecyclerView Adapter
         binding.repairRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.repairRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL))
 
         // Update adapter when data changed
         viewModelProvider
@@ -73,6 +83,13 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
                     binding.repairRecyclerView.adapter = adapter
                 }
             }
+
+        binding.repairsFAB.setOnClickListener { t ->
+
+            // Add new repair record
+            findNavController().navigate(
+                RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())
+        }
     }
 
 
@@ -81,9 +98,12 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
         _binding = null
     }
 
-    override fun setOnRepairItemClick() {
+   override fun setOnRepairItemClick(itemView: View) {
+
+       val id = itemView.findViewById<TextView>(R.id.idTextView).text.toString()
         findNavController().navigate(
-            RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment()
+            RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId,
+            bundleOf("id" to id )
         )
     }
 }

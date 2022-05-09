@@ -21,6 +21,10 @@ class LoginFragment : BaseFragment() {
 
     private val LOGIN_DEBUG = "LOGIN_DEBUG"
 
+    init{
+        setHasOptionsMenu(false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,7 +52,7 @@ class LoginFragment : BaseFragment() {
 
             // Show SnackBar if not logged succesfully
             .addOnFailureListener { exc ->
-                Snackbar.make(requireView(), "Login failure", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Podano błędny e-mail lub hasło", Snackbar.LENGTH_SHORT).show()
                 Log.d(LOGIN_DEBUG, exc.message.toString())
             }
 

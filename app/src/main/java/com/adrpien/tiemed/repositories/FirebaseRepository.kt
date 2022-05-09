@@ -1,8 +1,10 @@
 package com.adrpien.tiemed.repositories
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.adrpien.tiemed.activities.MainActivity
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.User
 import com.google.firebase.auth.FirebaseAuth
@@ -42,10 +44,24 @@ class FirebaseRepository {
 
     // Sets user data in Firestore
     fun setUserData(user: User){
-        // TODO
+        // TODO setUserData
     }
 
-    // Return list of repairss
+    // Creates new repair
+    fun createNewRepair(repair: Repair){
+        firebaseFirestore.collection("repairs")
+            .document(repair.id!!)
+            .set(repair)
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+            .addOnSuccessListener {
+                Toast.makeText(MainActivity(),"Dodano rekord",Toast.LENGTH_SHORT ).show()
+
+            }
+    }
+
+    // Return list of repairs
     fun getRepairList(): MutableLiveData<List<Repair>>{
         val repairList = MutableLiveData<List<Repair>>()
         firebaseFirestore.collection("repairs")
@@ -58,5 +74,19 @@ class FirebaseRepository {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
         return repairList
+    }
+
+    // Update repair record
+    fun updateRepair(map: Map<String, String>){
+        firebaseFirestore.collection("repairs")
+            .document("1")
+            .update(map)
+            .addOnSuccessListener {
+                Log.d(REPOSITORY_DEBUG, "Zaktualizowano dane!")
+            }
+            .addOnFailureListener{
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+
+            }
     }
 }

@@ -10,7 +10,7 @@
         android:id="@+id/logOutItem"
         android:icon="@android:drawable/ic_lock_power_off"
         android:title="@string/log_out"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/aboutItem"
