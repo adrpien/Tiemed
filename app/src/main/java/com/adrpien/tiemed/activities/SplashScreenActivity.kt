@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Menu
-import android.view.MenuItem
-import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.ActivitySplashScreenActivityBinding
+import com.adrpien.tiemed.login.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 

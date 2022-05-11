@@ -1,25 +1,18 @@
-package com.adrpien.tiemed.fragments
+package com.adrpien.tiemed.repairlist
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.adapters.RepairListAdapter
 import com.adrpien.tiemed.adapters.onRepairItemClickListener
-import com.adrpien.tiemed.viewmodels.RepairListViewModel
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
-import com.adrpien.tiemed.datamodels.Repair
-import com.adrpien.tiemed.datamodels.State
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 class RepairListFragment : Fragment(), onRepairItemClickListener {
@@ -89,7 +82,8 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
             // Add new repair record
             findNavController().navigate(
-                RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())
+                com.adrpien.tiemed.repairlist.RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment()
+            )
         }
     }
 
@@ -102,7 +96,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
        val id = itemView.findViewById<TextView>(R.id.idTextView).text.toString()
         findNavController().navigate(
-            RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId,
+            com.adrpien.tiemed.repairlist.RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId,
             bundleOf("id" to id )
         )
     }

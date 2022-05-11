@@ -5,6 +5,6 @@
         android:id="@+id/repairListFragment"
         android:title="Repairs" />
     <item
-        android:id="@+id/inspectionsListFragment"
+        android:id="@+id/inspectionListFragment"
         android:title="Inspections" />
 </menu>

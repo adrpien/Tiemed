@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.fragments
+package com.adrpien.tiemed.editrepair
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -7,14 +7,10 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.TiemedDatePickerDialog
-import com.adrpien.tiemed.activities.MainActivity
+import com.adrpien.tiemed.datepicker.TiemedDatePickerDialog
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.datamodels.Repair
-import com.adrpien.tiemed.viewmodels.EditRepairViewModel
-import com.adrpien.tiemed.viewmodels.RepairListViewModel
 
 
 class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {

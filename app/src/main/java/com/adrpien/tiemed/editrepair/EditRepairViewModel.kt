@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.viewmodels
+package com.adrpien.tiemed.editrepair
 
 import androidx.lifecycle.ViewModel
 import com.adrpien.tiemed.datamodels.Repair

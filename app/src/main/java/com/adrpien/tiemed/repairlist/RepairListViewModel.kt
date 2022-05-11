@@ -1,8 +1,6 @@
-package com.adrpien.tiemed.viewmodels
+package com.adrpien.tiemed.repairlist
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.repositories.FirebaseRepository
 
 class RepairListViewModel : ViewModel() {

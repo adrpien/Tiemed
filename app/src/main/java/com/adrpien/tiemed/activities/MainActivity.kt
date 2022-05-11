@@ -1,5 +1,6 @@
 package com.adrpien.tiemed.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.User
 import com.adrpien.tiemed.databinding.ActivityMainBinding
+import com.adrpien.tiemed.settings.SettingsActivity
 import com.adrpien.tiemed.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -59,7 +61,13 @@ class MainActivity : AppCompatActivity() {
                 finish()
                 true
             }
+            R.id.settingsItem -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 }

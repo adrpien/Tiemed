@@ -46,8 +46,8 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         val idTextView = itemView.findViewById<TextView>(R.id.idTextView)
         val stateTextView = itemView.findViewById<TextView>(R.id.stateTextView)
         val stateMarker = itemView.findViewById<View>(R.id.stateMarker)
-        val editRepairButton = itemView.findViewById<ImageButton>(R.id.editRepairButton)
-        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.viewRepairButton)
+        val editRepairButton = itemView.findViewById<ImageButton>(R.id.stateButton)
+        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.technicianButton)
     }
 }
 

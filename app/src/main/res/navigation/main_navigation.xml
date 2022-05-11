@@ -6,7 +6,7 @@
     app:startDestination="@id/repairListFragment">
     <fragment
         android:id="@+id/repairListFragment"
-        android:name="com.adrpien.tiemed.fragments.RepairListFragment"
+        android:name="com.adrpien.tiemed.repairlist.RepairListFragment"
         android:label="repair_list_fragment"
         tools:layout="@layout/fragment_repair_list" >
         <action
@@ -15,12 +15,11 @@
     </fragment>
     <fragment
         android:id="@+id/editRepairFragment"
-        android:name="com.adrpien.tiemed.fragments.EditRepairFragment"
+        android:name="com.adrpien.tiemed.editrepair.EditRepairFragment"
         android:label="fragment_edit_repair"
         tools:layout="@layout/fragment_edit_repair" />
     <fragment
-        android:id="@+id/inspectionsListFragment"
-        android:name="com.adrpien.tiemed.fragments.InspectionsListFragment"
-        android:label="fragment_inspections_list"
-        tools:layout="@layout/fragment_inspections_list" />
+        android:id="@+id/inspectionListFragment"
+        android:name="com.adrpien.tiemed.inspectionlist.InspectionListFragment"
+        android:label="InspectionListFragment" />
 </navigation>

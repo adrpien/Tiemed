@@ -1,4 +1,4 @@
-package com.adrpien.tiemed
+package com.adrpien.tiemed.datepicker
 
 import android.app.DatePickerDialog
 import android.app.Dialog

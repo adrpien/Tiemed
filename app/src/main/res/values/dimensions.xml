@@ -2,8 +2,8 @@
 <resources>
 
     <!-- Repair list cell dimensions -->
-    <dimen name="cell_height">70dp</dimen>
-    <dimen name="cell_margin">5dp</dimen>
+    <dimen name="cell_height">120dp</dimen>
+    <dimen name="cell_margin">15dp</dimen>
     <dimen name="state_marker_width">15dp</dimen>
 
 </resources>
