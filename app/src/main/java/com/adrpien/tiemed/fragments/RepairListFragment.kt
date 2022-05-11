@@ -32,6 +32,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
     // Lazy creating ViewModelProvider
     val viewModelProvider by viewModels<RepairListViewModel>()
 
+    // Options menu
     init{
         setHasOptionsMenu(true)
     }
@@ -47,11 +48,11 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
         // Handle item selection
         return when (item.itemId) {
             R.id.sortItem-> {
-                // TODO Set sorting and update adapter
+                // TODO Repairs sorting and update adapter
                 true
             }
             R.id.groupItem-> {
-                // TODO Set sorting and update adapter
+                // TODO Repair grouping and update adapter
                 true
             }
 
@@ -91,7 +92,6 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
                 RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -17,11 +18,15 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
+    // ViewBinding
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var userViewModel: UserViewModel
+    // ViewModel
+    val userViewModel by viewModels<UserViewModel> ()
+
     private var user: User? = null
 
+    // Firebase Authentication required to log out
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +37,7 @@ class MainActivity : AppCompatActivity() {
         // Creating Bottom Navigation View with Navigation Controller
         binding.bottomNavigationView.setupWithNavController(findNavController(R.id.mainFragmentContainer))
 
-        // Creating instance of ViewModelProvider
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        // Getting data from ViewModel
         var userLiveData = userViewModel.getUser()
         user = userLiveData.value
 

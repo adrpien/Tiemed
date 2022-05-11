@@ -13,6 +13,7 @@ class LoginActivity : AppCompatActivity() {
     // Instace of Firebase Authentication
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -21,11 +22,13 @@ class LoginActivity : AppCompatActivity() {
         // Hiding supportActionBar
         supportActionBar?.hide()
     }
+
     override fun onStart() { super.onStart()
-        // If user is already logged, go to MainActivity
+        // Go to MainActivity, if user is already logged
         isCurrentUser()
     }
 
+    // Go to MainActivity, if user is logger
     private fun isCurrentUser() {
         firebaseAuth.currentUser?.let { auth ->
             /*

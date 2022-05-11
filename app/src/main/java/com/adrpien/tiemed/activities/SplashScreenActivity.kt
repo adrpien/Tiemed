@@ -12,7 +12,11 @@ import com.adrpien.tiemed.databinding.ActivitySplashScreenActivityBinding
 
 class SplashScreenActivity : AppCompatActivity() {
 
+    // ViewBinding
     private lateinit var binding: ActivitySplashScreenActivityBinding
+
+    // Delay duration
+    val DELAY_DURATION = 3000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +28,12 @@ class SplashScreenActivity : AppCompatActivity() {
         // Hiding supportActionBar
         supportActionBar?.hide()
 
+        // Setting time delay
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
             val intent = Intent (this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }, 2000)
+        }, DELAY_DURATION)
     }
 
 }

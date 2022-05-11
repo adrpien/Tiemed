@@ -27,7 +27,6 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         holder.viewRepairButton.setOnClickListener {
             listener.setOnRepairItemClick(holder.itemView)
         }
-
         holder.editRepairButton.setOnClickListener {
             listener.setOnRepairItemClick(holder.itemView)
         }
@@ -42,24 +41,17 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         return repairList.size
     }
 
+    // ViewHolder class implementation
     inner class RepairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val idTextView = itemView.findViewById<TextView>(R.id.idTextView)
         val stateTextView = itemView.findViewById<TextView>(R.id.stateTextView)
         val stateMarker = itemView.findViewById<View>(R.id.stateMarker)
         val editRepairButton = itemView.findViewById<ImageButton>(R.id.editRepairButton)
         val viewRepairButton = itemView.findViewById<ImageButton>(R.id.viewRepairButton)
-
-       /*
-       init {
-            itemView.setOnClickListener {
-                listener.setOnRepairItemClick(itemView)
-            }
-        }
-        */
-
     }
 }
 
+// Creating listener implemented by fragment
 interface onRepairItemClickListener{
     fun setOnRepairItemClick(itemView: View)
 }

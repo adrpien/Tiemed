@@ -19,12 +19,16 @@ import com.adrpien.tiemed.viewmodels.RepairListViewModel
 
 class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
+
+    // ViewBinding
     private var _binding: FragmentEditRepairBinding? = null
     private val binding
         get() = _binding!!
 
+    // ViewModel
     val viewModelProvider by viewModels<EditRepairViewModel>()
 
+    // Init
     init{
         setHasOptionsMenu(true)
     }
@@ -41,15 +45,16 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Setting TextViews with values
         binding.idEditText.setText(arguments?.getString("id"))
 
-
-       binding.openingDateButton.setOnClickListener {
-            // Create MyTimePicker
-            val dialog = TiemedDatePickerDialog()
-            // show MyTimePicker
-            dialog.show(childFragmentManager, "time_picker")
-        }
+        // Setting openingButton listener
+        binding.openingDateButton.setOnClickListener {
+             // Create MyTimePicker
+             val dialog = TiemedDatePickerDialog()
+             // show MyTimePicker
+             dialog.show(childFragmentManager, "time_picker")
+         }
     }
 
     override fun onDestroy() {
@@ -60,8 +65,6 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.edit_repair_options_menu, menu)
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId){
@@ -78,6 +81,8 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
     }
 
+
+    // Implementing DatePickerDialog.OnDateSetListener in fragment to use ViewModel, which is not in adapter
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         Toast.makeText(activity, "Date: $year/$month/$dayOfMonth", Toast.LENGTH_SHORT).show()
     }

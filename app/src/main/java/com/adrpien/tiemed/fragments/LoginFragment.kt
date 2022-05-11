@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : BaseFragment() {
 
-
+    // ViewBinding
     private var _binding: FragmentLoginBinding? = null
     private val binding
         get() = _binding!!
@@ -25,12 +25,7 @@ class LoginFragment : BaseFragment() {
         setHasOptionsMenu(false)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -38,7 +33,7 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.loginButton.setOnClickListener {
-            // Execute login
+            // Execute login action
             setupLoginClick()
         }
     }
@@ -47,15 +42,12 @@ class LoginFragment : BaseFragment() {
 
         val mail = binding.emailEditText.text?.trim().toString()
         val password = binding.passwordEditText.text?.trim().toString()
-
         firebaseAuth.signInWithEmailAndPassword(mail, password)
-
             // Show SnackBar if not logged succesfully
             .addOnFailureListener { exc ->
                 Snackbar.make(requireView(), "Podano błędny e-mail lub hasło", Snackbar.LENGTH_SHORT).show()
                 Log.d(LOGIN_DEBUG, exc.message.toString())
             }
-
             // Go to main ativity if logged succesfully
             .addOnSuccessListener {
                 if(it.user != null) startApp()

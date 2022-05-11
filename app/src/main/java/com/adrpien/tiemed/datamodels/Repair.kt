@@ -3,7 +3,7 @@ package com.adrpien.tiemed.datamodels
 import java.util.*
 
 data class Repair(
-    var id: String? = null,
+    val id: String? = null,
     var openingDate: Date? = null,
     var closingDate: Date? = null,
     var state: State? = null,
