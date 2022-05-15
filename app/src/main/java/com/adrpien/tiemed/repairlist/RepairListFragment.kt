@@ -40,11 +40,11 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.itemId) {
-            R.id.sortItem-> {
+            R.id.repairSortItem-> {
                 // TODO Repairs sorting and update adapter
                 true
             }
-            R.id.groupItem-> {
+            R.id.repairGroupItem-> {
                 // TODO Repair grouping and update adapter
                 true
             }
@@ -94,7 +94,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
    override fun setOnRepairItemClick(itemView: View) {
 
-       val id = itemView.findViewById<TextView>(R.id.idTextView).text.toString()
+       val id = itemView.findViewById<TextView>(R.id.idRepairTextView).text.toString()
         findNavController().navigate(
             com.adrpien.tiemed.repairlist.RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId,
             bundleOf("id" to id )

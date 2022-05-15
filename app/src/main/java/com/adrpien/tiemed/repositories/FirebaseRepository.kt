@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.activities.MainActivity
+import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.User
 import com.google.firebase.auth.FirebaseAuth
@@ -88,5 +89,19 @@ class FirebaseRepository {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
 
             }
+    }
+
+    fun getInspectionList():MutableLiveData<List<Inspection>>{
+        val inspectionList = MutableLiveData<List<Inspection>>()
+        firebaseFirestore.collection("inspections")
+            .get().addOnSuccessListener{
+                val inspection = it.toObjects(Inspection::class.java)
+                inspectionList.postValue(inspection)
+            }
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+
+        return inspectionList
     }
 }

@@ -6,7 +6,7 @@ data class Repair(
     val id: String? = null,
     var openingDate: Date? = null,
     var closingDate: Date? = null,
-    var state: State? = null,
+    var repairState: RepairState? = null,
     var hospital: Hospital? = null,
     var device: String? = null,
     var producer: String? = null,

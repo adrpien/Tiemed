@@ -20,35 +20,44 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/idTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/inspectionIdTextView"
             android:layout_height="wrap_content"
-            android:layout_marginStart="232dp"
-            android:layout_marginTop="24dp"
             android:clickable="false"
-            app:layout_constraintStart_toEndOf="@+id/stateMarker"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/technicianButton"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="0dp"/>
 
         <TextView
-            android:id="@+id/stateTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/inspectionStateTextView"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/stateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/idTextView" />
+            app:layout_constraintStart_toEndOf="@+id/technicianButton"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionIdTextView" />
+
+        <TextView
+            android:id="@+id/inspectionDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionIdTextView" />
 
         <ImageButton
             android:id="@+id/technicianButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintLeft_toRightOf="@id/stateButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toEndOf="@+id/stateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/stateButton"
             app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
 
         <ImageButton
             android:id="@+id/stateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:layout_constraintLeft_toRightOf="@id/stateMarker"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="?attr/actionModePasteDrawable" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

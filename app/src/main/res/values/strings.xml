@@ -29,7 +29,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="App">App</string>
-    <string name="dark_mode">Dark mode</string>
+    <string name="dark_mode">darkMode</string>
     <string name="user">User</string>
     <string name="resetPasswordButton">resetPasswordButton</string>
 </resources>

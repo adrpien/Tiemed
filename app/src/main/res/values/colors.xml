@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_blue">#263798</color>
-    <color name="blue">#2941C5</color>
-    <color name="light_blue">#536AE8</color>
+
+    <!--
+    App colours
+    -->
+
+    <color name="dark_blue">#1B2873</color>
+    <color name="blue">#182FA5</color>
+    <color name="light_blue">#2843D8</color>
     <color name="mint">#FF03DAC5</color>
     <color name="dark_mint">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="background_colour">#104A79</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 
     <!--
     States colors
     -->
-
     <color name="Zgloszony">#7E1A1A</color>
+
+
 </resources>

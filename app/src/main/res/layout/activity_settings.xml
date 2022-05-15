@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".settings.SettingsActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.adrpien.tiemed.settings.SettingsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

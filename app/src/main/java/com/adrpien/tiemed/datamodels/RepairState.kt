@@ -1,6 +1,6 @@
 package com.adrpien.tiemed.datamodels
 
-enum class State {
+enum class RepairState {
     Zgloszony,
     W_trakcie,
     Oczekujacy,

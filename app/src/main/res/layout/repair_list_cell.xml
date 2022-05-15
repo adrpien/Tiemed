@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/cell_height"
     android:layout_margin="@dimen/cell_margin"
+    android:background="@android:color/transparent"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/idTextView"
+            android:id="@+id/idRepairTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             app:layout_constraintStart_toEndOf="@+id/stateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/idTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/idRepairTextView" />
 
         <ImageButton
             android:id="@+id/technicianButton"

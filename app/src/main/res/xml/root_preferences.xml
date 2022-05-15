@@ -3,15 +3,16 @@
 
     <PreferenceCategory app:title="@string/App">
         <SwitchPreferenceCompat
+            android:id="@+id/preferenceSwitch"
             app:key="@string/dark_mode"
-            app:title="@string/dark_mode"/>
+            app:title="@string/dark_mode" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/user">
         <Preference
         android:title="Reset Password"
         android:key="@string/resetPasswordButton"
-        android:summary="Reset Password" />
+        android:summary="Reset your password" />
     </PreferenceCategory>
 
 </PreferenceScreen>

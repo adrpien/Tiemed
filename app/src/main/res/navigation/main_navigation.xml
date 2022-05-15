@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+ <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_repairListFragment_to_editRepairFragment"
             app:destination="@id/editRepairFragment" />
+        <action
+            android:id="@+id/action_repairListFragment_to_viewRepairFragment"
+            app:destination="@id/viewRepairFragment" />
     </fragment>
     <fragment
         android:id="@+id/editRepairFragment"
@@ -21,5 +24,27 @@
     <fragment
         android:id="@+id/inspectionListFragment"
         android:name="com.adrpien.tiemed.inspectionlist.InspectionListFragment"
-        android:label="InspectionListFragment" />
+        android:label="InspectionListFragment" >
+        <action
+            android:id="@+id/action_inspectionListFragment_to_editInspectionFragment"
+            app:destination="@id/editInspectionFragment" />
+        <action
+            android:id="@+id/action_inspectionListFragment_to_viewInspectionFragment"
+            app:destination="@id/viewInspectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editInspectionFragment"
+        android:name="com.adrpien.tiemed.editinspection.EditInspectionFragment"
+        android:label="fragment_edit_inspection"
+        tools:layout="@layout/fragment_edit_inspection" />
+    <fragment
+        android:id="@+id/viewRepairFragment"
+        android:name="com.adrpien.tiemed.viewrepair.ViewRepairFragment"
+        android:label="fragment_view_repair"
+        tools:layout="@layout/fragment_view_repair" />
+    <fragment
+        android:id="@+id/viewInspectionFragment"
+        android:name="com.adrpien.tiemed.viewinspection.ViewInspectionFragment"
+        android:label="fragment_view_inspection"
+        tools:layout="@layout/fragment_view_inspection" />
 </navigation>
