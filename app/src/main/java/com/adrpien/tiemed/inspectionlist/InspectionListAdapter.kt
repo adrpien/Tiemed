@@ -9,9 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Inspection
+import com.adrpien.tiemed.datepicker.InspectionDatePickerDialog
+import com.adrpien.tiemed.datepicker.RepairDatePickerDialog
 import java.lang.Long.parseLong
 
-class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnInspectionItemClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
+class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
 
 
 
@@ -25,8 +27,28 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
     override fun onBindViewHolder(holder: InspectionViewHolder, position: Int) {
 
-        holder.inspectionRowIdTextView.setText(inspectionList[position].id)
+        // Technician Button onClickListener
+        holder.inspectionRowStateButton.setOnClickListener { view ->
+            listener.setOnStateButtonClickListener(view)
+        }
+
+        // State Button onClickListener
+        holder.inspectionRowDateButton.setOnClickListener { view ->
+            listener.setOnDateButtonClickListener(view)
+        }
+
+        holder.itemView.setOnClickListener { view ->
+            listener.setOnInspectionItemClickListener(view)
+        }
+
+        // Filling TextViews with values
         holder.inspectionRowDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
+        holder.inspectionRowNameTextView.setText(inspectionList[position].name)
+        val manufacturer: String = inspectionList[position].manufacturer + " " + inspectionList[position].model
+        holder.inspectionRowManufacturerTextView.setText(manufacturer)
+
+
+
 
     }
 
@@ -37,12 +59,14 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
     inner class InspectionViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
+
+
         // State marker
         val inspectionRowStateMarker = itemview.findViewById<View>(R.id.inspectionRowStateMarker)
 
         // Buttons
-        val inspectionRowTechnicianButton = itemview.findViewById<ImageButton>(R.id.inspectionRowTechnicianButton)
         val inspectionRowStateButton = itemview.findViewById<ImageButton>(R.id.inspectionRowStateButton)
+        val inspectionRowDateButton = itemview.findViewById<ImageButton>(R.id.inspectionRowDateButton)
 
         // TextViews
         val inspectionRowIdTextView = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView)
@@ -53,11 +77,14 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
         val inspectionRowINTextView = itemView.findViewById<TextView>(R.id.inspectionRowINTextView)
         val inspectionRoweLocalizationTextView = itemView.findViewById<TextView>(R.id.inspectionRowLocalizationTextView)
 
+
     }
 }
 
-interface OnInspectionItemClickListener {
+interface OnInspectionClickListener {
     fun setOnInspectionItemClickListener(itemview: View)
+    fun setOnDateButtonClickListener(itemview: View)
+    fun setOnStateButtonClickListener(itemview: View)
 }
 
 // Returns date in format YYYY/MM/DD

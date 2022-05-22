@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.535" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.38" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/maintenance_icon.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/repair_icon.xml" value="0.119" />
@@ -15,8 +16,8 @@
         <entry key="app/src/main/res/layout/activity_splash_screen_acticity.xml" value="0.11574074074074074" />
         <entry key="app/src/main/res/layout/activity_splash_screen_activity.xml" value="0.3796875" />
         <entry key="app/src/main/res/layout/fragment_add_repair.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.3796875" />
-        <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.36341463414634145" />
+        <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.19345238095238096" />
         <entry key="app/src/main/res/layout/fragment_inspection_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_inspections_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.346875" />
@@ -27,7 +28,7 @@
         <entry key="app/src/main/res/layout/fragment_technician_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_view_inspection.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_view_repair.xml" value="0.3796875" />
-        <entry key="app/src/main/res/layout/inspection_list_cell.xml" value="0.3296296296296296" />
+        <entry key="app/src/main/res/layout/inspection_list_cell.xml" value="0.3055555555555556" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.2109375" />
         <entry key="app/src/main/res/layout/menu_cell.xml" value="0.5" />
         <entry key="app/src/main/res/layout/repair_list_cell.xml" value="0.34375" />

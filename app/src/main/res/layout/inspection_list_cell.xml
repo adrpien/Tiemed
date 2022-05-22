@@ -22,7 +22,7 @@
             tools:layout_editor_absoluteY="5dp" />
 
         <ImageButton
-            android:id="@+id/inspectionRowTechnicianButton"
+            android:id="@+id/inspectionRowStateButton"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -35,7 +35,7 @@
             app:srcCompat="@drawable/executor_icon" />
 
         <ImageButton
-            android:id="@+id/inspectionRowStateButton"
+            android:id="@+id/inspectionRowDateButton"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -54,7 +54,7 @@
             android:layout_marginEnd="10dp"
             android:gravity="right"
             android:text="Inspection date: "
-            app:layout_constraintEnd_toStartOf="@+id/inspectionRowStateButton"
+            app:layout_constraintEnd_toStartOf="@+id/inspectionRowDateButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Nazwa"
+            android:text="Name"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowIdTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,9 +81,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="Producent Model"
+            android:text="Manufacturer"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowNameTextView" />
+
+        <TextView
+            android:id="@+id/inspectionRowModelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Model"
+            app:layout_constraintStart_toEndOf="@+id/inspectionRowManufacturerTextView"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionRowIdTextView" />
 
         <TextView
             android:id="@+id/inspectionRowSNTextView"
@@ -108,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="Lokalizacja: "
+            android:text="Localization: "
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView" />
 

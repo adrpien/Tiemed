@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import java.util.*
 
 
-class TiemedDatePickerDialog: DialogFragment() {
+class RepairDatePickerDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.datepicker.TiemedDatePickerDialog
+import com.adrpien.tiemed.datepicker.RepairDatePickerDialog
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.datamodels.Repair
 
@@ -46,10 +46,10 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
         // Setting openingButton listener
         binding.openingDateButton.setOnClickListener {
-             // Create MyTimePicker
-             val dialog = TiemedDatePickerDialog()
+             // Create TimePicker
+             val dialog = RepairDatePickerDialog()
              // show MyTimePicker
-             dialog.show(childFragmentManager, "time_picker")
+             dialog.show(childFragmentManager, "repair_time_picker")
          }
     }
 
