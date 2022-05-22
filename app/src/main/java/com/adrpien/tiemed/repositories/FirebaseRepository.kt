@@ -23,6 +23,12 @@ class FirebaseRepository {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+
+    /*
+    *********************************
+    USERS
+    *********************************
+    */
     // Returns user stored in LiveData
     fun getUserData(): MutableLiveData<User> {
         userData = MutableLiveData<User>()
@@ -46,6 +52,12 @@ class FirebaseRepository {
     fun setUserData(user: User){
         // TODO setUserData
     }
+
+    /*
+    *********************************
+    REPAIRS
+    *********************************
+     */
 
     // Creates new repair
     fun createNewRepair(repair: Repair){
@@ -90,6 +102,13 @@ class FirebaseRepository {
             }
     }
 
+    /*
+    *********************************
+    INSPECTIONS
+    *********************************
+     */
+
+    // Returns list of inspections
     fun getInspectionList():MutableLiveData<List<Inspection>>{
         val inspectionList = MutableLiveData<List<Inspection>>()
         firebaseFirestore.collection("inspections")
@@ -102,5 +121,17 @@ class FirebaseRepository {
             }
 
         return inspectionList
+    }
+
+    fun createNewInspection(inspection: Inspection){
+        firebaseFirestore.collection("inspections")
+            .document(inspection.id!!)
+            .set(inspection)
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+            .addOnSuccessListener {
+                Toast.makeText(MainActivity(),"Dodano rekord",Toast.LENGTH_SHORT ).show()
+            }
     }
 }

@@ -9,4 +9,6 @@ class InspectionListViewModel: ViewModel() {
 
     val inspectionList = repository.getInspectionList()
 
+
+
 }

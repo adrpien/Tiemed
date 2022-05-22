@@ -22,7 +22,7 @@
             tools:layout_editor_absoluteY="5dp" />
 
         <ImageButton
-            android:id="@+id/inspectionTechnicianButton"
+            android:id="@+id/inspectionRowTechnicianButton"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"

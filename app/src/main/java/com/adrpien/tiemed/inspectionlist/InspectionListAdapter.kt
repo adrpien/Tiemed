@@ -4,13 +4,12 @@ import android.icu.util.Calendar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Inspection
-import java.lang.reflect.Array.get
-import java.util.*
-import java.util.Calendar as Calendar1
+import java.lang.Long.parseLong
 
 class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnInspectionItemClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
 
@@ -26,8 +25,8 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
     override fun onBindViewHolder(holder: InspectionViewHolder, position: Int) {
 
-        holder.inspectionIdTextView.setText(inspectionList[position].id)
-        holder.inspectionDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
+        holder.inspectionRowIdTextView.setText(inspectionList[position].id)
+        holder.inspectionRowDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
 
     }
 
@@ -38,8 +37,21 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
     inner class InspectionViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
-        val inspectionIdTextView = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView)
-        val inspectionDateTextView = itemView.findViewById<TextView>(R.id.inspectionRowDateTextView)
+        // State marker
+        val inspectionRowStateMarker = itemview.findViewById<View>(R.id.inspectionRowStateMarker)
+
+        // Buttons
+        val inspectionRowTechnicianButton = itemview.findViewById<ImageButton>(R.id.inspectionRowTechnicianButton)
+        val inspectionRowStateButton = itemview.findViewById<ImageButton>(R.id.inspectionRowStateButton)
+
+        // TextViews
+        val inspectionRowIdTextView = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView)
+        val inspectionRowDateTextView = itemView.findViewById<TextView>(R.id.inspectionRowDateTextView)
+        val inspectionRowNameTextView = itemView.findViewById<TextView>(R.id.inspectionRowNameTextView)
+        val inspectionRowManufacturerTextView = itemView.findViewById<TextView>(R.id.inspectionRowManufacturerTextView)
+        val inspectionRowSNTextView = itemView.findViewById<TextView>(R.id.inspectionRowINTextView)
+        val inspectionRowINTextView = itemView.findViewById<TextView>(R.id.inspectionRowINTextView)
+        val inspectionRoweLocalizationTextView = itemView.findViewById<TextView>(R.id.inspectionRowLocalizationTextView)
 
     }
 }
@@ -48,38 +60,32 @@ interface OnInspectionItemClickListener {
     fun setOnInspectionItemClickListener(itemview: View)
 }
 
-
+// Returns date in format YYYY/MM/DD
 fun getDateString(date: String): String {
 
     var text: String = ""
 
     // Parsing millis in String to Calendar Object
-    val millis: Long = Integer.parseInt(date).toLong()
+    val millis: Long = parseLong(date).toLong()
     val date = Calendar.getInstance()
     date.timeInMillis = millis
 
     // Creating String with with date
-    val yearString = if(date.get(Calendar.YEAR)<10){
-        date.get(Calendar.YEAR). toString()
-    }
-    else {
-        "0" + date.get(Calendar.YEAR).toString()
-    }
+    val yearString = date.get(Calendar.YEAR). toString()
 
     val month = date.get(Calendar.MONTH) + 1
-    val monthString = if(date.get(Calendar.MONTH)<10){
-        date.get(Calendar.MONTH). toString()
-    }
-    else {
-        "0" + date.get(Calendar.MONTH).toString()
-    }
+    val monthString = if(month<10){
+            "0" + month.toString()
+        } else {
+            month.toString()
+        }
 
     val day = date.get(Calendar.DAY_OF_MONTH)
     val dayString = if(date.get(Calendar.DAY_OF_MONTH)<10){
-        date.get(Calendar.DAY_OF_MONTH). toString()
+        "0" + day.toString()
     }
     else {
-        "0" + date.get(Calendar.DAY_OF_MONTH).toString()
+        day.toString()
     }
 
     text = "$yearString/$monthString/$dayString"

@@ -12,11 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiemed">
         <activity
-            android:name=".addrepair.AddRepairActivity"
-            android:exported="false"
-            android:label="@string/title_activity_add_repair"
-            android:theme="@style/Theme.Tiemed.NoActionBar" />
-        <activity
             android:name=".settings.SettingsActivity"
             android:exported="false" />
         <activity

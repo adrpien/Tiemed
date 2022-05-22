@@ -42,9 +42,9 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
     // ViewHolder class implementation
     inner class RepairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val idRepairTextView = itemView.findViewById<TextView>(R.id.repairRowIdTextView)
-        val stateMarker = itemView.findViewById<View>(R.id.inspectionRowStateMarker)
-        val editRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowStateMarker)
-        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.inspectionTechnicianButton)
+        val stateMarker = itemView.findViewById<View>(R.id.repairRowStateMarker)
+        val editRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowEditButton)
+        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowViewButton)
     }
 }
 
