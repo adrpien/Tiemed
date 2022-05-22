@@ -11,6 +11,7 @@ class LoginActivity : AppCompatActivity() {
 
     // ViewBinding
     private lateinit var binding: ActivityLoginBinding
+
     // Instace of Firebase Authentication
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

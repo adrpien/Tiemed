@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.activities
+package com.adrpien.tiemed.splashscreen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +16,7 @@ class SplashScreenActivity : AppCompatActivity() {
     // Delay duration
     val DELAY_DURATION = 3000L
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,11 +27,24 @@ class SplashScreenActivity : AppCompatActivity() {
         // Hiding supportActionBar
         supportActionBar?.hide()
 
+        /*
+        This method can do things like:
+        - Dismiss any dialogs the activity was managing.
+        - Close any cursors the activity was managing.
+        - Close any open search dialog
+        Also, onDestroy() isn't a destructor. It doesn't actually destroy the object.
+        It's just a method that's called based on a certain state.
+        So your instance is still alive and very well* after the superclass's onDestroy() runs and returns.
+        Android keeps processes around in case the user wants to restart the app, this makes the startup phase faster.
+        The process will not be doing anything and if memory needs to be reclaimed, the process will be killed
+         */
+
         // Setting time delay
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
             val intent = Intent (this, LoginActivity::class.java)
             startActivity(intent)
-            finish()
+            finish() // When calling finish() on an activity, the method onDestroy() is executed.
+
         }, DELAY_DURATION)
     }
 

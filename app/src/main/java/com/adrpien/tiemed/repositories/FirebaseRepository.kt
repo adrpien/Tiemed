@@ -2,12 +2,11 @@ package com.adrpien.tiemed.repositories
 
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.activities.MainActivity
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
-import com.adrpien.tiemed.datamodels.User
+import com.adrpien.tiemed.datamodels.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

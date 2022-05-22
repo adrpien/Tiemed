@@ -73,7 +73,7 @@ class InspectionListFragment : Fragment(), OnInspectionItemClickListener {
 
     override fun setOnInspectionItemClickListener(itemView: View) {
 
-        val id = itemView.findViewById<TextView>(R.id.inspectionIdTextView).text.toString()
+        val id = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView).text.toString()
         findNavController().navigate(
             InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
             bundleOf("id" to id )

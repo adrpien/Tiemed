@@ -28,6 +28,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
     // Options menu
     init{
         setHasOptionsMenu(true)
+
     }
 
     // Creating Fragment Options Menu
@@ -94,7 +95,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
    override fun setOnRepairItemClick(itemView: View) {
 
-       val id = itemView.findViewById<TextView>(R.id.idRepairTextView).text.toString()
+       val id = itemView.findViewById<TextView>(R.id.repairRowIdTextView).text.toString()
         findNavController().navigate(
             com.adrpien.tiemed.repairlist.RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId,
             bundleOf("id" to id )

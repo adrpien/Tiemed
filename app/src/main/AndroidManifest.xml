@@ -12,10 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiemed">
         <activity
+            android:name=".addrepair.AddRepairActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_repair"
+            android:theme="@style/Theme.Tiemed.NoActionBar" />
+        <activity
             android:name=".settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".splashscreen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".login.LoginActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

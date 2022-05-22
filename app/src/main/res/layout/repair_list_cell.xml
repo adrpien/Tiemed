@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cell_height"
@@ -13,44 +14,92 @@
         android:layout_height="match_parent">
 
         <View
-            android:id="@+id/stateMarker"
+            android:id="@+id/repairRowStateMarker"
             android:layout_width="@dimen/state_marker_width"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/idRepairTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            app:layout_constraintStart_toEndOf="@+id/stateMarker"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/stateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/stateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/idRepairTextView" />
-
         <ImageButton
-            android:id="@+id/technicianButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/stateButton"
+            android:id="@+id/repairRowViewButton"
+            style="@android:style/Widget.Holo.Light.ImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_search" />
 
         <ImageButton
-            android:id="@+id/stateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/repairRowEditButton"
+            style="@android:style/Widget.Holo.Light.ImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/repairRowIdTextView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="ID"
+            app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/repairRowNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Nazwa"
+            app:layout_constraintStart_toEndOf="@+id/repairRowIdTextView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/repairRowOpeningDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="Opening day:"
+            app:layout_constraintEnd_toStartOf="@+id/repairRowViewButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/repairRowManufacturerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Producent Model"
+            app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
+
+        <TextView
+            android:id="@+id/repairRowSNTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SN:"
+            app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
+
+        <TextView
+            android:id="@+id/repairRowINTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="InventoryNumber"
+            app:layout_constraintStart_toEndOf="@+id/repairRowSNTextView"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
+
+        <TextView
+            android:id="@+id/repairRowLocalizationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lokalizacja"
+            app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

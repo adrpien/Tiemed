@@ -2,7 +2,7 @@ package com.adrpien.tiemed.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.adrpien.tiemed.datamodels.User
+import com.adrpien.tiemed.datamodels.users.User
 import com.adrpien.tiemed.repositories.FirebaseRepository
 
 // User ViewModel class

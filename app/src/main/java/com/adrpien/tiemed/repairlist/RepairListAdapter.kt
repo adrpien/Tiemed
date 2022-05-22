@@ -22,8 +22,6 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
 
     override fun onBindViewHolder(holder: RepairViewHolder, position: Int) {
         holder.idRepairTextView.text = repairList[position].id.toString()
-        holder.stateTextView.text = repairList[position].repairState.toString()
-
         holder.viewRepairButton.setOnClickListener {
             listener.setOnRepairItemClick(holder.itemView)
         }
@@ -43,11 +41,10 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
 
     // ViewHolder class implementation
     inner class RepairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val idRepairTextView = itemView.findViewById<TextView>(R.id.idRepairTextView)
-        val stateTextView = itemView.findViewById<TextView>(R.id.stateTextView)
-        val stateMarker = itemView.findViewById<View>(R.id.stateMarker)
-        val editRepairButton = itemView.findViewById<ImageButton>(R.id.stateButton)
-        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.technicianButton)
+        val idRepairTextView = itemView.findViewById<TextView>(R.id.repairRowIdTextView)
+        val stateMarker = itemView.findViewById<View>(R.id.inspectionRowStateMarker)
+        val editRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowStateMarker)
+        val viewRepairButton = itemView.findViewById<ImageButton>(R.id.inspectionTechnicianButton)
     }
 }
 

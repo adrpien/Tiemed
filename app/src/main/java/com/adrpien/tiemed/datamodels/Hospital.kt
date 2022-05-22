@@ -1,4 +1,11 @@
 package com.adrpien.tiemed.datamodels
 
-data class Hospital(val id: Int) {
+import com.adrpien.tiemed.datamodels.users.HospitalWorker
+
+enum class Hospital{
+    DLUGA,
+    WRZOSKA,
+    PRZYBYSZEWSKIEGO,
+    GRUNWALDZKA,
+    ORSK,
 }

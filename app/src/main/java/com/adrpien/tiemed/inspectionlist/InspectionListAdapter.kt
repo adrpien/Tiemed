@@ -28,7 +28,6 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
         holder.inspectionIdTextView.setText(inspectionList[position].id)
         holder.inspectionDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
-        holder.inspectionStateTextView.setText(inspectionList[position].inspectionState)
 
     }
 
@@ -39,9 +38,8 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, listener: OnIn
 
     inner class InspectionViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
-        val inspectionIdTextView = itemView.findViewById<TextView>(R.id.inspectionIdTextView)
-        val inspectionStateTextView = itemView.findViewById<TextView>(R.id.inspectionStateTextView)
-        val inspectionDateTextView = itemView.findViewById<TextView>(R.id.inspectionDateTextView)
+        val inspectionIdTextView = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView)
+        val inspectionDateTextView = itemView.findViewById<TextView>(R.id.inspectionRowDateTextView)
 
     }
 }

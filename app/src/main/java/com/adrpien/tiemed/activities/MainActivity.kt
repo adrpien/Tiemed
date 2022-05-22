@@ -7,11 +7,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.datamodels.User
+import com.adrpien.tiemed.datamodels.users.User
 import com.adrpien.tiemed.databinding.ActivityMainBinding
 import com.adrpien.tiemed.settings.SettingsActivity
 import com.adrpien.tiemed.viewmodels.UserViewModel
@@ -31,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     // Firebase Authentication required to log out
     private val firebaseAuth = FirebaseAuth.getInstance()
 
+    // onCreate lifecycle function
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,10 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         // Creating Bottom Navigation View with Navigation Controller
         binding.bottomNavigationView.setupWithNavController(findNavController(R.id.mainFragmentContainer))
-
-        // Getting data from ViewModel
-        var userLiveData = userViewModel.getUser()
-        user = userLiveData.value
 
     }
 
