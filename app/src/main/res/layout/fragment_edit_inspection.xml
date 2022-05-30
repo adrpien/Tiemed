@@ -115,17 +115,17 @@
 
             <View
                 android:id="@+id/inspectionDivider"
-                style="@style/Divider"/>
+                style="@style/Divider" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="STAN"
                 android:gravity="center_horizontal"
-                android:textStyle="bold"
-                android:textSize="20dp"/>
+                android:text="STAN"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -138,8 +138,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:button="@null"
 
+                    android:button="@null"
                     android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
                     android:gravity="center_horizontal|bottom"
                     android:text="Awaiting"
@@ -150,52 +150,48 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Passed"
-
-                    android:textSize="12dp"
                     android:button="@null"
-                    android:gravity="center_horizontal|bottom"
+
                     android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                    />
+                    android:gravity="center_horizontal|bottom"
+                    android:text="Passed"
+                    android:textSize="12dp" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Conditionally passed"
-
-                    android:textSize="12dp"
                     android:button="@null"
-                    android:gravity="center_horizontal|bottom"
+
                     android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                    />
+                    android:gravity="center_horizontal|bottom"
+                    android:text="Conditionally passed"
+                    android:textSize="12dp" />
 
                 <RadioButton
                     android:id="@+id/radioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Failed"
-
-                    android:textSize="12dp"
                     android:button="@null"
-                    android:gravity="center_horizontal|bottom"
+
                     android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                    />
+                    android:gravity="center_horizontal|bottom"
+                    android:text="Failed"
+                    android:textSize="12dp" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Finished"
-
-                    android:textSize="12dp"
                     android:button="@null"
-                    android:gravity="center_horizontal|bottom"
+
                     android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                    />
+                    android:gravity="center_horizontal|bottom"
+                    android:text="Finished"
+                    android:textSize="12dp" />
             </RadioGroup>
 
             <TextView
@@ -204,7 +200,42 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="Data przeglądu:"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Electrical safety test"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Passed"
+                    style="@style/RadioButtonStyle"/>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Failed"
+                    style="@style/RadioButtonStyle"/>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Not Applicable"
+                    style="@style/RadioButtonStyle"/>
+
+                <Button
+                    android:id="@+id/dateButton"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Inspection date" />
+            </RadioGroup>
+
 
         </LinearLayout>
     </ScrollView>

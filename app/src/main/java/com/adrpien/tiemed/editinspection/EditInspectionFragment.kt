@@ -1,7 +1,9 @@
 package com.adrpien.tiemed.editinspection
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,9 +12,10 @@ import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
+import com.adrpien.tiemed.datepicker.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 
-class EditInspectionFragment : BaseFragment() {
+class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     // ViewBinding
     private var _binding: FragmentEditInspectionBinding? = null
@@ -26,13 +29,20 @@ class EditInspectionFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // ViewBinding
         _binding = FragmentEditInspectionBinding.inflate(layoutInflater)
+
+        binding.dateButton.setOnClickListener {
+            // Create TimePicker
+            val dialog = InspectionDatePickerDialog()
+            // show MyTimePicker
+            dialog.show(childFragmentManager, "inspection_time_picker")
+        }
+
         return binding.root
     }
 
@@ -66,6 +76,10 @@ class EditInspectionFragment : BaseFragment() {
         _binding = null
     }
 
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        // TODO onInspectionDateSet reaction click
+        Toast.makeText(context, "Ustawiono datę", Toast.LENGTH_SHORT).show()
+    }
 
 
 }

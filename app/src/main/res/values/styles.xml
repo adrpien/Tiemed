@@ -17,4 +17,10 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
+    <style name="RadioButtonStyle">
+        <item name="android:button">@null</item>
+        <item name="android:drawableBottom">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
 </resources>
