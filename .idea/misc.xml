@@ -16,7 +16,7 @@
         <entry key="app/src/main/res/layout/activity_splash_screen_acticity.xml" value="0.11574074074074074" />
         <entry key="app/src/main/res/layout/activity_splash_screen_activity.xml" value="0.3796875" />
         <entry key="app/src/main/res/layout/fragment_add_repair.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.25555555555555554" />
+        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.2596685082872928" />
         <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.19345238095238096" />
         <entry key="app/src/main/res/layout/fragment_inspection_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_inspections_list.xml" value="0.22291666666666668" />
@@ -34,12 +34,14 @@
         <entry key="app/src/main/res/layout/repair_list_cell.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/repair_list_fragment.xml" value="0.28802083333333334" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.22291666666666668" />
+        <entry key="app/src/main/res/menu/edit_inspection_options_menu.xml" value="0.4588541666666667" />
         <entry key="app/src/main/res/menu/edit_repair_options_menu.xml" value="0.1671875" />
         <entry key="app/src/main/res/menu/inspection_list_options.xml" value="0.4515625" />
         <entry key="app/src/main/res/menu/main_navigation_drawer.xml" value="0.2953125" />
-        <entry key="app/src/main/res/menu/options_menu.xml" value="0.11574074074074074" />
+        <entry key="app/src/main/res/menu/options_menu.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/menu/repair_list_options_menu.xml" value="0.4515625" />
         <entry key="app/src/main/res/menu/repairs_options_menu.xml" value="0.11574074074074074" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2115" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.20833333333333334" />
       </map>
     </option>

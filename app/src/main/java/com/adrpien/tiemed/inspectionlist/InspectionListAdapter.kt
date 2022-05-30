@@ -37,6 +37,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
             listener.setOnDateButtonClickListener(view)
         }
 
+        // Inspection row onClickListener
         holder.itemView.setOnClickListener { view ->
             listener.setOnInspectionItemClickListener(view)
         }
@@ -87,7 +88,7 @@ interface OnInspectionClickListener {
     fun setOnStateButtonClickListener(itemview: View)
 }
 
-// Returns date in format YYYY/MM/DD
+// Returns date in format YYYY/MM/DD using millis in String representation
 fun getDateString(date: String): String {
 
     var text: String = ""

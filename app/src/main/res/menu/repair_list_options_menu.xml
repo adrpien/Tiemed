@@ -5,13 +5,16 @@
     <item
         android:id="@+id/repairSortItem"
         android:title="@string/sort"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"
+        android:icon="@drawable/sort_icon"/>
     <item
         android:id="@+id/repairGroupItem"
         android:title="@string/groupitem"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"
+        android:icon="@drawable/group_icon"/>
     <item
         android:id="@+id/repairFilterItem"
         android:title="@string/filterItem"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"
+        android:icon="@drawable/filter_icon"/>
 </menu>

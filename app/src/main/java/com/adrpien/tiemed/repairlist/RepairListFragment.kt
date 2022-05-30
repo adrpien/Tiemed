@@ -3,6 +3,7 @@ package com.adrpien.tiemed.repairlist
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +15,6 @@ import com.adrpien.tiemed.adapters.RepairListAdapter
 import com.adrpien.tiemed.adapters.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 
-
 class RepairListFragment : Fragment(), onRepairItemClickListener {
 
     // ViewBinding
@@ -22,20 +22,26 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
     private val binding: FragmentRepairListBinding
         get() = _binding!!
 
+    private val ACTION_BAR_TITLE: String = "Repair List"
+
     // Lazy creating ViewModelProvider
     val viewModelProvider by viewModels<RepairListViewModel>()
 
     // Options menu
     init{
         setHasOptionsMenu(true)
-
+        activity?.setTitle("Repair List")
     }
 
     // Creating Fragment Options Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val inflater: MenuInflater = inflater
-        inflater.inflate(R.menu.options_menu, menu)
-        }
+        inflater.inflate(R.menu.repair_list_options_menu, menu)
+
+        // Setting Action Bar Name according to open fragment
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
+
+    }
 
     // Hanlding options menu click events
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -83,7 +89,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
 
             // Add new repair record
             findNavController().navigate(
-                com.adrpien.tiemed.repairlist.RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment()
+                RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment()
             )
         }
     }

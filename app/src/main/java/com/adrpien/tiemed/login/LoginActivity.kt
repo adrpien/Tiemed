@@ -3,7 +3,7 @@ package com.adrpien.tiemed.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.adrpien.tiemed.activities.MainActivity
+import com.adrpien.tiemed.main.MainActivity
 import com.adrpien.tiemed.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 

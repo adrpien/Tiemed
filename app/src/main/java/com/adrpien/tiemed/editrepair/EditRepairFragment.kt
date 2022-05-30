@@ -64,9 +64,9 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId){
-        R.id.saveItem -> {
-            if (arguments?.getString("id") != null){
-                viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
+        R.id.saveRepairItem -> {
+            if (arguments?.getString("uid") != null){
+                // viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
             }
             else {
                 viewModelProvider.createRepair(Repair(id = binding.idEditText.text.toString()))

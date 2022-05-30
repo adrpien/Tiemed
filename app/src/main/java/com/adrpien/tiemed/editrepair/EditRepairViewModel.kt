@@ -12,7 +12,7 @@ class EditRepairViewModel: ViewModel() {
         repository.createNewRepair(repair)
     }
 
-    fun updateRepair(map: Map<String, String>){
-        repository.updateRepair(map)
+    fun updateRepair(map: Map<String, String>, uid: String){
+        repository.updateRepair(map, uid)
     }
 }

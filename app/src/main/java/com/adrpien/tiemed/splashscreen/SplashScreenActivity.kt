@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.adrpien.tiemed.databinding.ActivitySplashScreenActivityBinding
 import com.adrpien.tiemed.login.LoginActivity
 
@@ -38,6 +40,9 @@ class SplashScreenActivity : AppCompatActivity() {
         Android keeps processes around in case the user wants to restart the app, this makes the startup phase faster.
         The process will not be doing anything and if memory needs to be reclaimed, the process will be killed
          */
+
+        // Setting dark mode
+        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
 
         // Setting time delay
         Handler(Looper.getMainLooper()).postDelayed(Runnable {

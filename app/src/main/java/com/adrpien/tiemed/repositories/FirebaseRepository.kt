@@ -3,7 +3,7 @@ package com.adrpien.tiemed.repositories
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.adrpien.tiemed.activities.MainActivity
+import com.adrpien.tiemed.main.MainActivity
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.users.User
@@ -53,6 +53,20 @@ class FirebaseRepository {
         // TODO setUserData
     }
 
+    // Update user record
+    fun updateUser(map: Map<String, String>, uid: String){
+        firebaseFirestore.collection("users")
+            .document(uid)
+            .update(map)
+            .addOnSuccessListener {
+                Log.d(REPOSITORY_DEBUG, "Zaktualizowano dane!")
+            }
+            .addOnFailureListener{
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+
+            }
+    }
+
     /*
     *********************************
     REPAIRS
@@ -89,9 +103,9 @@ class FirebaseRepository {
     }
 
     // Update repair record
-    fun updateRepair(map: Map<String, String>){
+    fun updateRepair(map: Map<String, String>, uid: String){
         firebaseFirestore.collection("repairs")
-            .document("1")
+            .document(uid)
             .update(map)
             .addOnSuccessListener {
                 Log.d(REPOSITORY_DEBUG, "Zaktualizowano dane!")
@@ -123,15 +137,31 @@ class FirebaseRepository {
         return inspectionList
     }
 
+    // Creates new inspection
     fun createNewInspection(inspection: Inspection){
         firebaseFirestore.collection("inspections")
-            .document(inspection.id!!)
+            .document()
             .set(inspection)
             .addOnFailureListener {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
             .addOnSuccessListener {
-                Toast.makeText(MainActivity(),"Dodano rekord",Toast.LENGTH_SHORT ).show()
+                Toast.makeText(MainActivity(),"Inspection record created",Toast.LENGTH_SHORT ).show()
             }
     }
+
+    // Update inspection record
+    fun updateInspection(map: Map<String, String>, uid: String){
+        firebaseFirestore.collection("inspections")
+            .document(uid)
+            .update(map)
+            .addOnSuccessListener {
+                Log.d(REPOSITORY_DEBUG, "Data updated!")
+            }
+            .addOnFailureListener{
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+
+            }
+    }
+
 }

@@ -1,17 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Tiemed" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
+         Primary brand color.
+        // <item name="colorPrimary">@color/dark_blue</item>
         <item name="colorPrimaryVariant">@color/light_blue</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
+         Secondary brand color.
         <item name="colorSecondary">@color/mint</item>
         <item name="colorSecondaryVariant">@color/dark_mint</item>
         <item name="colorOnSecondary">@color/background_colour</item>
-        <!-- Status bar color. -->
+         Status bar color.
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+         Customize your theme here.
     </style>
 
     <style name="Theme.Tiemed.NoActionBar">
