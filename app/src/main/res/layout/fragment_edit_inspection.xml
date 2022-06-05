@@ -14,16 +14,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/InspectionIDTextInputLayout"
+                android:id="@+id/inspectionIDTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionIDTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="ID" />
@@ -51,6 +52,7 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionNameTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name" />
@@ -63,6 +65,7 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionManufacturerTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Manufacturer" />
@@ -75,6 +78,7 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionModelTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Model" />
@@ -87,6 +91,7 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionINTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Inventory number" />
@@ -99,9 +104,38 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionSNTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Serial number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView15"
+                style="@style/DividierTitle"
+                android:text="Localization" />
+
+            <View style="@style/Divider" />
+
+
+            <Spinner
+                android:id="@+id/inspectionHospitalSpinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inspectionWardTextInputLayout"
+                style="@style/EditTextStyle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionWardTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ward" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -118,23 +152,57 @@
                 style="@style/Divider" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView14"
+                style="@style/SectionTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center_horizontal"
-                android:text="STAN"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:text="Electrical safety test" />
 
             <RadioGroup
+                android:id="@+id/inspectionESTRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton5"
+                    android:id="@+id/ESTPassedRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Passed" />
+
+                <RadioButton
+                    android:id="@+id/ESTFailedRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Failed" />
+
+                <RadioButton
+                    android:id="@+id/ESTNotApplicableRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Not Applicable" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/SectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="STAN" />
+
+            <RadioGroup
+                android:id="@+id/inspectionStateRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/inspectionStateAwaitingRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -146,7 +214,7 @@
                     android:textSize="12dp" />
 
                 <RadioButton
-                    android:id="@+id/radioButton4"
+                    android:id="@+id/inspectionStatePassedRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -158,7 +226,8 @@
                     android:textSize="12dp" />
 
                 <RadioButton
-                    android:id="@+id/radioButton3"
+
+                    android:id="@+id/inspectionStateConditionallyPassedRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -170,7 +239,7 @@
                     android:textSize="12dp" />
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/inspectionStateFailedRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -182,7 +251,7 @@
                     android:textSize="12dp" />
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/inspectionStateFinishedRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -194,48 +263,27 @@
                     android:textSize="12dp" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="150dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Data przeglądu:"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Electrical safety test"/>
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
                 android:orientation="horizontal">
-                <RadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Passed"
-                    style="@style/RadioButtonStyle"/>
-                <RadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Failed"
-                    style="@style/RadioButtonStyle"/>
-                <RadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Not Applicable"
-                    style="@style/RadioButtonStyle"/>
+
+                <TextView
+                    android:id="@+id/textView13"
+                    style="@style/SectionTitle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
+                    android:text="Data przeglądu:" />
 
                 <Button
-                    android:id="@+id/dateButton"
+                    android:id="@+id/inspectionDateButton"
                     style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Inspection date" />
-            </RadioGroup>
-
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

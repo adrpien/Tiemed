@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.datepicker
+package com.adrpien.tiemed.datepickers
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import java.util.*
 
 
-class InspectionDatePickerDialog: DialogFragment() {
+class RepairDatePickerDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

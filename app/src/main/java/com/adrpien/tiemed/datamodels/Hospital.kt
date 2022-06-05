@@ -1,13 +1,7 @@
 package com.adrpien.tiemed.datamodels
 
-import com.adrpien.tiemed.datamodels.users.HospitalWorker
-
 // Unused
 
-enum class Hospital{
-    DLUGA,
-    WRZOSKA,
-    PRZYBYSZEWSKIEGO,
-    GRUNWALDZKA,
-    ORSK,
+data class Hospital(val hospitalId: String = "", val name: String = ""){
+
 }

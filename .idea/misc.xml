@@ -4,19 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.119" />
+        <entry key="app/src/main/res/drawable/baseline_save_24.xml" value="0.428" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.535" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.38" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/maintenance_icon.xml" value="0.119" />
+        <entry key="app/src/main/res/drawable/radio_button_icon.xml" value="0.428" />
         <entry key="app/src/main/res/drawable/repair_icon.xml" value="0.119" />
         <entry key="app/src/main/res/layout/activity_add_repair.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.15520833333333334" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3384615384615385" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2054794520547945" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/activity_splash_screen_acticity.xml" value="0.11574074074074074" />
         <entry key="app/src/main/res/layout/activity_splash_screen_activity.xml" value="0.3796875" />
         <entry key="app/src/main/res/layout/fragment_add_repair.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.2596685082872928" />
+        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.2874873353596758" />
         <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.19345238095238096" />
         <entry key="app/src/main/res/layout/fragment_inspection_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_inspections_list.xml" value="0.22291666666666668" />

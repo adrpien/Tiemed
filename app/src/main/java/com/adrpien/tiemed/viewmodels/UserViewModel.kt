@@ -15,8 +15,8 @@ class UserViewModel: ViewModel() {
     private val userRepository = FirebaseRepository()
 
     // Returns User
-    fun getUser(): MutableLiveData<User> {
-        return userRepository.getUserData()
+    fun getUser(): User {
+        return userRepository.getUser()
     }
 
     // Sets User

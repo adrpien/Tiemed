@@ -1,11 +1,21 @@
 package com.adrpien.tiemed.datamodels
 
 data class Device(
-    var type: String = "",
-    var manufacturer: String = "",
-    var model: String = "",
-    var serialNumer: String = "",
-    var inventoryNumber: String = "",
-    var localization : Localization = Localization()
 
+    // Basic information
+    val deviceId: Int? = null,
+    var name: String? = null,
+    var manufacturer: String? = null,
+    var model: String? = null,
+    var serialNumer: String? = null,
+    var inventoryNumber: String? = null,
+
+    // Device localization
+    var localization : Localization? = null,
+
+    // List of inspections
+    var inspections: ArrayList<Inspection>? = null,
+
+    // List of repairs:
+    var repairs: ArrayList<Repair>? = null
 )

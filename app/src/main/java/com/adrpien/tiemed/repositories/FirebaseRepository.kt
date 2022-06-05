@@ -3,6 +3,7 @@ package com.adrpien.tiemed.repositories
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.main.MainActivity
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
@@ -17,7 +18,22 @@ class FirebaseRepository {
     private val REPOSITORY_DEBUG = "REPOSITORY_DEBUG"
 
     // MutableLiveData with user
-    private lateinit var userData: MutableLiveData<User>
+    private lateinit var user: User
+
+    // MutableLiveData with inspection
+    private lateinit var inspection: Inspection
+
+    // MutableLiveData with repair
+    private lateinit var repair: Repair
+
+    // MutableLiveData with list of inspections
+    private lateinit var inspectionList: MutableLiveData<List<Inspection>>
+
+    // MutableLiveData with list of repairs
+    private lateinit var repairList: MutableLiveData<List<Repair>>
+
+    // MutableLiveData with list of hospitals
+    private lateinit var hospitalList: MutableLiveData<List<Hospital>>
 
     // Firebase initialization
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -29,9 +45,10 @@ class FirebaseRepository {
     USERS
     *********************************
     */
+
     // Returns user stored in LiveData
-    fun getUserData(): MutableLiveData<User> {
-        userData = MutableLiveData<User>()
+    fun getUser(): User {
+
         // Get user UID from Firebase Authentication
         val uid = firebaseAuth.currentUser?.uid
         // Getting user from Firebase Firestore and converting it into User object
@@ -39,13 +56,13 @@ class FirebaseRepository {
             .document(uid!!)
             .get()
             .addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                userData.postValue(user!!)
+                user = it.toObject(User::class.java)!!
+                Log.d(REPOSITORY_DEBUG, "User data delivered")
             }
             .addOnFailureListener {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
-        return userData
+        return user
     }
 
     // Sets user data in Firestore
@@ -59,7 +76,7 @@ class FirebaseRepository {
             .document(uid)
             .update(map)
             .addOnSuccessListener {
-                Log.d(REPOSITORY_DEBUG, "Zaktualizowano dane!")
+                Log.d(REPOSITORY_DEBUG, "User data updated")
             }
             .addOnFailureListener{
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
@@ -82,14 +99,13 @@ class FirebaseRepository {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
             .addOnSuccessListener {
-                Toast.makeText(MainActivity(),"Dodano rekord",Toast.LENGTH_SHORT ).show()
-
+                Log.d(REPOSITORY_DEBUG, "Repair record created")
             }
     }
 
     // Return list of repairs
     fun getRepairList(): MutableLiveData<List<Repair>>{
-        val repairList = MutableLiveData<List<Repair>>()
+        repairList = MutableLiveData<List<Repair>>()
         firebaseFirestore.collection("repairs")
             .get()
             .addOnSuccessListener {
@@ -103,17 +119,32 @@ class FirebaseRepository {
     }
 
     // Update repair record
-    fun updateRepair(map: Map<String, String>, uid: String){
+    fun updateRepair(map: Map<String, String>, id: String){
         firebaseFirestore.collection("repairs")
-            .document(uid)
+            .document(id)
             .update(map)
             .addOnSuccessListener {
-                Log.d(REPOSITORY_DEBUG, "Zaktualizowano dane!")
+                Log.d(REPOSITORY_DEBUG, "Repair record updated")
             }
             .addOnFailureListener{
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
 
             }
+    }
+
+    // Returns repair according to delivered id
+    fun getRepair(id: String): Repair {
+            firebaseFirestore.collection("repairs")
+                .document(id)
+                .get()
+                .addOnSuccessListener {
+                    repair = it.toObject(Repair::class.java)!!
+                    Log.d(REPOSITORY_DEBUG, "Repair record delivered")
+                }
+                .addOnFailureListener {
+                    Log.d(REPOSITORY_DEBUG, it.message.toString())
+                }
+            return repair
     }
 
     /*
@@ -124,7 +155,7 @@ class FirebaseRepository {
 
     // Returns list of inspections
     fun getInspectionList():MutableLiveData<List<Inspection>>{
-        val inspectionList = MutableLiveData<List<Inspection>>()
+        inspectionList = MutableLiveData<List<Inspection>>()
         firebaseFirestore.collection("inspections")
             .get().addOnSuccessListener{
                 val inspection = it.toObjects(Inspection::class.java)
@@ -151,17 +182,52 @@ class FirebaseRepository {
     }
 
     // Update inspection record
-    fun updateInspection(map: Map<String, String>, uid: String){
+    fun updateInspection(map: Map<String, String>, id: String){
         firebaseFirestore.collection("inspections")
-            .document(uid)
+            .document(id)
             .update(map)
             .addOnSuccessListener {
-                Log.d(REPOSITORY_DEBUG, "Data updated!")
+                Log.d(REPOSITORY_DEBUG, "Inspection record updated")
             }
             .addOnFailureListener{
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
-
             }
     }
 
+    //  Return inspection record according do delivered id
+    fun getInspection(id: String): Inspection {
+        firebaseFirestore.collection("inspections")
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                inspection = it.toObject(Inspection::class.java)!!
+                Log.d(REPOSITORY_DEBUG, "Inspection record delivered")
+            }
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+        return inspection
+    }
+
+    /*
+    *********************************
+    HOSPITALS
+    *********************************
+     */
+
+    // Return list of hospitals
+    fun getHospitalList(): MutableLiveData<List<Hospital>>{
+        hospitalList = MutableLiveData<List<Hospital>>()
+        firebaseFirestore.collection("hospitals")
+            .get()
+            .addOnSuccessListener {
+                val hospital = it.toObjects(Hospital::class.java)
+                hospitalList.postValue(hospital)
+            }
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+
+            }
+        return hospitalList
+    }
 }

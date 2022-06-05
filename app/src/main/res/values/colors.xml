@@ -5,12 +5,12 @@
     App colours
     -->
 
-    <color name="dark_blue">#1B2873</color>
-    <color name="blue">#182FA5</color>
-    <color name="light_blue">#2843D8</color>
-    <color name="mint">#FF03DAC5</color>
-    <color name="dark_mint">#FF018786</color>
-    <color name="background_colour">#104A79</color>
+    <color name="dark_grey">#494949</color>
+    <color name="grey">#838383</color>
+    <color name="light_grey">#B6B6B6</color>
+    <color name="light_mint_grey">#93DDD6</color>
+    <color name="mint_grey">#73AFA9</color>
+    <color name="dark_mint_grey">#486C68</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 

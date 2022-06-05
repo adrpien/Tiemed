@@ -6,13 +6,17 @@ import com.adrpien.tiemed.repositories.FirebaseRepository
 
 class EditRepairViewModel: ViewModel() {
 
-    private val repository = FirebaseRepository()
+    private val firebaseRepository = FirebaseRepository()
 
     fun createRepair(repair: Repair){
-        repository.createNewRepair(repair)
+        firebaseRepository.createNewRepair(repair)
     }
 
     fun updateRepair(map: Map<String, String>, uid: String){
-        repository.updateRepair(map, uid)
+        firebaseRepository.updateRepair(map, uid)
+    }
+
+    fun getRepair(id: String){
+        firebaseRepository.getRepair(id)
     }
 }

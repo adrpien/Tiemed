@@ -6,7 +6,7 @@
         android:id="@+id/saveInspectionItem"
         android:title="@string/save"
         app:showAsAction="always"
-        android:icon="@drawable/save_icon"/>
+        android:icon="@drawable/save_icon" />
     <item
         android:id="@+id/addRepairRecordItem"
         android:title="Add repair record"

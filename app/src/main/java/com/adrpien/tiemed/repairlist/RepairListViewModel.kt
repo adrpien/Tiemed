@@ -5,7 +5,7 @@ import com.adrpien.tiemed.repositories.FirebaseRepository
 
 class RepairListViewModel : ViewModel() {
 
-    val repository = FirebaseRepository()
+    val firebaseRepository = FirebaseRepository()
 
-    val repairList = repository.getRepairList()
+    val repairList = firebaseRepository.getRepairList()
 }

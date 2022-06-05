@@ -1,7 +1,9 @@
 package com.adrpien.tiemed.datamodels.users
 
-open class User(
-    val id: String = "",
-    var name: String = "",
-    var surname: String = "",
+ class User(
+    val userId: String? = null,
+    var name: String? = null,
+    var surname: String? = null,
+    var position: String? = null,
+    var userType: UserType? = null
     ){}

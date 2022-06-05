@@ -3,19 +3,22 @@ package com.adrpien.tiemed.editinspection
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
-import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
-import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.databinding.FragmentRepairListBinding
-import com.adrpien.tiemed.datepicker.InspectionDatePickerDialog
+import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 
-class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
+class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,  AdapterView.OnItemSelectedListener{
+
+    // ViewModel
+    val viewModelProvider by viewModels<EditInspectionViewModel>()
+
+    private var hospitalList: MutableList<String> = mutableListOf()
 
     // ViewBinding
     private var _binding: FragmentEditInspectionBinding? = null
@@ -23,7 +26,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         get() = _binding!!
 
     init{
-        // Options menu
+        // Setting options menu
         setHasOptionsMenu(true)
     }
 
@@ -32,17 +35,45 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // ViewBinding
-        _binding = FragmentEditInspectionBinding.inflate(layoutInflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.dateButton.setOnClickListener {
+
+
+        // Hospital spinner implementation
+        viewModelProvider.getHospitalList().observe(viewLifecycleOwner) {
+            for(item in it){
+                item.name.let {
+                    hospitalList.add(it)
+                }
+            }
+            val hospitalListArrayAdapter = activity?.baseContext?.let { it ->
+                ArrayAdapter(
+                    it,
+                    android.R.layout.simple_spinner_item,
+                    hospitalList
+                )
+            }
+            binding.testSpinner.adapter = hospitalListArrayAdapter
+
+        }
+        binding.testSpinner.onItemSelectedListener = this
+
+        // Date button implementation
+        binding.inspectionDateButton.setOnClickListener {
             // Create TimePicker
             val dialog = InspectionDatePickerDialog()
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
         }
 
+        // TODO Fill TextInputEditTexts with inspection data
+
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // ViewBinding
+        _binding = FragmentEditInspectionBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -51,6 +82,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         val inflater: MenuInflater = inflater
         inflater.inflate(R.menu.edit_inspection_options_menu, menu)
 
+        // Setting action bar title
         setActionBarTitle("Edit Inspection")
     }
 
@@ -60,6 +92,12 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
                 // TODO Update/Add inspection record button reaction
+                val map: Map<String, String> = mapOf(
+                    "id" to binding.InspectionIDTextInputEditText.text.toString(),
+                    "name" to binding.na
+                )
+                val id =
+                viewModelProvider.updateInspection(map, id)
                 Toast.makeText(context,"Saved!", Toast.LENGTH_SHORT).show()
                 true
             }
@@ -77,8 +115,18 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        // TODO onInspectionDateSet reaction click
-        Toast.makeText(context, "Ustawiono datę", Toast.LENGTH_SHORT).show()
+        // TODO inspectionDateButton onInspectionDateSet implementation
+        Toast.makeText(context, "Inspection date changed", Toast.LENGTH_SHORT).show()
+    }
+
+    // Spinner override
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        // TODO hospitalListSpinner onItemSelected implementation
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        // TODO hospitalListSpinner onNothingSelected implemention
     }
 
 

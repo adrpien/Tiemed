@@ -9,8 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Inspection
-import com.adrpien.tiemed.datepicker.InspectionDatePickerDialog
-import com.adrpien.tiemed.datepicker.RepairDatePickerDialog
 import java.lang.Long.parseLong
 
 class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
@@ -44,8 +42,8 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
 
         // Filling TextViews with values
         holder.inspectionRowDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
-        holder.inspectionRowNameTextView.setText(inspectionList[position].name)
-        val manufacturer: String = inspectionList[position].manufacturer + " " + inspectionList[position].model
+        holder.inspectionRowNameTextView.setText(inspectionList[position].device?.name)
+        val manufacturer: String = inspectionList[position].device?.manufacturer + " " + inspectionList[position].device?.model
         holder.inspectionRowManufacturerTextView.setText(manufacturer)
 
 

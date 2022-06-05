@@ -1,9 +1,7 @@
 package com.adrpien.tiemed.inspectionlist
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
@@ -15,13 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.adapters.onRepairItemClickListener
-import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
-import com.adrpien.tiemed.datepicker.InspectionDatePickerDialog
-import com.adrpien.tiemed.datepicker.RepairDatePickerDialog
+import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 
 class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePickerDialog.OnDateSetListener {
 
@@ -29,6 +23,8 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
     private var _binding: FragmentInspectionListBinding? = null
     private val binding
         get() = _binding!!
+
+
     private val ACTION_BAR_TITLE: String = "Inspection List"
 
     val viewModelProvider by viewModels<InspectionListViewModel>()

@@ -29,9 +29,9 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
             listener.setOnRepairItemClick(holder.itemView)
         }
 
-        if(repairList[position].repairState == RepairState.Naprawiony){ holder.stateMarker.setBackgroundColor(Color.GREEN) }
-        if(repairList[position].repairState == RepairState.Zgloszony){ holder.stateMarker.setBackgroundColor(Color.RED) }
-        if(repairList[position].repairState == RepairState.Wyslany_do_serwisu){ holder.stateMarker.setBackgroundColor(Color.BLUE) }
+        if(repairList[position].repairState == RepairState.FIXED){ holder.stateMarker.setBackgroundColor(Color.GREEN) }
+        if(repairList[position].repairState == RepairState.SUBMITTED){ holder.stateMarker.setBackgroundColor(Color.RED) }
+        if(repairList[position].repairState == RepairState.SENT_TO_SERVICE){ holder.stateMarker.setBackgroundColor(Color.BLUE) }
 
     }
 
