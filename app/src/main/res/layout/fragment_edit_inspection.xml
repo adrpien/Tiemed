@@ -32,14 +32,8 @@
 
             <TextView
                 android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="3dp"
                 android:text="Device"
-                android:textSize="16dp" />
+                style="@style/DividierTitle"/>
 
             <View
                 android:id="@+id/deviceDivider"
@@ -76,7 +70,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/inspectionModelTextInputEditText"
                     android:layout_width="match_parent"
@@ -95,6 +88,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Inventory number" />
+
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -140,12 +135,8 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Inspection"
-                android:textSize="16dp" />
+                style="@style/DividierTitle"
+                android:text="Inspection" />
 
             <View
                 android:id="@+id/inspectionDivider"
@@ -271,18 +262,20 @@
 
                 <TextView
                     android:id="@+id/textView13"
-                    style="@style/SectionTitle"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|start"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
                     android:text="Data przeglądu:" />
 
                 <Button
                     android:id="@+id/inspectionDateButton"
                     style="@style/Widget.AppCompat.EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Inspection date" />
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Inspection date"
+                    android:gravity="center_horizontal|center_vertical"/>
             </LinearLayout>
 
         </LinearLayout>

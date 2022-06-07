@@ -19,7 +19,7 @@ class EditInspectionViewModel: ViewModel() {
         firebaseRepository.createNewInspection(inspection)
     }
 
-    fun getInspection(id: String): Inspection{
+    fun getInspection(id: String): MutableLiveData<Inspection>{
         return firebaseRepository.getInspection(id)
     }
 

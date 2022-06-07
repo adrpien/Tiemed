@@ -66,7 +66,7 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
                 true
             }
             R.id.inspectionGroupItem -> {
-                // TODO Inspection list filetring
+                // TODO Inspection list filtering
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -83,6 +83,8 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
             binding.inspectionRecyclerView.adapter = InspectionListAdapter(t, this)
         }
 
+        // TODO Fab button to implement
+
 
     }
 
@@ -91,7 +93,8 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
         // implementing inspection list Recycler View item click
         // Move to EditInspectionFragment when inspection list Recycler View item clicked
         // Add bundle with record id
-        val id = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView).text.toString()
+        //val id = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView).text.toString()
+        val id = "dnnqy44DV2PbIPk7tfHc"
         findNavController().navigate(
             InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
             bundleOf("id" to id )

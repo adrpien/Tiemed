@@ -7,7 +7,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datepickers.RepairDatePickerDialog
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding

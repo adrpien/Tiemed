@@ -5,6 +5,7 @@
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cell_height"
+    android:layout_gravity="clip_horizontal"
     android:layout_margin="@dimen/cell_margin"
     android:clickable="true"
     android:orientation="vertical"
@@ -49,13 +50,12 @@
 
         <TextView
             android:id="@+id/inspectionRowDateTextView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:gravity="right"
+            android:layout_marginStart="5dp"
             android:text="Inspection date: "
-            app:layout_constraintEnd_toStartOf="@+id/inspectionRowDateButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/inspectionRowStateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionRowHospitalTextView" />
 
         <TextView
             android:id="@+id/inspectionRowIdTextView"
@@ -96,31 +96,41 @@
 
         <TextView
             android:id="@+id/inspectionRowSNTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:text="SN: "
+            android:maxLines="1"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
 
         <TextView
             android:id="@+id/inspectionRowINTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:layout_marginStart="10dp"
-            android:text="Inventory number: "
+            android:text="IN: "
             app:layout_constraintStart_toEndOf="@+id/inspectionRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
 
         <TextView
-            android:id="@+id/inspectionRowLocalizationTextView"
+            android:id="@+id/inspectionRowHospitalTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="Localization: "
+            android:text="Hospital"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView" />
 
+        <TextView
+            android:id="@+id/inspectionRowWardTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Ward"
+            app:layout_constraintStart_toEndOf="@+id/inspectionRowHospitalTextView"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

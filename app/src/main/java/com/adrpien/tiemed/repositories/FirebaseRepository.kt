@@ -21,7 +21,7 @@ class FirebaseRepository {
     private lateinit var user: User
 
     // MutableLiveData with inspection
-    private lateinit var inspection: Inspection
+    var inspection: MutableLiveData<Inspection> = MutableLiveData<Inspection>()
 
     // MutableLiveData with repair
     private lateinit var repair: Repair
@@ -195,12 +195,13 @@ class FirebaseRepository {
     }
 
     //  Return inspection record according do delivered id
-    fun getInspection(id: String): Inspection {
+    fun getInspection(id: String): MutableLiveData<Inspection> {
         firebaseFirestore.collection("inspections")
             .document(id)
             .get()
             .addOnSuccessListener {
-                inspection = it.toObject(Inspection::class.java)!!
+                val inspection = it.toObject(Inspection::class.java)!!
+                this.inspection.postValue(inspection)
                 Log.d(REPOSITORY_DEBUG, "Inspection record delivered")
             }
             .addOnFailureListener {

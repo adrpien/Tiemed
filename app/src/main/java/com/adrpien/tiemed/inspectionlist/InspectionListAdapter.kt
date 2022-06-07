@@ -41,10 +41,34 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         }
 
         // Filling TextViews with values
-        holder.inspectionRowDateTextView.setText(getDateString(inspectionList[position].inspectionDate))
-        holder.inspectionRowNameTextView.setText(inspectionList[position].device?.name)
-        val manufacturer: String = inspectionList[position].device?.manufacturer + " " + inspectionList[position].device?.model
-        holder.inspectionRowManufacturerTextView.setText(manufacturer)
+
+        // Set inspectionRowIdTextView
+        holder.inspectionRowIdTextView.setText(inspectionList[position].id)
+
+        // Setting inspectionRowDateTextView
+        holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate))
+
+        // Setting inspectionRowNameTextView
+        holder.inspectionRowNameTextView.setText(inspectionList[position].name)
+
+        // Setting inspectionRowManufacturerTextView
+        holder.inspectionRowManufacturerTextView.setText(inspectionList[position].manufacturer)
+
+        // Setting inspectionRowModelTextView
+        holder.inspectionRowModelTextView.setText(inspectionList[position].model)
+
+        // Setting inspectionRowSNTextView
+        //holder.inspectionRowSNTextView.append(inspectionList[position].serialNumber)
+        holder.inspectionRowSNTextView.append(inspectionList[position].serialNumber)
+
+        // Setting inspectionRowINTextView
+        holder.inspectionRowINTextView.append(inspectionList[position].inventoryNumber)
+
+        // Setting inspectionRowHospitalTextView
+        holder.inspectionRowHospitalTextView.setText(inspectionList[position].hospital)
+
+        // Setting inspectionRowWardTextView
+        holder.inspectionRowWardTextView.setText(inspectionList[position].ward)
 
 
 
@@ -72,9 +96,11 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         val inspectionRowDateTextView = itemView.findViewById<TextView>(R.id.inspectionRowDateTextView)
         val inspectionRowNameTextView = itemView.findViewById<TextView>(R.id.inspectionRowNameTextView)
         val inspectionRowManufacturerTextView = itemView.findViewById<TextView>(R.id.inspectionRowManufacturerTextView)
+        val inspectionRowModelTextView = itemView.findViewById<TextView>(R.id.inspectionRowModelTextView)
         val inspectionRowSNTextView = itemView.findViewById<TextView>(R.id.inspectionRowINTextView)
-        val inspectionRowINTextView = itemView.findViewById<TextView>(R.id.inspectionRowINTextView)
-        val inspectionRoweLocalizationTextView = itemView.findViewById<TextView>(R.id.inspectionRowLocalizationTextView)
+        val inspectionRowINTextView = itemView.findViewById<TextView>(R.id.inspectionRowSNTextView)
+        val inspectionRowHospitalTextView = itemView.findViewById<TextView>(R.id.inspectionRowHospitalTextView)
+        val inspectionRowWardTextView = itemView.findViewById<TextView>(R.id.inspectionRowWardTextView)
 
 
     }
