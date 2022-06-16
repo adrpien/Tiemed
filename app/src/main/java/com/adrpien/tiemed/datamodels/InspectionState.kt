@@ -4,6 +4,6 @@ enum class  InspectionState {
     AWAITING,
     PASSED,
     CONDITIONALLY_PASSED,
-    FAILDED,
+    FAILED,
     FINISHED
 }

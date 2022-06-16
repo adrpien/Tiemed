@@ -36,11 +36,10 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         val darkModeButton: SwitchPreference? =
             findPreference<SwitchPreference>(getString(R.string.dark_mode))
         darkModeButton?.setOnPreferenceClickListener {
+            // TODO Dark mode
             if (darkModeButton.isChecked) {
-                // TODO Dark mode
             }
             else {
-                // TODO
             }
             true
         }

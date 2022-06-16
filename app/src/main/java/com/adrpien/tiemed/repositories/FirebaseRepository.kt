@@ -65,11 +65,6 @@ class FirebaseRepository {
         return user
     }
 
-    // Sets user data in Firestore
-    fun setUserData(user: User){
-        // TODO setUserData
-    }
-
     // Update user record
     fun updateUser(map: Map<String, String>, uid: String){
         firebaseFirestore.collection("users")

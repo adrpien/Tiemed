@@ -7,18 +7,24 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
+import com.adrpien.tiemed.datamodels.ESTState
 import com.adrpien.tiemed.datamodels.Inspection
+import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 import java.util.*
 
 import kotlin.reflect.full.memberProperties
 
-class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,  AdapterView.OnItemSelectedListener{
+class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener{
 
     // ViewBinding
     private var _binding: FragmentEditInspectionBinding? = null
@@ -40,6 +46,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     init{
         // Setting options menu
         setHasOptionsMenu(true)
+        activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +66,10 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         id = arguments?.getString("id").toString()
         if(id != null) {
             inspection = viewModelProvider.getInspection(id)
-
             viewModelProvider.getInspection(id).observe(viewLifecycleOwner) { inspection ->
-                binding.inspectionDateButton.setText(getDateString(inspection.inspectionDate.toLong()))
                 bindInspectionData(inspection)
+
+                // Setting inspection data as tempInspection default value
                 tempInspection = inspection
             }
         }
@@ -74,7 +81,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                     hospitalList.add(it)
                 }
             }
-            val hospitalListArrayAdapter = activity?.baseContext?.let { it ->
+            var hospitalListArrayAdapter = activity?.baseContext?.let { it ->
                 ArrayAdapter(
                     it,
                     android.R.layout.simple_spinner_item,
@@ -83,8 +90,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             }
             binding.inspectionHospitalSpinner.adapter = hospitalListArrayAdapter
         }
-
-        // Hospital Spinner implementation
         binding.inspectionHospitalSpinner.onItemSelectedListener = this
 
         // Date button implementation
@@ -93,6 +98,21 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             val dialog = InspectionDatePickerDialog()
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
+        }
+
+        // EST spinner implementation
+        binding.inspectionESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            tempInspection.safetyTest = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+                .uppercase()
+                .replace(" ", "_")
+
+        }
+
+        // State spinner implementation
+        binding.inspectionStateRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            tempInspection.inspectionState = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+                .uppercase().
+                replace(" ", "_")
         }
     }
 
@@ -115,8 +135,8 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // Handle item selection
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
-
-                // TODO Update/Add inspection record button reaction
+                // Update/Add inspection record button reaction
+                updateTempInspection()
                 val map = createMap(tempInspection)
                 if(id != null) {
                     viewModelProvider.updateInspection(map, id)
@@ -124,6 +144,9 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 } else {
                     viewModelProvider.createInspection(tempInspection)
                 }
+
+                // Go to inspection list when record saved
+                findNavController().navigate(EditInspectionFragmentDirections.actionEditInspectionFragmentToInspectionListFragment())
                 true
             }
             R.id.addRepairRecordItem -> {
@@ -134,9 +157,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         }
     }
 
-
-
-
+    // Handling date set reaction for date dialog
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
 
         // Set values
@@ -148,15 +169,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionDateButton.setText(getDateString(date.timeInMillis))
     }
 
-    // Hospital spinner override
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        // TODO hospitalListSpinner onItemSelected implementation
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        // TODO hospitalListSpinner onNothingSelected implemention
-    }
-
+    // Binding data of inspection in  appropriate components
     private fun bindInspectionData(inspection: Inspection) {
         binding.inspectionIDTextInputEditText.setText(inspection.id)
         binding.inspectionNameTextInputEditText.setText(inspection.name)
@@ -166,11 +179,56 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionSNTextInputEditText.setText(inspection.serialNumber)
         binding.inspectionWardTextInputEditText.setText(inspection.ward)
 
-        // TODO Hospital spinner bind data to implement
-        val selection = 1
-        //inspection.hospital?.uppercase()
-        binding.inspectionHospitalSpinner.setSelection(selection)
+        // Date button inspection data bind
+        binding.inspectionDateButton.setText(getDateString(inspection.inspectionDate.toLong()))
 
+        // Hospital spinner bind data to implement
+        bindHospitalSpinner(inspection)
+
+        // EST radio button bind
+        bindESTRadioButton(inspection)
+
+        // Inspection state radio button bind
+        bindStateRadioButton(inspection)
+    }
+
+    // Binding data of inspection in state spinner
+    private fun bindStateRadioButton(inspection: Inspection) {
+        var position = 0
+        var selection = 0
+        for (item in InspectionState.values()) {
+            if (inspection.inspectionState == item.toString()) {
+                position = selection
+            }
+            selection += 1
+        }
+        binding.inspectionStateRadioGroup.check(binding.inspectionStateRadioGroup.getChildAt(position).id)
+    }
+
+    // Binding data of inspection in state spinner
+    private fun bindESTRadioButton(inspection: Inspection) {
+        var position = 0
+        var selection = 0
+        for (item in ESTState.values()) {
+            if (inspection.safetyTest == item.toString()) {
+                position = selection
+            }
+            selection += 1
+        }
+        binding.inspectionESTRadioGroup.check(binding.inspectionESTRadioGroup.getChildAt(position).id)
+    }
+
+    // Binding data of inspection in hospital spinner
+    private fun bindHospitalSpinner(inspection: Inspection) {
+        var position = 0
+        var selection = 1
+        for (item in hospitalList) {
+            if (inspection.hospital == item.toString()) {
+                position = selection
+            }
+            selection += 1
+        }
+        binding.inspectionHospitalSpinner.setSelection(position)
     }
 
     // Creating map of inspection fields with their values
@@ -181,8 +239,27 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         }
         return map
     }
-    private fun updateTempInspection(){
 
+    // Updating tempInspection
+    private fun updateTempInspection(){
+        tempInspection.id = binding.inspectionIDTextInputEditText.text.toString()
+        tempInspection.name = binding.inspectionNameTextInputEditText.text.toString()
+        tempInspection.manufacturer = binding.inspectionManufacturerTextInputEditText.text.toString()
+        tempInspection.model = binding.inspectionModelTextInputEditText.text.toString()
+        tempInspection.inventoryNumber = binding.inspectionINTextInputEditText.text.toString()
+        tempInspection.serialNumber = binding.inspectionSNTextInputEditText.text.toString()
+        tempInspection.ward = binding.inspectionWardTextInputEditText.text.toString()
+        tempInspection.hospital = binding.inspectionHospitalSpinner.selectedItem.toString()
     }
 
+    // Handling hospital spinner item selected reaction
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if(parent?.id == R.id.inspectionHospitalSpinner){
+            tempInspection.hospital = parent.getItemAtPosition(position).toString()
+        }
+    }
+
+    // Handling hostpial spinner no item selected reaction
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
 }

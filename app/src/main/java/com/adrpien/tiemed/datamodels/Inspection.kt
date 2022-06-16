@@ -7,25 +7,28 @@ data class Inspection(
 
     // General
     var id: String = "0",
-    var inspectionState: InspectionState? = null,
+    //  var inspectionState: InspectionState? = null,
+    var inspectionState: String = "",
 
     // Device
     // var device: Device? = null,
 
-    val deviceId: String? = null,
-    var name: String? = null,
-    var manufacturer: String? = null,
-    var model: String? = null,
-    var serialNumber: String? = null,
-    var inventoryNumber: String? = null,
+    val deviceId: String = "",
+    var name: String = "",
+    var manufacturer: String = "",
+    var model: String = "",
+    var serialNumber: String = "",
+    var inventoryNumber: String = "",
 
     // Localization
-    var hospital: String? = null,
-    var ward: String? = null,
+    // var localization: Localization? = null,
+    var hospital: String = "",
+    var ward: String = "",
 
     // Inspection description
-    var safetyTest: ElectricalSafetyTest? = null,
-    var comment: String? = null,
+    //  var safetyTest: ESTState = "",
+    var safetyTest: String = "",
+    var comment: String = "",
 
     // Dates
     var inspectionDate: String = Calendar.getInstance().time.toString(),

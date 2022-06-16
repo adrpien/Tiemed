@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:gravity="left"
+            android:maxLines="1"
             android:text="ID"
             app:layout_constraintStart_toEndOf="@id/inspectionRowStateMarker"
             app:layout_constraintTop_toTopOf="parent" />
@@ -81,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:maxLines="1"
             android:text="Manufacturer"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowNameTextView" />

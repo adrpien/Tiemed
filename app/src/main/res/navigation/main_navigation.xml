@@ -36,7 +36,11 @@
         android:id="@+id/editInspectionFragment"
         android:name="com.adrpien.tiemed.editinspection.EditInspectionFragment"
         android:label="fragment_edit_inspection"
-        tools:layout="@layout/fragment_edit_inspection" />
+        tools:layout="@layout/fragment_edit_inspection" >
+        <action
+            android:id="@+id/action_editInspectionFragment_to_inspectionListFragment"
+            app:destination="@id/inspectionListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewRepairFragment"
         android:name="com.adrpien.tiemed.viewrepair.ViewRepairFragment"
@@ -46,5 +50,9 @@
         android:id="@+id/viewInspectionFragment"
         android:name="com.adrpien.tiemed.viewinspection.ViewInspectionFragment"
         android:label="fragment_view_inspection"
-        tools:layout="@layout/fragment_view_inspection" />
+        tools:layout="@layout/fragment_view_inspection" >
+        <action
+            android:id="@+id/action_viewInspectionFragment_to_inspectionListFragment"
+            app:destination="@id/inspectionListFragment" />
+    </fragment>
 </navigation>

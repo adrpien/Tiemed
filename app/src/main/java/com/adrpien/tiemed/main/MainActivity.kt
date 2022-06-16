@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     // Firebase Authentication required to log out
     private val firebaseAuth = FirebaseAuth.getInstance()
 
+
     // onCreate lifecycle function
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
