@@ -41,6 +41,9 @@ android {
 dependencies {
     implementation 'androidx.preference:preference:1.1.1'
 
+    // Kotlin Reflect depencies for iteration through components of object
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+
 
     // NavigationUI dependedencies
     def nav_version = "2.4.2"

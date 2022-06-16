@@ -90,6 +90,7 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
 
     override fun setOnInspectionItemClickListener(itemView: View) {
 
+        // TODO XDDDD
         // implementing inspection list Recycler View item click
         // Move to EditInspectionFragment when inspection list Recycler View item clicked
         // Add bundle with record id

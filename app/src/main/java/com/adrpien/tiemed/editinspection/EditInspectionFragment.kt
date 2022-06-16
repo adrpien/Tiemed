@@ -2,11 +2,11 @@ package com.adrpien.tiemed.editinspection
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.R
@@ -14,9 +14,16 @@ import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
-import java.lang.NullPointerException
+import java.util.*
+
+import kotlin.reflect.full.memberProperties
 
 class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,  AdapterView.OnItemSelectedListener{
+
+    // ViewBinding
+    private var _binding: FragmentEditInspectionBinding? = null
+    private val binding: FragmentEditInspectionBinding
+        get() = _binding!!
 
     // ViewModel
     val viewModelProvider by viewModels<EditInspectionViewModel>()
@@ -24,10 +31,11 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     private var hospitalList: MutableList<String> = mutableListOf()
     private lateinit var inspection: MutableLiveData<Inspection>
 
-    // ViewBinding
-    private var _binding: FragmentEditInspectionBinding? = null
-    private val binding: FragmentEditInspectionBinding
-        get() = _binding!!
+    private var tempInspection: Inspection = Inspection()
+
+    private lateinit var id: String
+
+    val TAG = "EditInspectionFragment"
 
     init{
         // Setting options menu
@@ -38,24 +46,30 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         super.onCreate(savedInstanceState)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // ViewBinding
+        _binding = FragmentEditInspectionBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = arguments?.getString("id")
+        // Filling fields with data of opened record (in case of update of inspection, not creating)
+        id = arguments?.getString("id").toString()
+        if(id != null) {
+            inspection = viewModelProvider.getInspection(id)
 
-        // TODO W IF DALES TRY-CATCH DEBILU XDDDDDD
-        if(id != null){
-            try {
-                inspection = viewModelProvider.getInspection(id)
+            viewModelProvider.getInspection(id).observe(viewLifecycleOwner) { inspection ->
+                binding.inspectionDateButton.setText(getDateString(inspection.inspectionDate.toLong()))
+                bindInspectionData(inspection)
+                tempInspection = inspection
             }
-            catch (e: NullPointerException) {
-                // TODO getInspection NullPointerException catch implementation
-            }
+        }
 
         // Hospital spinner implementation
         viewModelProvider.getHospitalList().observe(viewLifecycleOwner) {
-            for(item in it){
+            for (item in it) {
                 item.name.let {
                     hospitalList.add(it)
                 }
@@ -68,8 +82,9 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 )
             }
             binding.inspectionHospitalSpinner.adapter = hospitalListArrayAdapter
-
         }
+
+        // Hospital Spinner implementation
         binding.inspectionHospitalSpinner.onItemSelectedListener = this
 
         // Date button implementation
@@ -79,33 +94,11 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
         }
-            viewModelProvider.getInspection(id).observe(viewLifecycleOwner) { inspection ->
-                binding.inspectionDateButton.setText(getDataString(inspection.inspectionDate.toLong()))
-                bindInspectionData(inspection)
-            }
-        }
-
     }
 
-    private fun bindInspectionData(inspection: Inspection) {
-        binding.inspectionIDTextInputEditText.setText(inspection.id)
-        binding.inspectionNameTextInputEditText.setText(inspection.name)
-        binding.inspectionManufacturerTextInputEditText.setText(inspection.manufacturer)
-        binding.inspectionModelTextInputEditText.setText(inspection.model)
-        binding.inspectionINTextInputEditText.setText(inspection.inventoryNumber)
-        binding.inspectionSNTextInputEditText.setText(inspection.serialNumber)
-        binding.inspectionWardTextInputEditText.setText(inspection.ward)
-        // TODO Hospital spinner bind data to implement
-        val selection = 1
-        //inspection.hospital?.uppercase()
-        binding.inspectionHospitalSpinner.setSelection(selection)
-
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // ViewBinding
-        _binding = FragmentEditInspectionBinding.inflate(layoutInflater)
-        return binding.root
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     // Creating Fragment Options Menu
@@ -122,14 +115,15 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // Handle item selection
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
+
                 // TODO Update/Add inspection record button reaction
-                val map: Map<String, String> = mapOf(
-                    // "id" to binding.InspectionIDTextInputEditText.text.toString(),
-                    // "name" to binding.na
-                )
-                //val id =
-                //viewModelProvider.updateInspection(map, id)
-                Toast.makeText(context,"Saved!", Toast.LENGTH_SHORT).show()
+                val map = createMap(tempInspection)
+                if(id != null) {
+                    viewModelProvider.updateInspection(map, id)
+                    Log.d(TAG, "Inspection updated")
+                } else {
+                    viewModelProvider.createInspection(tempInspection)
+                }
                 true
             }
             R.id.addRepairRecordItem -> {
@@ -142,18 +136,19 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        // TODO inspectionDateButton onInspectionDateSet implementation
-        Toast.makeText(context, "Inspection date changed", Toast.LENGTH_SHORT).show()
+
+        // Set values
+        var date: Calendar = Calendar.getInstance()
+        date.set(year, month, dayOfMonth)
+
+        // Set button text
+        tempInspection.inspectionDate = date.timeInMillis.toString()
+        binding.inspectionDateButton.setText(getDateString(date.timeInMillis))
     }
 
-    // Spinner override
-
+    // Hospital spinner override
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // TODO hospitalListSpinner onItemSelected implementation
     }
@@ -162,5 +157,32 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // TODO hospitalListSpinner onNothingSelected implemention
     }
 
+    private fun bindInspectionData(inspection: Inspection) {
+        binding.inspectionIDTextInputEditText.setText(inspection.id)
+        binding.inspectionNameTextInputEditText.setText(inspection.name)
+        binding.inspectionManufacturerTextInputEditText.setText(inspection.manufacturer)
+        binding.inspectionModelTextInputEditText.setText(inspection.model)
+        binding.inspectionINTextInputEditText.setText(inspection.inventoryNumber)
+        binding.inspectionSNTextInputEditText.setText(inspection.serialNumber)
+        binding.inspectionWardTextInputEditText.setText(inspection.ward)
+
+        // TODO Hospital spinner bind data to implement
+        val selection = 1
+        //inspection.hospital?.uppercase()
+        binding.inspectionHospitalSpinner.setSelection(selection)
+
+    }
+
+    // Creating map of inspection fields with their values
+    private fun createMap(inspection: Inspection): Map<String, String> {
+        var map: MutableMap<String, String> = mutableMapOf()
+        for (component in Inspection::class.memberProperties){
+            map.put(component.name, component.get(inspection).toString())
+        }
+        return map
+    }
+    private fun updateTempInspection(){
+
+    }
 
 }

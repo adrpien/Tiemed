@@ -21,14 +21,35 @@ abstract class BaseFragment: Fragment(){
         (requireActivity() as AppCompatActivity).supportActionBar?.title = title
     }
 
-    fun getDataString(millis: Long): String{
+    fun getDateString(millis: Long): String{
         var date: Calendar = Calendar.getInstance()
         date.timeInMillis = millis
-        var string: String = date.getTime().toString()
+
+
+        var day = date.get(Calendar.DAY_OF_MONTH)
+        var month = date.get(Calendar.MONTH) + 1
+        var year = date.get(Calendar.YEAR)
+
+        var dayString = if( day < 10) {
+            "0" + day.toString()
+        } else {
+            day.toString()
+        }
+
+        var monthString = if(month < 10){
+            "0" + month.toString()
+        } else {
+            month.toString()
+        }
+
+        var yearString = year.toString()
+
+        var string = "$dayString/$monthString/$year"
+
         return string
     }
 
-    fun getDataString(): String{
+    fun getDateString(): String{
         var date: Calendar = Calendar.getInstance()
         var string: String = date.getTime().toString()
         return string
