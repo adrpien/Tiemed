@@ -1,6 +1,7 @@
 package com.adrpien.tiemed.editinspection
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -100,6 +101,13 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             dialog.show(childFragmentManager, "inspection_time_picker")
         }
 
+        // TODO signatureImageButton implementation
+        // signatureImageButton impementation
+        binding.signatureImageButton.setOnClickListener {
+            // Open SignatureDialog when signatureImageButtonClicked
+            createSignatureDialog(this)
+        }
+
         // EST spinner implementation
         binding.inspectionESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             tempInspection.safetyTest = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
@@ -114,6 +122,10 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 .uppercase().
                 replace(" ", "_")
         }
+    }
+
+    private fun createSignatureDialog(context: Context) {
+
     }
 
     override fun onDestroy() {

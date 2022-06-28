@@ -4,7 +4,6 @@
     <!--
     App colours
     -->
-
     <color name="dark_grey">#494949</color>
     <color name="grey">#838383</color>
     <color name="light_grey">#B6B6B6</color>
@@ -19,5 +18,9 @@
     -->
     <color name="Zgloszony">#7E1A1A</color>
 
+    <!--
+    Signature View Color
+    -->
+    <color name="signature_view_color">#FFFFFF</color>
 
 </resources>

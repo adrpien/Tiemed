@@ -33,6 +33,9 @@
     <string name="resetPasswordButton">resetPasswordButton</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="siganture">Signature</string>
     <string-array name="spinner_array">
         <item>Item1</item>
         <item>Item2</item>
