@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.adrpien.tiemed.R
@@ -12,14 +13,25 @@ import kotlinx.coroutines.NonCancellable.cancel
 
 class SignatureDialog(): DialogFragment() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // TAK OK?
-        val view = SignatureView(requireContext())
+        //val view = SignatureView(requireContext())
+        // val signatureLayout = layoutInflater.inflate(R.layout.signature_view, null)
+
+        val view = View.inflate(context, R.layout.signature_view, null)
+
         return activity?.let {
             // Use the Builder class for convenient dialog construction
-            val builder = androidx.appcompat.app.AlertDialog.Builder(it)
+            val builder = AlertDialog.Builder(activity)
             builder.setMessage(R.string.siganture)
+                .setCancelable(true)
+                .setTitle(getString(R.string.signature))
                 .setPositiveButton(R.string.confirm,
                     DialogInterface.OnClickListener { dialog, id ->
                         saveSignature()
@@ -28,8 +40,11 @@ class SignatureDialog(): DialogFragment() {
                 .setNegativeButton(R.string.cancel,
                     DialogInterface.OnClickListener { dialog, id ->
                         Toast.makeText(it, "Canceled", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
                     })
                 .setView(view)
+
+
 
             // Create the AlertDialog object and return it
             builder.create()

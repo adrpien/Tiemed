@@ -41,4 +41,9 @@
         <item>Item2</item>
         <item>Item3</item>
     </string-array>
+
+    <!-- Signature View content description -->
+
+    <string name="signatureViewContentDescription">Signature View is area with signature</string>
+    <string name="signature">Signature</string>
 </resources>

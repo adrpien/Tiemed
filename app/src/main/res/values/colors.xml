@@ -21,6 +21,6 @@
     <!--
     Signature View Color
     -->
-    <color name="signature_view_color">#FFFFFF</color>
-
+    <color name="signature_view_background_color">#FFFFFF</color>
+    <color name="signature_view_color">#000000</color>
 </resources>

@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/layout/menu_cell.xml" value="0.5" />
         <entry key="app/src/main/res/layout/repair_list_cell.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/repair_list_fragment.xml" value="0.28802083333333334" />
+        <entry key="app/src/main/res/layout/signature_view.xml" value="0.1952887537993921" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/menu/edit_inspection_options_menu.xml" value="0.4588541666666667" />
         <entry key="app/src/main/res/menu/edit_repair_options_menu.xml" value="0.1671875" />

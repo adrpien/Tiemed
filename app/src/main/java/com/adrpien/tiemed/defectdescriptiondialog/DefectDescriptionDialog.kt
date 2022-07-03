@@ -12,5 +12,6 @@ class DefectPickerDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // TODO onCreate defect description dialog
+        return Dialog(requireContext())
     }
 }

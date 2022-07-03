@@ -21,6 +21,7 @@ import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
+import com.adrpien.tiemed.signature.SignatureDialog
 import java.util.*
 
 import kotlin.reflect.full.memberProperties
@@ -102,10 +103,13 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         }
 
         // TODO signatureImageButton implementation
-        // signatureImageButton impementation
+        // signatureImageButton implementation
         binding.signatureImageButton.setOnClickListener {
+
             // Open SignatureDialog when signatureImageButtonClicked
-            createSignatureDialog(this)
+            val dialog = SignatureDialog()
+            // show MyTimePicker
+            dialog.show(childFragmentManager, "signature_dialog")
         }
 
         // EST spinner implementation
@@ -124,9 +128,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         }
     }
 
-    private fun createSignatureDialog(context: Context) {
-
-    }
 
     override fun onDestroy() {
         super.onDestroy()

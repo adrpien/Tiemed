@@ -19,9 +19,9 @@ class UserViewModel: ViewModel() {
         return userRepository.getUser()
     }
 
-    // Sets User
-    fun setUser(user: User){
-        userRepository.setUserData(user)
-    }
+//    // Sets User
+//    fun setUser(user: User){
+//        userRepository.setUserData(user)
+//    }
 
 }
