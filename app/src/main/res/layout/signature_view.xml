@@ -7,7 +7,7 @@
 
     <com.adrpien.tiemed.signature.SignatureView
         android:id="@+id/signatureView"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp" />
 
 </LinearLayout>

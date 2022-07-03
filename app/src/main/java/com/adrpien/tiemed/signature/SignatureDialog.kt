@@ -20,16 +20,14 @@ class SignatureDialog(): DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        // TAK OK?
-        //val view = SignatureView(requireContext())
-        // val signatureLayout = layoutInflater.inflate(R.layout.signature_view, null)
+        // Inflating signature layout with custom SignatureView
+        val signatureLayout = layoutInflater.inflate(R.layout.signature_view, null)
 
-        val view = View.inflate(context, R.layout.signature_view, null)
 
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(activity)
-            builder.setMessage(R.string.siganture)
+            builder
                 .setCancelable(true)
                 .setTitle(getString(R.string.signature))
                 .setPositiveButton(R.string.confirm,
@@ -42,7 +40,7 @@ class SignatureDialog(): DialogFragment() {
                         Toast.makeText(it, "Canceled", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     })
-                .setView(view)
+                .setView(signatureLayout)
 
 
 

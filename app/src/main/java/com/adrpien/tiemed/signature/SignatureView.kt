@@ -1,26 +1,33 @@
 package com.adrpien.tiemed.signature
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.get
 import com.adrpien.tiemed.R
 import kotlin.math.abs
 
-class SignatureView(context: Context): View(context) {
+private const val STROKE_WIDTH = 12f
 
+class SignatureView(context: Context): View(context) {
     constructor(context: Context, attributeSet: AttributeSet): this(context) {
     }
 
-    // Touch tolerance infulence on interpolation a path between point to increase phone perfomance
-    private val touchTolerance = ViewConfiguration.get(context).scaledTouchSlop
+    // The Path class encapsulates compound geometric paths consisting of straight line segments, quadratic curves, and cubic curves.
+    // Cached Path
+    private var path = Path()
 
+    // Contain cached Bitmap and Canvas
+    private lateinit var extraBitmap: Bitmap
+    private  lateinit var extraCanvas: Canvas
+    // Values definitions
+    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.signature_view_background_color, null)
+    private val drawColor = ResourcesCompat.getColor(resources, R.color.signature_view_color, null)
+    private lateinit var frame: Rect
 
     // Values to store motion coordinates
     private var motionTouchEventX = 0f
@@ -30,7 +37,7 @@ class SignatureView(context: Context): View(context) {
 
     // Implementation of Paint object
     val paint = Paint().apply {
-        color = backgroundColor
+        color = drawColor
         // isAntiAlias defines whether to apply edge smoothing.
         // Setting isAntiAlias to true, smoothes out the edges of what is drawn without affecting the shape.
         isAntiAlias = true
@@ -43,31 +50,13 @@ class SignatureView(context: Context): View(context) {
         //strokeCap sets the shape of the end of the line to be a cap
         strokeCap = Paint.Cap.ROUND // default: BUTT
         // strokeWidth specifies the width of the stroke in pixels
-        strokeWidth = 12f // default: Hairline-width (really thin)
+        strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
 
 
+    // Touch tolerance infulence on interpolation a path between point to increase phone perfomance
+    private val touchTolerance = ViewConfiguration.get(context).scaledTouchSlop
 
-    // The Path class encapsulates compound geometric paths consisting of straight line segments, quadratic curves, and cubic curves.
-    // Cached Path
-    private var path = Path()
-
-    // Contain cached Bitmap and Canvas
-    private lateinit var extraBitmap: Bitmap
-    private  lateinit var extraCanvas: Canvas
-
-    // Values definitions
-    private val viewWidth = 800
-    private val viewHeight = 400
-    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.signature_view_background_color, null)
-    private val drawColor = ResourcesCompat.getColor(resources, R.color.signature_view_color, null)
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-
-        // Drawing cached Bitmap on canvas
-        canvas?.drawBitmap(extraBitmap, 0f, 0f, null)
-    }
 
     // The onSizeChanged() method is called by the Android system whenever a view changes size.
     // Because the view starts out with no size, the view's onSizeChanged() method is also called after the Activity first creates and inflates it.
@@ -79,20 +68,46 @@ class SignatureView(context: Context): View(context) {
         if (::extraBitmap.isInitialized) extraBitmap.recycle()
 
         // Setting extraBitmap
-        // extraBitmap is background of the view
-        extraBitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888)
+        extraBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+
         // Setting extraCanvas with extraBitmap
         extraCanvas = Canvas(extraBitmap)
+
         // Setting drawColor
         extraCanvas.drawColor(backgroundColor)
 
+        // Calculate a rectangular frame around the picture.
+        val inset = 10
+        frame = Rect(inset, inset, w - inset, h - inset)
+
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        if (canvas != null) {
+            // Drawing cached Bitmap on canvas
+            canvas.drawBitmap(extraBitmap, 0f, 0f, null)
+            // Draw a frame around the canvas.
+            extraCanvas.drawRect(frame, paint)
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event != null) {
+            motionTouchEventY = event.y
+            motionTouchEventX = event.x
+        }
         when (event?.action) {
-            MotionEvent.ACTION_DOWN -> touchDown()
-            MotionEvent.ACTION_UP -> touchUp()
-            MotionEvent.ACTION_MOVE -> touchMove()
+            MotionEvent.ACTION_DOWN -> {
+                touchDown()
+            }
+            MotionEvent.ACTION_UP -> {
+                touchUp()
+            }
+            MotionEvent.ACTION_MOVE -> {
+                touchMove()
+            }
 
         }
         return true
@@ -102,12 +117,13 @@ class SignatureView(context: Context): View(context) {
         val dx = abs(motionTouchEventX - currentX)
         val dy = abs(motionTouchEventY - currentY)
         if (dx >= touchTolerance || dy >= touchTolerance) {
-            // Creating curve between points when finger is dragged more tan touchTolerance
-            path.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
-            currentX = motionTouchEventX
-            currentY = motionTouchEventY
-            // Draw the path in the extra bitmap to cache it.
-            extraCanvas.drawPath(path, paint)
+          // Creating curve between points when finger is dragged more tan touchTolerance
+          path.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
+          currentX = motionTouchEventX
+          currentY = motionTouchEventY
+          // Draw the path in the extra bitmap to cache it.
+          extraCanvas.drawPath(path, paint)
+
         }
         // Force to redraw
         invalidate()

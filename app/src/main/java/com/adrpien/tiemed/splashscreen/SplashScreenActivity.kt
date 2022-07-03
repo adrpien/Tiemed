@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.ActivitySplashScreenActivityBinding
 import com.adrpien.tiemed.login.LoginActivity
+import com.adrpien.tiemed.signature.SignatureView
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -22,8 +25,10 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         // Setting ViewBinding
         binding = ActivitySplashScreenActivityBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         // Hiding supportActionBar
