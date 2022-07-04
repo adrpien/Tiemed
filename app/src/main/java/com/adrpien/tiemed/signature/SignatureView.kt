@@ -24,9 +24,12 @@ class SignatureView(context: Context): View(context) {
     // Contain cached Bitmap and Canvas
     private lateinit var extraBitmap: Bitmap
     private  lateinit var extraCanvas: Canvas
+
     // Values definitions
     private val backgroundColor = ResourcesCompat.getColor(resources, R.color.signature_view_background_color, null)
     private val drawColor = ResourcesCompat.getColor(resources, R.color.signature_view_color, null)
+
+    // Frame
     private lateinit var frame: Rect
 
     // Values to store motion coordinates
@@ -70,7 +73,7 @@ class SignatureView(context: Context): View(context) {
         // Setting extraBitmap
         extraBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
 
-        // Setting extraCanvas with extraBitmap
+        // Create extraCanvas using extraBitmap
         extraCanvas = Canvas(extraBitmap)
 
         // Setting drawColor
