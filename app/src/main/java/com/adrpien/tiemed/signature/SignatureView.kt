@@ -85,6 +85,7 @@ class SignatureView(context: Context): View(context) {
 
     }
 
+    // onDraw implementation
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
@@ -96,6 +97,7 @@ class SignatureView(context: Context): View(context) {
         }
     }
 
+    // onTouchEvent implementation
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
             motionTouchEventY = event.y

@@ -33,4 +33,7 @@ data class Inspection(
     // Dates
     var inspectionDate: String = Calendar.getInstance().time.toString(),
 
+    // Signature
+    var signature: String = ""
+
     )

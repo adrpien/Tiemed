@@ -284,7 +284,6 @@
                 android:id="@+id/signatureImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@drawable/add_float_button"
                 android:scaleType="centerInside"
                 />
 

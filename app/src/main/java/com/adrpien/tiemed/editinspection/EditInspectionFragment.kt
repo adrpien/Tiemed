@@ -1,16 +1,16 @@
 package com.adrpien.tiemed.editinspection
 
+
 import android.app.DatePickerDialog
-import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.core.view.get
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -23,8 +23,8 @@ import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 import com.adrpien.tiemed.signature.SignatureDialog
 import java.util.*
-
 import kotlin.reflect.full.memberProperties
+
 
 class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener{
 
@@ -40,6 +40,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     private lateinit var inspection: MutableLiveData<Inspection>
 
     private var tempInspection: Inspection = Inspection()
+    private var tempSignatureByteArray = ByteArray(0)
 
     private lateinit var id: String
 
@@ -108,6 +109,22 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
             // Open SignatureDialog when signatureImageButtonClicked
             val dialog = SignatureDialog()
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                "REQUEST_KEY",
+                viewLifecycleOwner,
+                FragmentResultListener { requestKey, result ->
+                    tempSignatureByteArray = result.getByteArray("signature")!!
+                    val options = BitmapFactory.Options()
+                    options.inMutable = true
+                    val bmp = BitmapFactory.decodeByteArray(
+                        tempSignatureByteArray,
+                        0,
+                        tempSignatureByteArray.size,
+                        options
+                    )
+
+                    binding.signatureImageButton.setImageBitmap(bmp)
+                })
             // show MyTimePicker
             dialog.show(childFragmentManager, "signature_dialog")
         }
@@ -149,6 +166,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
                 // Update/Add inspection record button reaction
+                viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.id)
                 updateTempInspection()
                 val map = createMap(tempInspection)
                 if(id != null) {
@@ -244,6 +262,11 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionHospitalSpinner.setSelection(position)
     }
 
+    private fun bindSignatureImageButton(inspection: Inspection){
+        // TODO Use Glide to bind signature photo with image button
+
+    }
+
     // Creating map of inspection fields with their values
     private fun createMap(inspection: Inspection): Map<String, String> {
         var map: MutableMap<String, String> = mutableMapOf()
@@ -263,6 +286,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         tempInspection.serialNumber = binding.inspectionSNTextInputEditText.text.toString()
         tempInspection.ward = binding.inspectionWardTextInputEditText.text.toString()
         tempInspection.hospital = binding.inspectionHospitalSpinner.selectedItem.toString()
+        tempInspection.signature = viewModelProvider.getInspectionSignatureUrl(tempInspection.id).toString()
     }
 
     // Handling hospital spinner item selected reaction

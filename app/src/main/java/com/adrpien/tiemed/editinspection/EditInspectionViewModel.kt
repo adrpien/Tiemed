@@ -6,10 +6,11 @@ import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.repositories.FirebaseRepository
+import com.google.firebase.storage.FirebaseStorage
 
 class EditInspectionViewModel: ViewModel() {
 
-    val firebaseRepository = FirebaseRepository()
+    private val firebaseRepository = FirebaseRepository()
 
     fun updateInspection(map: Map<String, String>, id: String){
         firebaseRepository.updateInspection(map, id)
@@ -25,6 +26,14 @@ class EditInspectionViewModel: ViewModel() {
 
     fun getHospitalList(): MutableLiveData<List<Hospital>>{
         return firebaseRepository.getHospitalList()
+    }
+
+    fun uploadSignature(signatureBytes: ByteArray, signatureId: String){
+        firebaseRepository.uploadSignature(signatureBytes, signatureId)
+    }
+
+    fun getInspectionSignatureUrl(signatureId: String){
+        firebaseRepository.getInspectionSignatureUrl(signatureId)
     }
 
 }
