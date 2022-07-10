@@ -3,6 +3,7 @@ package com.adrpien.tiemed.repositories
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.main.MainActivity
@@ -21,16 +22,18 @@ class FirebaseRepository {
     private val REPOSITORY_DEBUG = "REPOSITORY_DEBUG"
 
     // Signature
-    private lateinit var signatureURL: Uri
+    private lateinit var signatureURL: MutableLiveData<String>
 
     // User
-    private lateinit var user: User
+    private lateinit var user: MutableLiveData<User>
+
+    private var signature: MutableLiveData<ByteArray> = MutableLiveData<ByteArray>()
 
     // MutableLiveData with inspection
-    var inspection: MutableLiveData<Inspection> = MutableLiveData<Inspection>()
+    private var inspection: MutableLiveData<Inspection> = MutableLiveData<Inspection>()
 
     // Repair
-    private lateinit var repair: Repair
+    private lateinit var repair: MutableLiveData<Repair>
 
     // MutableLiveData with list of inspections
     private lateinit var inspectionList: MutableLiveData<List<Inspection>>
@@ -54,7 +57,9 @@ class FirebaseRepository {
     */
 
     // Returns user stored in LiveData
-    fun getUser(): User {
+    fun getUser(): MutableLiveData<User> {
+
+        val user = MutableLiveData<User>()
 
         // Get user UID from Firebase Authentication
         val uid = firebaseAuth.currentUser?.uid
@@ -63,7 +68,8 @@ class FirebaseRepository {
             .document(uid!!)
             .get()
             .addOnSuccessListener {
-                user = it.toObject(User::class.java)!!
+                val user = it.toObject(User::class.java)!!
+                this.user.postValue(user)
                 Log.d(REPOSITORY_DEBUG, "User data delivered")
             }
             .addOnFailureListener {
@@ -135,12 +141,13 @@ class FirebaseRepository {
     }
 
     // Returns repair according to delivered id
-    fun getRepair(id: String): Repair {
+    fun getRepair(id: String): MutableLiveData<Repair> {
             firebaseFirestore.collection("repairs")
                 .document(id)
                 .get()
                 .addOnSuccessListener {
-                    repair = it.toObject(Repair::class.java)!!
+                    val repair = it.toObject(Repair::class.java)!!
+                    this.repair.postValue(repair)
                     Log.d(REPOSITORY_DEBUG, "Repair record delivered")
                 }
                 .addOnFailureListener {
@@ -224,27 +231,43 @@ class FirebaseRepository {
             .child("${signatureId}.jpg")
             .putBytes(signatureBytes)
             .addOnCompleteListener{
+                Log.d(REPOSITORY_DEBUG, "COMPLETE UPLOAD PHOTO")
             }
             .addOnSuccessListener {
                 Log.d(REPOSITORY_DEBUG, "Signature uploaded")
             }
             .addOnFailureListener{
-                Log.d(REPOSITORY_DEBUG, "it.message.toString()")
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
     }
 
     // Get inspection signature Url
-    fun getInspectionSignatureUrl(inspectionId: String): Uri {
+    fun getInspectionSignature(inspectionId: String): MutableLiveData<String> {
+        firebaseStorage.getReference("signatures")
+            .child("${inspectionId}.jpeg")
+            .downloadUrl
+                .addOnSuccessListener {
+                    val signatureURL = it.toString()
+                    this.signatureURL.postValue(signatureURL)
+                }
+                .addOnFailureListener{
+                    Log.d(REPOSITORY_DEBUG, it.message.toString())
+                }
+        return signatureURL
+    }
+    fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
+        // TODO getInspectionSignature to implement
         firebaseStorage.getReference("signatures")
             .child("${inspectionId}.jpg")
-            .downloadUrl
-                        .addOnSuccessListener {
-                            signatureURL = it
-                        }
-                        .addOnFailureListener{
-                            Log.d(REPOSITORY_DEBUG, it.message.toString())
-                        }
-        return signatureURL
+            .getBytes(10000000) // 10MB
+            .addOnSuccessListener {
+                val signature = it
+                this.signature.postValue(signature)
+            }
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+        return signature
     }
 
     /*

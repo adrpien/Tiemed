@@ -7,25 +7,26 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.get
 import com.adrpien.tiemed.R
 import kotlin.math.abs
 
-private const val STROKE_WIDTH = 12f
 
 class SignatureView(context: Context): View(context) {
     constructor(context: Context, attributeSet: AttributeSet): this(context) {
     }
 
+    // Stroke width
+    private val STROKE_WIDTH = 6f
+
     // The Path class encapsulates compound geometric paths consisting of straight line segments, quadratic curves, and cubic curves.
     // Cached Path
-    private var path = Path()
+    private var currentPath = Path()
 
     // Contain cached Bitmap and Canvas
     private lateinit var extraBitmap: Bitmap
     private  lateinit var extraCanvas: Canvas
 
-    // Values definitions
+    // Colours definitions
     private val backgroundColor = ResourcesCompat.getColor(resources, R.color.signature_view_background_color, null)
     private val drawColor = ResourcesCompat.getColor(resources, R.color.signature_view_color, null)
 
@@ -39,6 +40,7 @@ class SignatureView(context: Context): View(context) {
     private var currentY = 0f
 
     // Implementation of Paint object
+    //The Paint class holds the style and color information about how to draw geometries, text and bitmaps.
     val paint = Paint().apply {
         color = drawColor
         // isAntiAlias defines whether to apply edge smoothing.
@@ -89,6 +91,7 @@ class SignatureView(context: Context): View(context) {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
+        // Draw extraBitmap, which contains what was drawn earlier
         if (canvas != null) {
             // Drawing cached Bitmap on canvas
             canvas.drawBitmap(extraBitmap, 0f, 0f, null)
@@ -123,11 +126,11 @@ class SignatureView(context: Context): View(context) {
         val dy = abs(motionTouchEventY - currentY)
         if (dx >= touchTolerance || dy >= touchTolerance) {
           // Creating curve between points when finger is dragged more tan touchTolerance
-          path.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
+          currentPath.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
           currentX = motionTouchEventX
           currentY = motionTouchEventY
           // Draw the path in the extra bitmap to cache it.
-          extraCanvas.drawPath(path, paint)
+          extraCanvas.drawPath(currentPath, paint)
 
         }
         // Force to redraw
@@ -135,12 +138,13 @@ class SignatureView(context: Context): View(context) {
     }
 
     private fun touchUp() {
-        path.reset()
+        // Reset current path
+        currentPath.reset()
     }
 
     private fun touchDown() {
-        path.reset()
-        path.moveTo(motionTouchEventX, motionTouchEventY)
+        currentPath.reset()
+        currentPath.moveTo(motionTouchEventX, motionTouchEventY)
         currentX = motionTouchEventX
         currentY = motionTouchEventY
     }

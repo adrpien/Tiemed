@@ -44,6 +44,7 @@
 
     <!-- Signature View content description -->
 
-    <string name="signatureViewContentDescription">Signature View is area with signature</string>
+    <string name="signature_view_content_description">Signature View is area with signature</string>
     <string name="signature">Signature</string>
+    <string name="signature_request_key">request_key</string>
 </resources>

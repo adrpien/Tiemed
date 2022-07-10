@@ -4,9 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.datamodels.Inspection
-import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.repositories.FirebaseRepository
-import com.google.firebase.storage.FirebaseStorage
 
 class EditInspectionViewModel: ViewModel() {
 
@@ -32,8 +30,12 @@ class EditInspectionViewModel: ViewModel() {
         firebaseRepository.uploadSignature(signatureBytes, signatureId)
     }
 
-    fun getInspectionSignatureUrl(signatureId: String){
-        firebaseRepository.getInspectionSignatureUrl(signatureId)
+    fun getInspectionSignatureUrl(signatureId: String): MutableLiveData<String>{
+        return firebaseRepository.getInspectionSignature(signatureId)
+    }
+
+    fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
+        return firebaseRepository.getSignature(inspectionId)
     }
 
 }

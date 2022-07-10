@@ -1,5 +1,7 @@
 package com.adrpien.tiemed.editrepair
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.repositories.FirebaseRepository
@@ -16,7 +18,7 @@ class EditRepairViewModel: ViewModel() {
         firebaseRepository.updateRepair(map, uid)
     }
 
-    fun getRepair(id: String){
-        firebaseRepository.getRepair(id)
+    fun getRepair(id: String): MutableLiveData<Repair> {
+        return firebaseRepository.getRepair(id)
     }
 }
