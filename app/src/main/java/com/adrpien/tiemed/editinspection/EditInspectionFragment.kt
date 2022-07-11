@@ -38,12 +38,12 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     // ViewModel
     val viewModelProvider by viewModels<EditInspectionViewModel>()
 
+
     private lateinit var hospitalList: MutableLiveData<List<Hospital>>
     private lateinit var inspection: MutableLiveData<Inspection>
     private lateinit var signature: MutableLiveData<ByteArray>
 
     private  var tempHospitalList = mutableListOf<String>()
-    private var tempSignature: ByteArray = byteArrayOf()
     private var tempInspection: Inspection = Inspection()
     private var tempSignatureByteArray: ByteArray = byteArrayOf()
 
@@ -70,16 +70,19 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Filling fields with data of opened record (when record is updated)
         id = arguments?.getString("id").toString()
         if(id != null) {
             inspection = viewModelProvider.getInspection(id)
             viewModelProvider.getInspection(id).observe(viewLifecycleOwner) { inspection ->
+                // Filling fields with data of opened record (when record is updated)
                 bindInspectionData(inspection)
-
-                // Setting inspection data as tempInspection default value
-                tempInspection = inspection
             }
+        }
+
+        // Signature image button implementation
+        signature = viewModelProvider.getSignature(id)
+        viewModelProvider.getSignature(id).observe(viewLifecycleOwner) { bytes ->
+            bindSignatureImageButton(bytes)
         }
 
         // Hospital spinner implementation
@@ -109,11 +112,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             dialog.show(childFragmentManager, "inspection_time_picker")
         }
 
-        // Signature image button implementation
-        signature = viewModelProvider.getSignature(id)
-        viewModelProvider.getSignature(id).observe(viewLifecycleOwner){
-            tempSignatureByteArray = it
-        }
         binding.signatureImageButton.setOnClickListener {
 
             // Open SignatureDialog when signatureImageButtonClicked
@@ -157,7 +155,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -177,9 +174,12 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // Handle item selection
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
-                // Update/Add inspection record button reaction
-                viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.id)
-                //updateTempInspection()
+
+                // Check if update or upload signature
+                    // Update/Add inspection record button reaction
+                    viewModelProvider.updateSignature(tempInspection.id, tempSignatureByteArray)
+
+                updateTempInspection()
                 val map = createMap(tempInspection)
                 if(id != null) {
                     viewModelProvider.updateInspection(map, id)
@@ -215,6 +215,8 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     // Binding data of inspection in  appropriate components
     private fun bindInspectionData(inspection: Inspection) {
 
+        tempInspection = inspection
+
         // TextViews bind
         binding.inspectionIDTextInputEditText.setText(inspection.id)
         binding.inspectionNameTextInputEditText.setText(inspection.name)
@@ -235,9 +237,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
         // Inspection state radio button bind
         bindStateRadioButton(inspection)
-
-        // Signature image button bind and observe
-        bindSignatureImageButton(inspection)
     }
 
     // Binding data of inspection in state spinner
@@ -279,13 +278,14 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionHospitalSpinner.setSelection(position)
     }
 
-    private fun bindSignatureImageButton(inspection: Inspection){
+    private fun bindSignatureImageButton(bytes: ByteArray){
+
         val options = BitmapFactory.Options()
         options.inMutable = true
         val bmp = BitmapFactory.decodeByteArray(
-            tempSignatureByteArray,
+            bytes,
             0,
-            tempSignatureByteArray.size,
+            bytes.size,
             options)
         binding.signatureImageButton.setImageBitmap(bmp)
     }
@@ -309,7 +309,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         tempInspection.serialNumber = binding.inspectionSNTextInputEditText.text.toString()
         tempInspection.ward = binding.inspectionWardTextInputEditText.text.toString()
         tempInspection.hospital = binding.inspectionHospitalSpinner.selectedItem.toString()
-        // TODO Update signature
+        // TODO Update signature and EST Radio Group and State RadioGroup
     }
 
     // Handling hospital spinner item selected reaction

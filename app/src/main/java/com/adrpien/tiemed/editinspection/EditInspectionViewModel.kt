@@ -30,12 +30,13 @@ class EditInspectionViewModel: ViewModel() {
         firebaseRepository.uploadSignature(signatureBytes, signatureId)
     }
 
-    fun getInspectionSignatureUrl(signatureId: String): MutableLiveData<String>{
-        return firebaseRepository.getInspectionSignature(signatureId)
-    }
 
     fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
         return firebaseRepository.getSignature(inspectionId)
     }
+    fun updateSignature(inspectionId: String, byteArray: ByteArray) {
+        firebaseRepository.updateSignature(byteArray, inspectionId)
+    }
+
 
 }

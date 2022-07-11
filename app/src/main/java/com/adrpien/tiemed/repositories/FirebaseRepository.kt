@@ -241,20 +241,7 @@ class FirebaseRepository {
             }
     }
 
-    // Get inspection signature Url
-    fun getInspectionSignature(inspectionId: String): MutableLiveData<String> {
-        firebaseStorage.getReference("signatures")
-            .child("${inspectionId}.jpeg")
-            .downloadUrl
-                .addOnSuccessListener {
-                    val signatureURL = it.toString()
-                    this.signatureURL.postValue(signatureURL)
-                }
-                .addOnFailureListener{
-                    Log.d(REPOSITORY_DEBUG, it.message.toString())
-                }
-        return signatureURL
-    }
+    // Get inspection signature
     fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
         // TODO getInspectionSignature to implement
         firebaseStorage.getReference("signatures")
@@ -268,6 +255,16 @@ class FirebaseRepository {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
         return signature
+    }
+
+    // Update signature
+    fun updateSignature(signatureBytes: ByteArray, signatureId: String) {
+        firebaseStorage.getReference("signatures")
+            .child(signatureId)
+            .delete()
+        firebaseStorage.getReference("signatures")
+            .child(signatureId)
+            .putBytes(signatureBytes)
     }
 
     /*
