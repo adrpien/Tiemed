@@ -18,8 +18,8 @@ class EditInspectionViewModel: ViewModel() {
         firebaseRepository.createNewInspection(inspection)
     }
 
-    fun getInspection(id: String): MutableLiveData<Inspection>{
-        return firebaseRepository.getInspection(id)
+    fun getInspection(uid: String): MutableLiveData<Inspection>{
+        return firebaseRepository.getInspection(uid)
     }
 
     fun getHospitalList(): MutableLiveData<List<Hospital>>{
@@ -31,12 +31,8 @@ class EditInspectionViewModel: ViewModel() {
     }
 
 
-    fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
-        return firebaseRepository.getSignature(inspectionId)
+    fun getSignature(inspectionUid: String): MutableLiveData<ByteArray> {
+        return firebaseRepository.getSignature(inspectionUid)
     }
-    fun updateSignature(inspectionId: String, byteArray: ByteArray) {
-        firebaseRepository.updateSignature(byteArray, inspectionId)
-    }
-
 
 }

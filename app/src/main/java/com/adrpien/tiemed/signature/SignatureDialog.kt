@@ -54,6 +54,7 @@ class SignatureDialog(): DialogFragment() {
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")    }
 
+    // Children objects has method to draw on a canvas, not the other way round?
     // Capture Signature, compress to JPEG and return as ByteArray
     private fun captureSignature(signatureLayout: View): ByteArray {
         // Creates empty Bitmap

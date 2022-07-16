@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
 import androidx.fragment.app.Fragment
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
+import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 
@@ -24,6 +24,8 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
     private val binding
         get() = _binding!!
 
+    private lateinit var inspectionUid: String
+    private lateinit var inspectionList: List<Inspection>
 
     private val ACTION_BAR_TITLE: String = "Inspection List"
 
@@ -81,25 +83,30 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
         viewModelProvider.inspectionList.observe(viewLifecycleOwner) { t ->
             if(t.isNotEmpty())
             binding.inspectionRecyclerView.adapter = InspectionListAdapter(t, this)
+            inspectionList = t
         }
 
-        // TODO Fab button to implement
-
+        // FAB Button implementation
+        binding.addInspectionFABButton.setOnClickListener {  view ->
+            findNavController().navigate(InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment())
+        }
 
     }
 
-    override fun setOnInspectionItemClickListener(itemView: View) {
+    override fun setOnInspectionItemClickListener(itemView: View, position: Int) {
 
-        // TODO XDDDD
-        // implementing inspection list Recycler View item click
-        // Move to EditInspectionFragment when inspection list Recycler View item clicked
-        // Add bundle with record id
-        //val id = itemView.findViewById<TextView>(R.id.inspectionRowIdTextView).text.toString()
-        val id = "dnnqy44DV2PbIPk7tfHc"
-        findNavController().navigate(
-            InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
-            bundleOf("id" to id )
-        )
+        inspectionUid = inspectionList[position].uid
+        if(inspectionUid != null) {
+            findNavController().navigate(
+                InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
+                bundleOf("uid" to inspectionUid))
+        } else {
+            findNavController().navigate(
+                InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
+                bundleOf("uid" to null))
+        }
+
+
 
     }
 

@@ -1,19 +1,14 @@
 package com.adrpien.tiemed.repositories
 
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.datamodels.Hospital
-import com.adrpien.tiemed.main.MainActivity
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
 import com.adrpien.tiemed.datamodels.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 
 // Repository class
@@ -179,15 +174,28 @@ class FirebaseRepository {
 
     // Creates new inspection
     fun createNewInspection(inspection: Inspection){
-        firebaseFirestore.collection("inspections")
+        var documentReference = firebaseFirestore.collection("inspections")
             .document()
-            .set(inspection)
-            .addOnFailureListener {
-                Log.d(REPOSITORY_DEBUG, it.message.toString())
-            }
-            .addOnSuccessListener {
-                Toast.makeText(MainActivity(),"Inspection record created",Toast.LENGTH_SHORT ).show()
-            }
+        var map = mapOf<String, String>(
+            "uid" to documentReference.id,
+            "id" to inspection.id,
+            "inspectionState" to inspection.inspectionState,
+            "deviceId" to inspection.deviceId,
+            "name" to inspection.name,
+            "manufacturer" to inspection.manufacturer,
+            "model" to inspection.model,
+            "serialNumber" to inspection.serialNumber,
+            "inventoryNumber" to inspection.inventoryNumber,
+            "hospital" to inspection.hospital,
+            "ward" to inspection.ward,
+            "safetyTest" to inspection.safetyTest,
+            "comment" to inspection.comment,
+            "inspectionDate" to inspection.inspectionDate,
+            "signature" to inspection.signature
+        )
+            documentReference.set(map)
+
+
     }
 
     // Update inspection record
@@ -204,9 +212,9 @@ class FirebaseRepository {
     }
 
     //  Return inspection record according do delivered id
-    fun getInspection(id: String): MutableLiveData<Inspection> {
+    fun getInspection(uid: String): MutableLiveData<Inspection> {
         firebaseFirestore.collection("inspections")
-            .document(id)
+            .document(uid)
             .get()
             .addOnSuccessListener {
                 val inspection = it.toObject(Inspection::class.java)!!
@@ -242,10 +250,9 @@ class FirebaseRepository {
     }
 
     // Get inspection signature
-    fun getSignature(inspectionId: String): MutableLiveData<ByteArray> {
-        // TODO getInspectionSignature to implement
+    fun getSignature(inspectionUid: String): MutableLiveData<ByteArray> {
         firebaseStorage.getReference("signatures")
-            .child("${inspectionId}.jpg")
+            .child("${inspectionUid}.jpg")
             .getBytes(10000000) // 10MB
             .addOnSuccessListener {
                 val signature = it
@@ -257,15 +264,6 @@ class FirebaseRepository {
         return signature
     }
 
-    // Update signature
-    fun updateSignature(signatureBytes: ByteArray, signatureId: String) {
-        firebaseStorage.getReference("signatures")
-            .child(signatureId)
-            .delete()
-        firebaseStorage.getReference("signatures")
-            .child(signatureId)
-            .putBytes(signatureBytes)
-    }
 
     /*
     *********************************

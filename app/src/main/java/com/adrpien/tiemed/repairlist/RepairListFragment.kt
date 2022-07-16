@@ -85,7 +85,7 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
                 }
             }
 
-        binding.repairsFAB.setOnClickListener { t ->
+        binding.addRepairFABButton.setOnClickListener { t ->
 
             // Add new repair record
             findNavController().navigate(

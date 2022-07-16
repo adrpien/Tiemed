@@ -37,7 +37,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
 
         // Inspection row onClickListener
         holder.itemView.setOnClickListener { view ->
-            listener.setOnInspectionItemClickListener(view)
+            listener.setOnInspectionItemClickListener(view, holder.adapterPosition)
         }
 
         // Filling TextViews with values
@@ -107,12 +107,12 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
 }
 
 interface OnInspectionClickListener {
-    fun setOnInspectionItemClickListener(itemview: View)
+    fun setOnInspectionItemClickListener(itemview: View, position: Int)
     fun setOnDateButtonClickListener(itemview: View)
     fun setOnStateButtonClickListener(itemview: View)
 }
 
-// Returns date in format YYYY/MM/DD using millis in String representation
+// Returns date in format YYYY/MM/DD String representation using date in millis
 fun getDateString(date: String): String {
 
     var text: String = ""

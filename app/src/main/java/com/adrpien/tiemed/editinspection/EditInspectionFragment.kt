@@ -47,7 +47,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     private var tempInspection: Inspection = Inspection()
     private var tempSignatureByteArray: ByteArray = byteArrayOf()
 
-    private lateinit var id: String
+    private var uid: String? = null
 
     private val INSPECTION_UPDATE_TAG = "EditInspectionFragment"
 
@@ -69,21 +69,49 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        id = arguments?.getString("id").toString()
-        if(id != null) {
-            inspection = viewModelProvider.getInspection(id)
-            viewModelProvider.getInspection(id).observe(viewLifecycleOwner) { inspection ->
+        uid = arguments?.getString("uid", null)
+        // Fill fields with record data if
+        if(uid != null) {
+            inspection = viewModelProvider.getInspection(uid!!)
+            viewModelProvider.getInspection(uid!!).observe(viewLifecycleOwner) { inspection ->
                 // Filling fields with data of opened record (when record is updated)
                 bindInspectionData(inspection)
             }
         }
 
         // Signature image button implementation
-        signature = viewModelProvider.getSignature(id)
-        viewModelProvider.getSignature(id).observe(viewLifecycleOwner) { bytes ->
-            bindSignatureImageButton(bytes)
+        if(uid != null) {
+                signature = viewModelProvider.getSignature(uid!!)
+                viewModelProvider.getSignature(uid!!).observe(viewLifecycleOwner) { bytes ->
+                    bindSignatureImageButton(bytes)
+                }
+            }
+        binding.signatureImageButton.setOnClickListener {
+
+            // Open SignatureDialog when signatureImageButtonClicked
+            val dialog = SignatureDialog()
+
+            // Dialog fragment result listener
+            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                getString(R.string.signature_request_key),
+                viewLifecycleOwner,
+                FragmentResultListener { requestKey, result ->
+                    tempSignatureByteArray = result.getByteArray("signature")!!
+                    val options = BitmapFactory.Options()
+                    options.inMutable = true
+                    val bmp = BitmapFactory.decodeByteArray(
+                        tempSignatureByteArray,
+                        0,
+                        tempSignatureByteArray.size,
+                        options
+                    )
+                    binding.signatureImageButton.setImageBitmap(bmp)
+                })
+            // show MyTimePicker
+            dialog.show(childFragmentManager, "signature_dialog")
         }
+
 
         // Hospital spinner implementation
         hospitalList = viewModelProvider.getHospitalList()
@@ -110,32 +138,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             val dialog = InspectionDatePickerDialog()
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
-        }
-
-        binding.signatureImageButton.setOnClickListener {
-
-            // Open SignatureDialog when signatureImageButtonClicked
-            val dialog = SignatureDialog()
-
-            // Dialog fragment result listener
-            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
-            requireActivity().supportFragmentManager.setFragmentResultListener(
-                getString(R.string.signature_request_key),
-                viewLifecycleOwner,
-                FragmentResultListener { requestKey, result ->
-                    tempSignatureByteArray = result.getByteArray("signature")!!
-                    val options = BitmapFactory.Options()
-                    options.inMutable = true
-                    val bmp = BitmapFactory.decodeByteArray(
-                        tempSignatureByteArray,
-                        0,
-                        tempSignatureByteArray.size,
-                        options
-                    )
-                    binding.signatureImageButton.setImageBitmap(bmp)
-                })
-            // show MyTimePicker
-            dialog.show(childFragmentManager, "signature_dialog")
         }
 
         // EST spinner implementation
@@ -175,14 +177,13 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         return when (item.itemId) {
             R.id.saveInspectionItem -> {
 
-                // Check if update or upload signature
-                    // Update/Add inspection record button reaction
-                    viewModelProvider.updateSignature(tempInspection.id, tempSignatureByteArray)
+                // Update/Add inspection record button reaction
+                viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.uid)
 
                 updateTempInspection()
                 val map = createMap(tempInspection)
-                if(id != null) {
-                    viewModelProvider.updateInspection(map, id)
+                if(uid != null) {
+                    viewModelProvider.updateInspection(map, uid!!)
                     Log.d(INSPECTION_UPDATE_TAG, "Inspection updated")
                 } else {
                     viewModelProvider.createInspection(tempInspection)
@@ -198,18 +199,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    // Handling date set reaction for date dialog
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-
-        // Set values
-        var date: Calendar = Calendar.getInstance()
-        date.set(year, month, dayOfMonth)
-
-        // Set button text
-        tempInspection.inspectionDate = date.timeInMillis.toString()
-        binding.inspectionDateButton.setText(getDateString(date.timeInMillis))
     }
 
     // Binding data of inspection in  appropriate components
@@ -290,15 +279,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.signatureImageButton.setImageBitmap(bmp)
     }
 
-    // Creating map of inspection fields with their values
-    private fun createMap(inspection: Inspection): Map<String, String> {
-        var map: MutableMap<String, String> = mutableMapOf()
-        for (component in Inspection::class.memberProperties){
-            map.put(component.name, component.get(inspection).toString())
-        }
-        return map
-    }
-
     // Updating tempInspection
     private fun updateTempInspection(){
         tempInspection.id = binding.inspectionIDTextInputEditText.text.toString()
@@ -309,7 +289,6 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         tempInspection.serialNumber = binding.inspectionSNTextInputEditText.text.toString()
         tempInspection.ward = binding.inspectionWardTextInputEditText.text.toString()
         tempInspection.hospital = binding.inspectionHospitalSpinner.selectedItem.toString()
-        // TODO Update signature and EST Radio Group and State RadioGroup
     }
 
     // Handling hospital spinner item selected reaction
@@ -321,5 +300,26 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     // Handling hostpial spinner no item selected reaction
     override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
+
+    // Handling date set reaction for date dialog
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+
+        // Set values
+        var date: Calendar = Calendar.getInstance()
+        date.set(year, month, dayOfMonth)
+
+        // Set button text
+        tempInspection.inspectionDate = date.timeInMillis.toString()
+        binding.inspectionDateButton.setText(getDateString(date.timeInMillis))
+    }
+
+    // Creating map of inspection fields with their values
+    private fun createMap(inspection: Inspection): Map<String, String> {
+        var map: MutableMap<String, String> = mutableMapOf()
+        for (component in Inspection::class.memberProperties){
+            map.put(component.name, component.get(inspection).toString())
+        }
+        return map
     }
 }

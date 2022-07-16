@@ -5,6 +5,8 @@ import java.util.*
 
 data class Inspection(
 
+    var uid: String = "0",
+
     // General
     var id: String = "0",
     //  var inspectionState: InspectionState? = null,
@@ -31,7 +33,7 @@ data class Inspection(
     var comment: String = "",
 
     // Dates
-    var inspectionDate: String = Calendar.getInstance().time.toString(),
+    var inspectionDate: String = Calendar.getInstance().timeInMillis.toString(),
 
     // Signature
     var signature: String = ""
