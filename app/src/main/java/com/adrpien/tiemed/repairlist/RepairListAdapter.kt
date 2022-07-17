@@ -21,7 +21,7 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
     }
 
     override fun onBindViewHolder(holder: RepairViewHolder, position: Int) {
-        holder.idRepairTextView.text = repairList[position].id.toString()
+        holder.idRepairTextView.text = repairList[position].repairId.toString()
         holder.viewRepairButton.setOnClickListener {
             listener.setOnRepairItemClick(holder.itemView)
         }

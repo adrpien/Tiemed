@@ -2,19 +2,21 @@ package com.adrpien.tiemed.datamodels
 
 import org.w3c.dom.Comment
 import java.util.*
+import kotlin.collections.ArrayList
 
 data class Inspection(
 
-    var uid: String = "0",
-
     // General
-    var id: String = "0",
-    //  var inspectionState: InspectionState? = null,
-    var inspectionState: String = "",
+    var inspectionUid: String = "",
+    var inspectionId: String = "",
+
+    // State
+    // Should be InspectionState?
+    //var inspectionState: String = "",
+    var inspectionStateString: String = "",
 
     // Device
-    // var device: Device? = null,
-
+    //var device: Device? = null,
     val deviceId: String = "",
     var name: String = "",
     var manufacturer: String = "",
@@ -23,19 +25,28 @@ data class Inspection(
     var inventoryNumber: String = "",
 
     // Localization
-    // var localization: Localization? = null,
-    var hospital: String = "",
+    //var localization: Localization? = null,
+    //var hospital: Hospital? = null,
+    var hospitalString: String = "",
     var ward: String = "",
 
-    // Inspection description
-    //  var safetyTest: ESTState = "",
-    var safetyTest: String = "",
+
+    // Safety test
+    // Should be ESTState?
+    // var safetyTest: ElectricalSafetyTest? = null,
+    var electricalSafetyTestString: String = "",
+
+    // Comment
     var comment: String = "",
 
-    // Dates
+    // Inspection date
     var inspectionDate: String = Calendar.getInstance().timeInMillis.toString(),
 
-    // Signature
-    var signature: String = ""
+    // Recipient
+    var recipient: String = "",
+    var recipientSignature: String = "",
+
+    // Related repairs
+    //var relatedRepairs: ArrayList<Repair>? = null
 
     )

@@ -43,7 +43,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         // Filling TextViews with values
 
         // Set inspectionRowIdTextView
-        holder.inspectionRowIdTextView.setText(inspectionList[position].id)
+        holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionId)
 
         // Setting inspectionRowDateTextView
         holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate))
@@ -65,7 +65,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         holder.inspectionRowINTextView.append(inspectionList[position].inventoryNumber)
 
         // Setting inspectionRowHospitalTextView
-        holder.inspectionRowHospitalTextView.setText(inspectionList[position].hospital)
+        holder.inspectionRowHospitalTextView.setText(inspectionList[position].hospitalString)
 
         // Setting inspectionRowWardTextView
         holder.inspectionRowWardTextView.setText(inspectionList[position].ward)

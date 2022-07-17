@@ -95,7 +95,7 @@ class InspectionListFragment : Fragment(), OnInspectionClickListener, DatePicker
 
     override fun setOnInspectionItemClickListener(itemView: View, position: Int) {
 
-        inspectionUid = inspectionList[position].uid
+        inspectionUid = inspectionList[position].inspectionUid
         if(inspectionUid != null) {
             findNavController().navigate(
                 InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,

@@ -36,9 +36,7 @@ class DefectDescriptionDialog: DialogFragment() {
                 // Creating
                 // TODO awating for Repair class finish
                 val repair = Repair(
-                    id = "ueiwydgq8",
-                    defectDescription = defectDescriptionEditText.text.toString(),
-                    repairState = RepairState.SUBMITTED,
+                    defectDescription = defectDescriptionEditText.text.toString()
                 )
                 viewModelProvider.createRepair(repair)
                 Log.d(DEFECT_DESCRIPTION_DIALOG_TAG, "Confirmed")

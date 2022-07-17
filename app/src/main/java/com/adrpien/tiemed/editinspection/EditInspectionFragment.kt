@@ -152,7 +152,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
         // EST spinner implementation
         binding.inspectionESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            tempInspection.safetyTest = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+            tempInspection.electricalSafetyTestString = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
                 .uppercase()
                 .replace(" ", "_")
 
@@ -160,7 +160,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
         // State spinner implementation
         binding.inspectionStateRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            tempInspection.inspectionState = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+            tempInspection.inspectionStateString = group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
                 .uppercase().
                 replace(" ", "_")
         }
@@ -188,7 +188,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             R.id.saveInspectionItem -> {
 
                 // Update/Add inspection record button reaction
-                viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.uid)
+                viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.inspectionUid)
 
                 updateTempInspection()
                 val map = createMap(tempInspection)
@@ -222,7 +222,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         tempInspection = inspection
 
         // TextViews bind
-        binding.inspectionIDTextInputEditText.setText(inspection.id)
+        binding.inspectionIDTextInputEditText.setText(inspection.inspectionId)
         binding.inspectionNameTextInputEditText.setText(inspection.name)
         binding.inspectionManufacturerTextInputEditText.setText(inspection.manufacturer)
         binding.inspectionModelTextInputEditText.setText(inspection.model)
@@ -248,7 +248,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         var position = 0
         var selection = 0
         for (item in InspectionState.values()) {
-            if (inspection.inspectionState == item.toString()) {
+            if (inspection.inspectionStateString == item.toString()) {
                 position = selection
             }
             selection += 1
@@ -261,7 +261,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         var position = 0
         var selection = 0
         for (item in ESTState.values()) {
-            if (inspection.safetyTest == item.toString()) {
+            if (inspection.electricalSafetyTestString == item.toString()) {
                 position = selection
             }
             selection += 1
@@ -274,7 +274,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         var position = 0
         var selection = 1
         for (item in spinnerHospitalList) {
-            if (inspection.hospital == item.toString()) {
+            if (inspection.hospitalString == item.toString()) {
                 position = selection
             }
             selection += 1
@@ -296,20 +296,20 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     // Updating tempInspection
     private fun updateTempInspection(){
-        tempInspection.id = binding.inspectionIDTextInputEditText.text.toString()
+        tempInspection.inspectionId = binding.inspectionIDTextInputEditText.text.toString()
         tempInspection.name = binding.inspectionNameTextInputEditText.text.toString()
         tempInspection.manufacturer = binding.inspectionManufacturerTextInputEditText.text.toString()
         tempInspection.model = binding.inspectionModelTextInputEditText.text.toString()
         tempInspection.inventoryNumber = binding.inspectionINTextInputEditText.text.toString()
         tempInspection.serialNumber = binding.inspectionSNTextInputEditText.text.toString()
         tempInspection.ward = binding.inspectionWardTextInputEditText.text.toString()
-        tempInspection.hospital = binding.inspectionHospitalSpinner.selectedItem.toString()
+        tempInspection.hospitalString = binding.inspectionHospitalSpinner.selectedItem.toString()
     }
 
     // Handling hospital spinner item selected reaction
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if(parent?.id == R.id.inspectionHospitalSpinner){
-            tempInspection.hospital = parent.getItemAtPosition(position).toString()
+            tempInspection.hospitalString = parent.getItemAtPosition(position).toString()
         }
     }
 

@@ -7,20 +7,43 @@ import kotlin.collections.ArrayList
 data class Repair(
 
     // General
-    val id: String? = null,
+    var repairId: String = "",
+    var repairUid: String = "",
+
+    // State
     var repairState: RepairState? = null,
+    var repairStateString: String = "",
 
     // Related device
-    val device: Device? = null,
+    //val device: Device? = null,
+    var deviceId: String = "",
+    var name: String = "",
+    var manufacturer: String = "",
+    var model: String = "",
+    var serialNumber: String = "",
+    var inventoryNumber: String = "",
+
+    // Localization
+    //var localization: Localization? = null,
+    var hospital: String = "",
+    var ward: String = "",
+
 
     // Repair description
     var photosList: ArrayList<Photo>? = null,
-    var defectDescription: String? = null,
-    var repairDescription: String? = null,
+    var defectDescription: String = "",
+    var repairDescription: String = "",
+
+    // Used Parts
     var partList: ArrayList<Part>? = null,
-    var partDescription: String? = null,
-    var comment: String? = null,
-    var electricalSafetyTest: ElectricalSafetyTest? = null,
+    var partDescription: String = "",
+
+    // Comment
+    var comment: String = "",
+
+    // Safety Test
+    // var electricalSafetyTest: ElectricalSafetyTest? = null,
+    var electricalSafetyTest: String = "",
 
     // Dates
     var closingDate: Calendar? = null,
@@ -36,8 +59,12 @@ data class Repair(
     var rate: Int? = null,
 
     // Recipient
-    var recipient: String? = null,
-    var recipientSignature: Photo? = null
+    var recipient: String = "",
+    var recipientSignature: String? = "",
+
+    // Related inspections
+    //var relatedInspections: ArrayList<Inspection>? = null,
+
 
     )
 

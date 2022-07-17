@@ -95,15 +95,24 @@ class FirebaseRepository {
 
     // Creates new repair
     fun createNewRepair(repair: Repair){
-        firebaseFirestore.collection("repairs")
-            .document(repair.id!!)
-            .set(repair)
-            .addOnFailureListener {
-                Log.d(REPOSITORY_DEBUG, it.message.toString())
-            }
-            .addOnSuccessListener {
-                Log.d(REPOSITORY_DEBUG, "Repair record created")
-            }
+//        firebaseFirestore.collection("repairs")
+//            .document(repair.id!!)
+//            .set(repair)
+//            .addOnFailureListener {
+//                Log.d(REPOSITORY_DEBUG, it.message.toString())
+//            }
+//            .addOnSuccessListener {
+//                Log.d(REPOSITORY_DEBUG, "Repair record created")
+//            }
+
+        var documentReference = firebaseFirestore.collection("repairs")
+            .document()
+        var map = mapOf<String, String>(
+            "uid" to documentReference.id,
+
+
+        )
+        documentReference.set(map)
     }
 
     // Return list of repairs
@@ -136,9 +145,9 @@ class FirebaseRepository {
     }
 
     // Returns repair according to delivered id
-    fun getRepair(id: String): MutableLiveData<Repair> {
+    fun getRepair(uid: String): MutableLiveData<Repair> {
             firebaseFirestore.collection("repairs")
-                .document(id)
+                .document(uid)
                 .get()
                 .addOnSuccessListener {
                     val repair = it.toObject(Repair::class.java)!!
@@ -161,7 +170,8 @@ class FirebaseRepository {
     fun getInspectionList():MutableLiveData<List<Inspection>>{
         inspectionList = MutableLiveData<List<Inspection>>()
         firebaseFirestore.collection("inspections")
-            .get().addOnSuccessListener{
+            .get()
+            .addOnSuccessListener{
                 val inspection = it.toObjects(Inspection::class.java)
                 inspectionList.postValue(inspection)
             }
@@ -177,21 +187,22 @@ class FirebaseRepository {
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
         var map = mapOf<String, String>(
-            "uid" to documentReference.id,
-            "id" to inspection.id,
-            "inspectionState" to inspection.inspectionState,
+            "inspectionUid" to documentReference.id,
+            "id" to inspection.inspectionId,
+            "inspectionStateString" to inspection.inspectionStateString,
             "deviceId" to inspection.deviceId,
             "name" to inspection.name,
             "manufacturer" to inspection.manufacturer,
             "model" to inspection.model,
             "serialNumber" to inspection.serialNumber,
             "inventoryNumber" to inspection.inventoryNumber,
-            "hospital" to inspection.hospital,
+            "hospital" to inspection.hospitalString,
             "ward" to inspection.ward,
-            "safetyTest" to inspection.safetyTest,
+            "electricalsafetyTestString" to inspection.electricalSafetyTestString,
             "comment" to inspection.comment,
             "inspectionDate" to inspection.inspectionDate,
-            "signature" to inspection.signature
+            "recipient" to inspection.recipient,
+            "signature" to inspection.recipientSignature
         )
             documentReference.set(map)
 

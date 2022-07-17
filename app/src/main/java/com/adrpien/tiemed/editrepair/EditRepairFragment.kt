@@ -69,7 +69,7 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
             }
             else {
-                viewModelProvider.createRepair(Repair(id = binding.idEditText.text.toString()))
+                viewModelProvider.createRepair(Repair(repairId = binding.idEditText.text.toString()))
             }
             return true
         }
