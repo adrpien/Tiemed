@@ -110,6 +110,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 })
             // show MyTimePicker
             dialog.show(childFragmentManager, "signature_dialog")
+
         }
 
 
