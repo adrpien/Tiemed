@@ -139,6 +139,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             val dialog = InspectionDatePickerDialog()
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
+
         }
 
         // EST spinner implementation
