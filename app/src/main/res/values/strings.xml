@@ -47,4 +47,6 @@
     <string name="signature_view_content_description">Signature View is area with signature</string>
     <string name="signature">Signature</string>
     <string name="signature_request_key">request_key</string>
+    <string name="defect_decription">Defect description</string>
+    <string name="defect_description">Defect description</string>
 </resources>

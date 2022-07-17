@@ -20,6 +20,7 @@ import com.adrpien.tiemed.datamodels.ESTState
 import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
+import com.adrpien.tiemed.datepickers.DefectDescriptionDialog
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 import com.adrpien.tiemed.signature.SignatureDialog
@@ -38,18 +39,24 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     // ViewModel
     val viewModelProvider by viewModels<EditInspectionViewModel>()
 
+    private val INSPECTION_UPDATE_TAG = "INSPECTION UPDATE TAG"
+    private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
+    private  val DEFECT_DESCRIPTION_TAG = "DEFECT DESCRIPTION TAG"
 
     private lateinit var hospitalList: MutableLiveData<List<Hospital>>
     private lateinit var inspection: MutableLiveData<Inspection>
     private lateinit var signature: MutableLiveData<ByteArray>
 
-    private  var tempHospitalList = mutableListOf<String>()
-    private var tempInspection: Inspection = Inspection()
-    private var tempSignatureByteArray: ByteArray = byteArrayOf()
+    private var spinnerHospitalList = mutableListOf<String>()
 
     private var uid: String? = null
 
-    private val INSPECTION_UPDATE_TAG = "EditInspectionFragment"
+    private var defectDescription: String? = null
+
+    private var tempInspection: Inspection = Inspection()
+    private var tempSignatureByteArray: ByteArray = byteArrayOf()
+
+
 
     init{
         // Setting options menu
@@ -109,7 +116,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                     binding.signatureImageButton.setImageBitmap(bmp)
                 })
             // show MyTimePicker
-            dialog.show(childFragmentManager, "signature_dialog")
+            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
 
         }
 
@@ -119,14 +126,14 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         viewModelProvider.getHospitalList().observe(viewLifecycleOwner) {
             for (item in it) {
                 item.name.let {
-                    tempHospitalList.add(item.name)
+                    spinnerHospitalList.add(item.name)
                 }
             }
             var hospitalListArrayAdapter = activity?.baseContext?.let { it ->
                 ArrayAdapter(
                     it,
                     android.R.layout.simple_spinner_item,
-                    tempHospitalList
+                    spinnerHospitalList
                 )
             }
             binding.inspectionHospitalSpinner.adapter = hospitalListArrayAdapter
@@ -197,7 +204,12 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 true
             }
             R.id.addRepairRecordItem -> {
-                // TODO addRepairRecordItem click reaction
+                val dialog = DefectDescriptionDialog()
+                requireActivity().supportFragmentManager.setFragmentResultListener("request_key", viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+                    defectDescription = result.getString("request_key", null)
+                })
+                dialog.show(childFragmentManager, DEFECT_DESCRIPTION_TAG)
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -261,7 +273,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     private fun bindHospitalSpinner(inspection: Inspection) {
         var position = 0
         var selection = 1
-        for (item in tempHospitalList) {
+        for (item in spinnerHospitalList) {
             if (inspection.hospital == item.toString()) {
                 position = selection
             }
