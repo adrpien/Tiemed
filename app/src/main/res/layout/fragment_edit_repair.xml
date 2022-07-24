@@ -17,120 +17,89 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textView9"
+            <!--
+            ID
+            -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairIdInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ID"
-                android:textSize="16dp" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/idEditText7"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inspectionIdInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/id" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--
+            Divider
+            -->
+
+            <!--
+            Device
+            -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairNameTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView8"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repairNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairManufacturerTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hospital"
-                android:textSize="16dp" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/idEditText6"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repairManufacturerEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/manufacturer" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairModelTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repairModelEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/model" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairInventoryNumberTextIputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ward"
-                android:textSize="16dp" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/idEditText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repairInventoryNumberEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/inventory_number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repairSerialNumberTextIputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hospital" />
-
-            <EditText
-                android:id="@+id/dateEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Device name" />
-
-            <EditText
-                android:id="@+id/idEditText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Producer"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/idEditText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="model"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/idEditText9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Serial number"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/idEditText10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:textSize="16dp" />
-
-            <Button
-                android:id="@+id/openingDateButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repairSerialNumberEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/serial_number" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>
 

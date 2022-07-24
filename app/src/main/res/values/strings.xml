@@ -49,4 +49,10 @@
     <string name="signature_request_key">request_key</string>
     <string name="defect_decription">Defect description</string>
     <string name="defect_description">Defect description</string>
+    <string name="name">Name</string>
+    <string name="manufacturer">Manufactuer</string>
+    <string name="model">Model</string>
+    <string name="inventory_number">Inventory number</string>
+    <string name="serial_number">Serial number</string>
+    <string name="device">Device</string>
 </resources>

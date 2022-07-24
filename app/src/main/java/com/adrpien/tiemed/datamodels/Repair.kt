@@ -11,7 +11,7 @@ data class Repair(
     var repairUid: String = "",
 
     // State
-    var repairState: RepairState? = null,
+    //var repairState: RepairState? = null,
     var repairStateString: String = "",
 
     // Related device
@@ -25,7 +25,8 @@ data class Repair(
 
     // Localization
     //var localization: Localization? = null,
-    var hospital: String = "",
+    //var hospital: String = "",
+    var hospitalString: String = "",
     var ward: String = "",
 
 
@@ -46,21 +47,21 @@ data class Repair(
     var electricalSafetyTest: String = "",
 
     // Dates
-    var closingDate: Calendar? = null,
-    var openingDate: Calendar? = null,
-    var repairingDate: Calendar? = null,
+    var closingDate: String = "",
+    var openingDate: String = "",
+    var repairingDate: String = "",
 
     // Technician
-    var pickupTechnician: User? = null,
-    var repairTechnician: User? = null,
-    var returnTechnician: User? = null,
+    //var pickupTechnician: User? = null,
+    //var repairTechnician: User? = null,
+    //var returnTechnician: User? = null,
 
     // Rate
     var rate: Int? = null,
 
     // Recipient
     var recipient: String = "",
-    var recipientSignature: String? = "",
+    var recipientSignature: String = "",
 
     // Related inspections
     //var relatedInspections: ArrayList<Inspection>? = null,

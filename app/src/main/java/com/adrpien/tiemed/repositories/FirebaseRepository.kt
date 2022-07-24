@@ -108,9 +108,30 @@ class FirebaseRepository {
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
-            "uid" to documentReference.id,
-
-
+            "repairUid" to documentReference.id,
+            "repairId" to repair.repairId,
+            "repairState" to repair.repairStateString,
+            "deviceId" to repair.deviceId,
+            "name" to repair.name,
+            "manufacturer" to repair.manufacturer,
+            "model" to repair.model,
+            "serialNumber" to repair.serialNumber,
+            "inventoryNumber" to repair.inventoryNumber,
+            "hospital" to repair.hospitalString,
+            "ward" to repair.ward,
+            // TODO photosList to implement
+            "defectDescription" to repair.defectDescription,
+            "repairDescription" to repair.repairDescription,
+            // TODO partList to implement
+            "partDecription" to repair.partDescription,
+            "comment" to repair.comment,
+            "electricalSafetyTest" to repair.electricalSafetyTest,
+            "closingDate" to repair.closingDate,
+            "openingDate" to repair.openingDate,
+            "repairingDate" to repair.repairingDate,
+            "rate" to repair.rate.toString(),
+            "recipient" to repair.recipient,
+            "recipientSignature" to repair.recipientSignature
         )
         documentReference.set(map)
     }

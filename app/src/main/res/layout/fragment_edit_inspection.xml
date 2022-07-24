@@ -18,25 +18,23 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inspectionIDTextInputLayout"
+                android:id="@+id/inspectionIdTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inspectionIDTextInputEditText"
+                    android:id="@+id/inspectionIdTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="ID" />
+                    android:hint="@string/id" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView7"
                 style="@style/DividierTitle"
-                android:text="Device" />
+                android:text="@string/device" />
 
             <View
-                android:id="@+id/deviceDivider"
                 style="@style/Divider" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -107,7 +105,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView15"
                 style="@style/DividierTitle"
                 android:text="Localization" />
 
@@ -135,12 +132,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView6"
                 style="@style/DividierTitle"
                 android:text="Inspection" />
 
             <View
-                android:id="@+id/inspectionDivider"
                 style="@style/Divider" />
 
             <TextView
