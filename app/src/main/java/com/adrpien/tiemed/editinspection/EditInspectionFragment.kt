@@ -76,6 +76,8 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Get inspection uid if passed in bundle
         uid = arguments?.getString("uid", null)
         // Fill fields with record data if
         if(uid != null) {
@@ -222,7 +224,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         tempInspection = inspection
 
         // TextViews bind
-        binding.inspectionIDTextInputEditText.setText(inspection.inspectionId)
+        binding.inspectionIdTextInputEditText.setText(inspection.inspectionUid)
         binding.inspectionNameTextInputEditText.setText(inspection.name)
         binding.inspectionManufacturerTextInputEditText.setText(inspection.manufacturer)
         binding.inspectionModelTextInputEditText.setText(inspection.model)
@@ -296,7 +298,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     // Updating tempInspection
     private fun updateTempInspection(){
-        tempInspection.inspectionId = binding.inspectionIDTextInputEditText.text.toString()
+        tempInspection.inspectionUid = binding.inspectionIdTextInputEditText.text.toString()
         tempInspection.name = binding.inspectionNameTextInputEditText.text.toString()
         tempInspection.manufacturer = binding.inspectionManufacturerTextInputEditText.text.toString()
         tempInspection.model = binding.inspectionModelTextInputEditText.text.toString()
@@ -313,7 +315,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         }
     }
 
-    // Handling hostpial spinner no item selected reaction
+    // Handling hospital spinner no item selected reaction
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 

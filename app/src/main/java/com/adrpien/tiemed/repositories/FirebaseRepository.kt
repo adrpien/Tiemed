@@ -109,7 +109,7 @@ class FirebaseRepository {
             .document()
         var map = mapOf<String, String>(
             "repairUid" to documentReference.id,
-            "repairId" to repair.repairId,
+            "repairId" to repair.repairUid,
             "repairState" to repair.repairStateString,
             "deviceId" to repair.deviceId,
             "name" to repair.name,
@@ -125,7 +125,7 @@ class FirebaseRepository {
             // TODO partList to implement
             "partDecription" to repair.partDescription,
             "comment" to repair.comment,
-            "electricalSafetyTest" to repair.electricalSafetyTest,
+            "electricalSafetyTest" to repair.electricalSafetyTestString,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
             "repairingDate" to repair.repairingDate,
@@ -209,7 +209,7 @@ class FirebaseRepository {
             .document()
         var map = mapOf<String, String>(
             "inspectionUid" to documentReference.id,
-            "id" to inspection.inspectionId,
+            "id" to inspection.inspectionUid,
             "inspectionStateString" to inspection.inspectionStateString,
             "deviceId" to inspection.deviceId,
             "name" to inspection.name,
@@ -282,9 +282,9 @@ class FirebaseRepository {
     }
 
     // Get inspection signature
-    fun getSignature(inspectionUid: String): MutableLiveData<ByteArray> {
+    fun getSignature(Uid: String): MutableLiveData<ByteArray> {
         firebaseStorage.getReference("signatures")
-            .child("${inspectionUid}.jpg")
+            .child("${Uid}.jpg")
             .getBytes(10000000) // 10MB
             .addOnSuccessListener {
                 val signature = it

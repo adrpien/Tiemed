@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Inspection
+import com.adrpien.tiemed.fragments.BaseFragment
 import java.lang.Long.parseLong
 
 class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
@@ -18,7 +19,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InspectionViewHolder {
 
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.inspection_list_cell, parent, false)
+        val view = inflater.inflate(R.layout.inspection_list_row, parent, false)
         return InspectionViewHolder(view)
 
     }
@@ -43,7 +44,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         // Filling TextViews with values
 
         // Set inspectionRowIdTextView
-        holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionId)
+        holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionUid)
 
         // Setting inspectionRowDateTextView
         holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate))

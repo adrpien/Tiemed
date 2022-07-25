@@ -19,8 +19,8 @@
         <entry key="app/src/main/res/layout/activity_splash_screen_activity.xml" value="0.3796875" />
         <entry key="app/src/main/res/layout/defect_decription_view.xml" value="0.1935185185185185" />
         <entry key="app/src/main/res/layout/fragment_add_repair.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.2874873353596758" />
-        <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.2874873353596758" />
+        <entry key="app/src/main/res/layout/fragment_edit_inspection.xml" value="0.2388888888888889" />
+        <entry key="app/src/main/res/layout/fragment_edit_repair.xml" value="0.28394123606889565" />
         <entry key="app/src/main/res/layout/fragment_inspection_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_inspections_list.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.346875" />
@@ -32,10 +32,14 @@
         <entry key="app/src/main/res/layout/fragment_view_inspection.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_view_repair.xml" value="0.3796875" />
         <entry key="app/src/main/res/layout/inspection_list_cell.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/inspection_list_row.xml" value="0.24351851851851852" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.2109375" />
         <entry key="app/src/main/res/layout/menu_cell.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/part_list_row.xml" value="0.2874873353596758" />
+        <entry key="app/src/main/res/layout/photo_list_row.xml" value="0.24351851851851852" />
         <entry key="app/src/main/res/layout/repair_list_cell.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/repair_list_fragment.xml" value="0.28802083333333334" />
+        <entry key="app/src/main/res/layout/repair_list_row.xml" value="0.24351851851851852" />
         <entry key="app/src/main/res/layout/signature_view.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/menu/edit_inspection_options_menu.xml" value="0.4588541666666667" />

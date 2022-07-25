@@ -17,89 +17,370 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <!--
-            ID
-            -->
-
+<!--            ID-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairIdInputLayout"
+                android:id="@+id/editRepairIdInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inspectionIdInputEditText"
+                    android:id="@+id/editRepairIdInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/id" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--
-            Divider
-            -->
+<!--            Opening date-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <!--
-            Device
-            -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/opening_date" />
 
+                <Button
+                    android:id="@+id/editRepairOpeningDateButton"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/opening_date" />
+
+            </LinearLayout>
+
+<!--             Device divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/device" />
+            <View
+                style="@style/Divider" />
+
+<!--            Device-->
+
+<!--            Device name-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairNameTextInputLayout"
+                android:id="@+id/editRepairNameTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairNameEditText"
+                    android:id="@+id/editRepairNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/name" />
             </com.google.android.material.textfield.TextInputLayout>
 
+<!--            Manufacturer-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairManufacturerTextInputLayout"
+                android:id="@+id/editRepairManufacturerTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairManufacturerEditText"
+                    android:id="@+id/editRepairManufacturerEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/manufacturer" />
             </com.google.android.material.textfield.TextInputLayout>
 
+<!--            Model-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairModelTextInputLayout"
+                android:id="@+id/editRepairModelTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairModelEditText"
+                    android:id="@+id/editRepairModelEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/model" />
             </com.google.android.material.textfield.TextInputLayout>
 
+<!--            Inventory number-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairInventoryNumberTextIputLayout"
+                android:id="@+id/editRepairInventoryNumberTextIputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairInventoryNumberEditText"
+                    android:id="@+id/editRepairInventoryNumberEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/inventory_number" />
             </com.google.android.material.textfield.TextInputLayout>
 
+<!--            Serial number-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairSerialNumberTextIputLayout"
+                android:id="@+id/editRepairSerialNumberTextIputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairSerialNumberEditText"
+                    android:id="@+id/editRepairSerialNumberEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/serial_number" />
             </com.google.android.material.textfield.TextInputLayout>
+
+<!--            Localization divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/localization" />
+            <View
+                style="@style/Divider" />
+
+<!--            Localization-->
+
+<!--            Hospital-->
+            <Spinner
+                android:id="@+id/editRepairHospitalSpinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                />
+
+<!--            Ward-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editRepairWardTextInputLayout"
+                style="@style/EditTextStyle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editRepairWardTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/ward" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            Defect divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/defect" />
+            <View
+                style="@style/Divider" />
+
+<!--            Defect Description -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editRepairDefectDescriptionTextInputLayout"
+                style="@style/EditTextStyle"
+                android:layout_height="98dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editRepairDefectDescriptionTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:hint="@string/defect_description"
+                    android:minLines="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            Repair divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/repair" />
+            <View
+                style="@style/Divider" />
+
+<!--            Defect Description -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editRepairRepairDescriptionTextInputLayout"
+                style="@style/EditTextStyle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editRepairRepairDescriptionTextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:hint="@string/repair_description"
+                    android:minLines="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            Repairing date-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/repairing_date" />
+
+                <Button
+                    android:id="@+id/editRepairRepairingDateButton"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/repairing_date" />
+
+            </LinearLayout>
+
+<!--            Photos divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/photos" />
+
+            <View
+                style="@style/Divider" />
+
+
+
+<!--            Photos-->
+
+<!--            Add photo-->
+            <LinearLayout
+                android:layout_width="151dp"
+                android:layout_height="75dp"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/editRepairMakePhotoButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:drawable/ic_menu_add" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/cardview_dark_background" />
+                <ImageView
+                    android:id="@+id/editRepairAddPhotoButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+            </LinearLayout>
+
+<!--            Photo list-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/editRepairPhotosRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+<!--            Parts divider-->
+            <TextView
+                style="@style/DividierTitle"
+                android:text="@string/parts" />
+            <View
+                style="@style/Divider" />
+
+<!--            Add part-->
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                app:srcCompat="@android:drawable/ic_menu_add" />
+
+<!--            Part list-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/editRepairPartListRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/part_list_row"/>
+
+
+<!--            Electrical safety test divider-->
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/electrical_safety_test" />
+
+<!--            Electrical safety test-->
+            <RadioGroup
+                android:id="@+id/editRepairESTRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/editRepairESTPassedRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/passed" />
+
+                <RadioButton
+                    android:id="@+id/editRepairESTFailedRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/failed" />
+
+                <RadioButton
+                    android:id="@+id/editRepairESTNotApplicableRadioButton"
+                    style="@style/RadioButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/not_required" />
+            </RadioGroup>
+
+<!--            Signature-->
+            <ImageButton
+                android:id="@+id/editRepairSignatureImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerInside"
+                />
+
+<!--            State Divider -->
+            <TextView
+                style="@style/SectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/state" />
+
+            <!--            Repair State-->
+            <Spinner
+                android:id="@+id/editRepairStateSpinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+
+                />
+
+<!--            Closing date-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/closing_date" />
+
+                <Button
+                    android:id="@+id/editRepairClosingDateButton"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/closing_date" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

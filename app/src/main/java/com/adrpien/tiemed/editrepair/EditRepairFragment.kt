@@ -1,19 +1,39 @@
 package com.adrpien.tiemed.editrepair
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.datepickers.RepairDatePickerDialog
+import com.adrpien.tiemed.adapters.getDateString
+import com.adrpien.tiemed.adapters.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
+import com.adrpien.tiemed.datamodels.ESTState
+import com.adrpien.tiemed.datamodels.Hospital
+import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.Repair
+import com.adrpien.tiemed.datepickers.RepairDatePickerDialog
+import com.adrpien.tiemed.fragments.BaseFragment
+import com.adrpien.tiemed.signature.SignatureDialog
+import java.io.ByteArrayOutputStream
 
 
-class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
+class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, onRepairItemClickListener,
+    AdapterView.OnItemSelectedListener {
 
 
     // ViewBinding
@@ -24,13 +44,38 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     // ViewModel
     val viewModelProvider by viewModels<EditRepairViewModel>()
 
+    private var tempRepair: Repair = Repair()
+    private var tempSignatureByteArray = byteArrayOf()
+
+    private var tempPhotoByteArray = byteArrayOf()
+
+    private var uid: String? = null
+
+    private val REPAIR_UPDATE_TAG = "INSPECTION UPDATE TAG"
+    private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
+
+    private lateinit var hospitalList: MutableLiveData<List<Hospital>>
+    private lateinit var repair: MutableLiveData<Repair>
+    private lateinit var signature: MutableLiveData<ByteArray>
+
+    private var spinnerHospitalList = mutableListOf<String>()
+
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+
+    private var REQUEST_IMAGE_CAPTURE: Int = 0
+
+
     // Init
     init{
         setHasOptionsMenu(true)
+        activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        photoResultLauncher()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,16 +86,104 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Get repair uid if passed in bundle
+        uid = arguments?.getString("uid", null)
+        // Fill fields with record data if
+        if(uid != null) {
+            repair = viewModelProvider.getRepair(uid!!)
+            viewModelProvider.getRepair(uid!!).observe(viewLifecycleOwner) { repair ->
+                // Filling fields with data of opened record (when record is updated)
+                bindRepairData(repair)
+            }
+        }
+
+        // Make photo button implementation
+        binding.editRepairMakePhotoButton.setOnClickListener {
+            takePicture()
+        }
+
+        // Add photo button implementation
+        binding.editRepairAddPhotoButton.setOnClickListener {
+            addPicture()
+        }
+
         // Setting TextViews with values
-        binding.idEditText.setText(arguments?.getString("id"))
+        binding.editRepairIdInputEditText.setText(arguments?.getString("id"))
 
         // Setting openingButton listener
-        binding.openingDateButton.setOnClickListener {
+        binding.editRepairOpeningDateButton.setOnClickListener {
              // Create TimePicker
              val dialog = RepairDatePickerDialog()
              // show MyTimePicker
              dialog.show(childFragmentManager, "repair_time_picker")
          }
+
+        // TODO Add parts button implementation
+
+        // TODO Parts recycerview implementation
+
+        // EST spinner implementation
+        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            tempRepair.electricalSafetyTestString= group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+                .uppercase()
+                .replace(" ", "_")
+
+        }
+
+        // TODO State spinner implemetation
+
+        // Hospital spinner implementation
+        hospitalList = viewModelProvider.getHospitalList()
+        viewModelProvider.getHospitalList().observe(viewLifecycleOwner) {
+            for (item in it) {
+                item.name.let {
+                    spinnerHospitalList.add(item.name)
+                }
+            }
+            var hospitalListArrayAdapter = activity?.baseContext?.let { it ->
+                ArrayAdapter(
+                    it,
+                    android.R.layout.simple_spinner_item,
+                    spinnerHospitalList
+                )
+            }
+            binding.editRepairHospitalSpinner.adapter = hospitalListArrayAdapter
+        }
+        binding.editRepairHospitalSpinner.onItemSelectedListener = this
+
+        // Signature image button implementation
+        if(uid != null) {
+            signature = viewModelProvider.getSignature(uid!!)
+            viewModelProvider.getSignature(uid!!).observe(viewLifecycleOwner) { bytes ->
+                bindSignatureImageButton(bytes)
+            }
+        }
+        binding.editRepairSignatureImageButton.setOnClickListener {
+
+            // Open SignatureDialog when signatureImageButtonClicked
+            val dialog = SignatureDialog()
+
+            // Dialog fragment result listener
+            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                getString(R.string.signature_request_key),
+                viewLifecycleOwner,
+                FragmentResultListener { requestKey, result ->
+                    tempSignatureByteArray = result.getByteArray("signature")!!
+                    val options = BitmapFactory.Options()
+                    options.inMutable = true
+                    val bmp = BitmapFactory.decodeByteArray(
+                        tempSignatureByteArray,
+                        0,
+                        tempSignatureByteArray.size,
+                        options
+                    )
+                    binding.editRepairSignatureImageButton.setImageBitmap(bmp)
+                })
+            // show MyTimePicker
+            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
+
+        }
     }
 
     override fun onDestroy() {
@@ -60,6 +193,9 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.edit_repair_options_menu, menu)
+
+        // Setting action bar title
+        setActionBarTitle("Edit Repair")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -69,7 +205,7 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
             }
             else {
-                viewModelProvider.createRepair(Repair(repairId = binding.idEditText.text.toString()))
+                viewModelProvider.createRepair(Repair(repairUid = binding.editRepairIdInputEditText.text.toString()))
             }
             return true
         }
@@ -81,6 +217,136 @@ class EditRepairFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     // Implementing DatePickerDialog.OnDateSetListener in fragment to use ViewModel, which is not in adapter
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         Toast.makeText(activity, "Date: $year/$month/$dayOfMonth", Toast.LENGTH_SHORT).show()
+        // TODO onDateSet alert dialog implementation
+    }
+
+    // Repair row click implementation
+    override fun setOnRepairItemClick(itemView: View) {
+        TODO("Not yet implemented")
+    }
+
+    // Repair edit button click implementation
+    override fun setOnEditRepairButtonClick(itemView: View) {
+        TODO("Not yet implemented")
+    }
+
+    // Repair view button click implementation
+    override fun setOnViewRepairButtonClick(itemView: View) {
+        TODO("Not yet implemented")
+    }
+
+    private fun bindRepairData(repair: Repair) {
+
+        tempRepair = repair
+
+        binding.editRepairIdInputEditText.setText(tempRepair.repairUid)
+        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate))
+        binding.editRepairNameEditText.setText(tempRepair.name)
+        binding.editRepairManufacturerEditText.setText(tempRepair.manufacturer)
+        binding.editRepairModelEditText.setText(tempRepair.model)
+        binding.editRepairInventoryNumberEditText.setText(tempRepair.inventoryNumber)
+        binding.editRepairSerialNumberEditText.setText(tempRepair.serialNumber)
+        bindHospitalSpinner(tempRepair)
+        binding.editRepairWardTextInputEditText.setText(tempRepair.ward)
+        binding.editRepairDefectDescriptionTextInputEditText.setText(tempRepair.defectDescription)
+        binding.editRepairRepairDescriptionTextInputEditText.setText(tempRepair.repairDescription)
+        binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate))
+
+        bindESTRadioButton(repair)
+
+
+    }
+
+    private fun bindHospitalSpinner(repair: Repair) {
+        var position = 0
+        var selection = 1
+        for (item in spinnerHospitalList) {
+            if (repair.hospitalString == item.toString()) {
+                position = selection
+            }
+            selection += 1
+        }
+        binding.editRepairHospitalSpinner.setSelection(position)
+    }
+
+    private fun takePicture():  ByteArray{
+        REQUEST_IMAGE_CAPTURE = 1
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        resultLauncher.launch(takePictureIntent)
+        return tempPhotoByteArray
+    }
+
+    private fun addPicture(): ByteArray {
+        REQUEST_IMAGE_CAPTURE = 2
+        val addPictureIntent = Intent(Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        resultLauncher.launch(addPictureIntent)
+        return tempPhotoByteArray
+    }
+
+    private fun photoResultLauncher() {
+
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    if (REQUEST_IMAGE_CAPTURE == 1) {
+                        val tempPhotoOutputStream = ByteArrayOutputStream()
+                        val data: Intent? = result.data
+                        val photoBitmap = data?.extras?.get("data") as Bitmap
+                        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, tempPhotoOutputStream)
+                        tempPhotoByteArray = tempPhotoOutputStream.toByteArray()
+                    }
+                    if (REQUEST_IMAGE_CAPTURE == 2) {
+                        val data = result.data
+                        val uri = data?.data
+                        val inputStream =
+                            uri?.let { activity?.contentResolver?.openInputStream(it) }
+                        val bufferSize = 1024
+                        val buffer = ByteArray(bufferSize)
+                        val tempPhotoOutputStream = ByteArrayOutputStream()
+                        var len = 0
+                        while (inputStream!!.read(buffer).also { len = it } != -1) {
+                            tempPhotoOutputStream.write(buffer, 0, len)
+                        }
+                    }
+
+                }
+            }
+    }
+
+    // Binding data of inspection in state spinner
+    private fun bindESTRadioButton(repair: Repair) {
+        var position = 0
+        var selection = 0
+        for (item in ESTState.values()) {
+            if (repair.electricalSafetyTestString == item.toString()) {
+                position = selection
+            }
+            selection += 1
+        }
+        binding.editRepairESTRadioGroup.check(binding.editRepairESTRadioGroup.getChildAt(position).id)
+    }
+
+    // Bind signature image button
+    private fun bindSignatureImageButton(bytes: ByteArray){
+
+        val options = BitmapFactory.Options()
+        options.inMutable = true
+        val bmp = BitmapFactory.decodeByteArray(
+            bytes,
+            0,
+            bytes.size,
+            options)
+        binding.editRepairSignatureImageButton.setImageBitmap(bmp)
+    }
+
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 
 }

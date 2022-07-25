@@ -8,7 +8,7 @@ data class Inspection(
 
     // General
     var inspectionUid: String = "",
-    var inspectionId: String = "",
+    //var inspectionId: String = "",
 
     // State
     // Should be InspectionState?

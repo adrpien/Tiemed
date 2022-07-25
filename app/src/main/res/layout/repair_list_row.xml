@@ -13,92 +13,127 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+<!--        State marker-->
         <View
             android:id="@+id/repairRowStateMarker"
             android:layout_width="@dimen/state_marker_width"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
+<!--        View repair button-->
         <ImageButton
             android:id="@+id/repairRowViewButton"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
+            android:layout_margin="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_search" />
 
+<!--        Edit repair button-->
         <ImageButton
             android:id="@+id/repairRowEditButton"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
+            android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
+<!--        Id-->
         <TextView
             android:id="@+id/repairRowIdTextView"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:clickable="false"
             android:text="ID"
+            android:layout_margin="5dp"
             app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        Name-->
         <TextView
             android:id="@+id/repairRowNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_margin="5dp"
             android:text="Nazwa"
             app:layout_constraintStart_toEndOf="@+id/repairRowIdTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        Opening day-->
         <TextView
             android:id="@+id/repairRowOpeningDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_margin="5dp"
             android:text="Opening day:"
             app:layout_constraintEnd_toStartOf="@+id/repairRowViewButton"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        Manufactuer-->
         <TextView
             android:id="@+id/repairRowManufacturerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Producent Model"
+            android:text="@string/manufacturer"
+            android:layout_margin="5dp"
             app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
 
-        <TextView
+<!--        Model-->
+            <TextView
+                android:id="@+id/repairRowModelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/model"
+                app:layout_constraintStart_toEndOf="@+id/repairRowManufacturerTextView"
+                app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
+
+<!--        Serial number-->
+            <TextView
             android:id="@+id/repairRowSNTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SN:"
+            android:layout_margin="5dp"
             app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
 
+<!--        Inventory number-->
         <TextView
             android:id="@+id/repairRowINTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_margin="5dp"
             android:text="InventoryNumber:"
             app:layout_constraintStart_toEndOf="@+id/repairRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
 
-        <TextView
-            android:id="@+id/repairRowLocalizationTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lokalizacja"
-            app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
+<!--        Hospital -->
+            <TextView
+                android:id="@+id/repairRowHospitalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/hospital"
+                app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
+                app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
+
+<!--            Ward-->
+            <TextView
+                android:id="@+id/repairRowWardTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/ward"
+                app:layout_constraintStart_toEndOf="@+id/repairRowHospitalTextView"
+                app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

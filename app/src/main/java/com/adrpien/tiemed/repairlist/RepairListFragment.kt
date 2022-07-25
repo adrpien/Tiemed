@@ -107,4 +107,12 @@ class RepairListFragment : Fragment(), onRepairItemClickListener {
             bundleOf("id" to id )
         )
     }
+
+    override fun setOnEditRepairButtonClick(itemView: View) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setOnViewRepairButtonClick(itemView: View) {
+        TODO("Not yet implemented")
+    }
 }

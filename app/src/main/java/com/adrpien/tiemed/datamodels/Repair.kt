@@ -4,10 +4,11 @@ import com.adrpien.tiemed.datamodels.users.User
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 data class Repair(
 
     // General
-    var repairId: String = "",
+    // var repairId: String = "",
     var repairUid: String = "",
 
     // State
@@ -31,12 +32,12 @@ data class Repair(
 
 
     // Repair description
-    var photosList: ArrayList<Photo>? = null,
+    var photosList: ArrayList<Photo> = arrayListOf(),
     var defectDescription: String = "",
     var repairDescription: String = "",
 
     // Used Parts
-    var partList: ArrayList<Part>? = null,
+    var partList: ArrayList<Part> = arrayListOf(),
     var partDescription: String = "",
 
     // Comment
@@ -44,7 +45,7 @@ data class Repair(
 
     // Safety Test
     // var electricalSafetyTest: ElectricalSafetyTest? = null,
-    var electricalSafetyTest: String = "",
+    var electricalSafetyTestString: String = "",
 
     // Dates
     var closingDate: String = "",
@@ -57,7 +58,7 @@ data class Repair(
     //var returnTechnician: User? = null,
 
     // Rate
-    var rate: Int? = null,
+    var rate: String = "",
 
     // Recipient
     var recipient: String = "",

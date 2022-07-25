@@ -54,5 +54,20 @@
     <string name="model">Model</string>
     <string name="inventory_number">Inventory number</string>
     <string name="serial_number">Serial number</string>
+    <string name="localization">Localization</string>
     <string name="device">Device</string>
+    <string name="not_required">Not required</string>
+    <string name="failed">Failed</string>
+    <string name="passed">Passed</string>
+    <string name="electrical_safety_test">Electrical safety test</string>
+    <string name="ward">Ward</string>
+    <string name="opening_date">Opening date</string>
+    <string name="repair">Repair</string>
+    <string name="defect">Defect</string>
+    <string name="parts">Parts</string>
+    <string name="repairing_date">Repairing date</string>
+    <string name="closing_date">Closing date</string>
+    <string name="photos">Photos</string>
+    <string name="hospital">Hospital</string>
+    <string name="repair_description">Repair description</string>
 </resources>
