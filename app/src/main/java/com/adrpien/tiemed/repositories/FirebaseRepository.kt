@@ -95,21 +95,11 @@ class FirebaseRepository {
 
     // Creates new repair
     fun createNewRepair(repair: Repair){
-//        firebaseFirestore.collection("repairs")
-//            .document(repair.id!!)
-//            .set(repair)
-//            .addOnFailureListener {
-//                Log.d(REPOSITORY_DEBUG, it.message.toString())
-//            }
-//            .addOnSuccessListener {
-//                Log.d(REPOSITORY_DEBUG, "Repair record created")
-//            }
 
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
             "repairUid" to documentReference.id,
-            "repairId" to repair.repairUid,
             "repairState" to repair.repairStateString,
             "deviceId" to repair.deviceId,
             "name" to repair.name,
@@ -119,10 +109,8 @@ class FirebaseRepository {
             "inventoryNumber" to repair.inventoryNumber,
             "hospital" to repair.hospitalString,
             "ward" to repair.ward,
-            // TODO photosList to implement
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
-            // TODO partList to implement
             "partDecription" to repair.partDescription,
             "comment" to repair.comment,
             "electricalSafetyTest" to repair.electricalSafetyTestString,
@@ -209,7 +197,6 @@ class FirebaseRepository {
             .document()
         var map = mapOf<String, String>(
             "inspectionUid" to documentReference.id,
-            "id" to inspection.inspectionUid,
             "inspectionStateString" to inspection.inspectionStateString,
             "deviceId" to inspection.deviceId,
             "name" to inspection.name,

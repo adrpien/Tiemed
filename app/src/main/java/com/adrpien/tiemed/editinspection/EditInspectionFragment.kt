@@ -25,8 +25,6 @@ import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 import com.adrpien.tiemed.signature.SignatureDialog
 import java.util.*
-import kotlin.reflect.full.memberProperties
-
 
 
 class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener{
@@ -49,7 +47,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     private var spinnerHospitalList = mutableListOf<String>()
 
-    private var uid: String? = null
+    private var inspectionUid: String? = null
 
     private var defectDescription: String? = null
 
@@ -78,20 +76,20 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         super.onViewCreated(view, savedInstanceState)
 
         // Get inspection uid if passed in bundle
-        uid = arguments?.getString("uid", null)
+        inspectionUid = arguments?.getString("uid", null)
         // Fill fields with record data if
-        if(uid != null) {
-            inspection = viewModelProvider.getInspection(uid!!)
-            viewModelProvider.getInspection(uid!!).observe(viewLifecycleOwner) { inspection ->
+        if(inspectionUid != null) {
+            inspection = viewModelProvider.getInspection(inspectionUid!!)
+            viewModelProvider.getInspection(inspectionUid!!).observe(viewLifecycleOwner) { inspection ->
                 // Filling fields with data of opened record (when record is updated)
                 bindInspectionData(inspection)
             }
         }
 
         // Signature image button implementation
-        if(uid != null) {
-                signature = viewModelProvider.getSignature(uid!!)
-                viewModelProvider.getSignature(uid!!).observe(viewLifecycleOwner) { bytes ->
+        if(inspectionUid != null) {
+                signature = viewModelProvider.getSignature(inspectionUid!!)
+                viewModelProvider.getSignature(inspectionUid!!).observe(viewLifecycleOwner) { bytes ->
                     bindSignatureImageButton(bytes)
                 }
             }
@@ -193,9 +191,9 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                 viewModelProvider.uploadSignature(tempSignatureByteArray, tempInspection.inspectionUid)
 
                 updateTempInspection()
-                val map = createMap(tempInspection)
-                if(uid != null) {
-                    viewModelProvider.updateInspection(map, uid!!)
+                val map = createInspectionMap(tempInspection)
+                if(inspectionUid != null) {
+                    viewModelProvider.updateInspection(map, inspectionUid!!)
                     Log.d(INSPECTION_UPDATE_TAG, "Inspection updated")
                 } else {
                     viewModelProvider.createInspection(tempInspection)
@@ -331,12 +329,4 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionDateButton.setText(getDateString(date.timeInMillis))
     }
 
-    // Creating map of inspection fields with their values
-    private fun createMap(inspection: Inspection): Map<String, String> {
-        var map: MutableMap<String, String> = mutableMapOf()
-        for (component in Inspection::class.memberProperties){
-            map.put(component.name, component.get(inspection).toString())
-        }
-        return map
-    }
 }

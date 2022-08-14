@@ -30,6 +30,7 @@ import com.adrpien.tiemed.datepickers.RepairDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
 import com.adrpien.tiemed.signature.SignatureDialog
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, onRepairItemClickListener,
@@ -44,12 +45,17 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
     // ViewModel
     val viewModelProvider by viewModels<EditRepairViewModel>()
 
+    // UID
+    private var uid: String? = null
+
+    // tempRepairByteArray
     private var tempRepair: Repair = Repair()
+
+    // tempSignatureByteArray
     private var tempSignatureByteArray = byteArrayOf()
 
+    // tempPhotoByte Array
     private var tempPhotoByteArray = byteArrayOf()
-
-    private var uid: String? = null
 
     private val REPAIR_UPDATE_TAG = "INSPECTION UPDATE TAG"
     private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
@@ -75,7 +81,6 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photoResultLauncher()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -120,6 +125,10 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
 
         // TODO Add parts button implementation
 
+        // TODO Opening date button implementation
+
+        // TODO closing date implementation
+
         // TODO Parts recycerview implementation
 
         // EST spinner implementation
@@ -130,7 +139,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
 
         }
 
-        // TODO State spinner implemetation
+        // TODO State spinner implementation
 
         // Hospital spinner implementation
         hospitalList = viewModelProvider.getHospitalList()
@@ -216,9 +225,14 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
 
     // Implementing DatePickerDialog.OnDateSetListener in fragment to use ViewModel, which is not in adapter
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        Toast.makeText(activity, "Date: $year/$month/$dayOfMonth", Toast.LENGTH_SHORT).show()
-        // TODO onDateSet alert dialog implementation
-    }
+        // Set values
+        var date: Calendar = Calendar.getInstance()
+        date.set(year, month, dayOfMonth)
+
+        // Set button text
+        tempRepair.openingDate = date.timeInMillis.toString()
+        binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))    }
+
 
     // Repair row click implementation
     override fun setOnRepairItemClick(itemView: View) {
@@ -235,28 +249,32 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
         TODO("Not yet implemented")
     }
 
+
+    // Bind all textviews, spinners, dates and radiogroups
     private fun bindRepairData(repair: Repair) {
 
         tempRepair = repair
 
         binding.editRepairIdInputEditText.setText(tempRepair.repairUid)
-        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate))
         binding.editRepairNameEditText.setText(tempRepair.name)
         binding.editRepairManufacturerEditText.setText(tempRepair.manufacturer)
         binding.editRepairModelEditText.setText(tempRepair.model)
         binding.editRepairInventoryNumberEditText.setText(tempRepair.inventoryNumber)
         binding.editRepairSerialNumberEditText.setText(tempRepair.serialNumber)
-        bindHospitalSpinner(tempRepair)
         binding.editRepairWardTextInputEditText.setText(tempRepair.ward)
         binding.editRepairDefectDescriptionTextInputEditText.setText(tempRepair.defectDescription)
         binding.editRepairRepairDescriptionTextInputEditText.setText(tempRepair.repairDescription)
         binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate))
 
         bindESTRadioButton(repair)
+        bindHospitalSpinner(tempRepair)
+
+        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate))
 
 
     }
 
+    // Binding Hospital spinner with repair selection
     private fun bindHospitalSpinner(repair: Repair) {
         var position = 0
         var selection = 1
@@ -269,6 +287,10 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
         binding.editRepairHospitalSpinner.setSelection(position)
     }
 
+    // takePicture implementation
+    /*
+    Funtion opens camera using intent and returns result as ByteArray
+     */
     private fun takePicture():  ByteArray{
         REQUEST_IMAGE_CAPTURE = 1
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -276,6 +298,10 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
         return tempPhotoByteArray
     }
 
+    // taddPicture implementation
+    /*
+    Function opens gallery and returns result as ByteArray
+     */
     private fun addPicture(): ByteArray {
         REQUEST_IMAGE_CAPTURE = 2
         val addPictureIntent = Intent(Intent.ACTION_PICK,
@@ -284,8 +310,8 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
         return tempPhotoByteArray
     }
 
-    private fun photoResultLauncher() {
-
+    // Checks if photo is takie by camera or taken from gallery and saves it to ByteArray
+    private fun   photoResultLauncher() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -308,6 +334,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
                         while (inputStream!!.read(buffer).also { len = it } != -1) {
                             tempPhotoOutputStream.write(buffer, 0, len)
                         }
+                        tempPhotoByteArray = tempPhotoOutputStream.toByteArray()
                     }
 
                 }
@@ -329,7 +356,6 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
 
     // Bind signature image button
     private fun bindSignatureImageButton(bytes: ByteArray){
-
         val options = BitmapFactory.Options()
         options.inMutable = true
         val bmp = BitmapFactory.decodeByteArray(
@@ -340,13 +366,14 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
         binding.editRepairSignatureImageButton.setImageBitmap(bmp)
     }
 
-
+    // Hospital spinner implementation - onItemSelected
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("Not yet implemented")
-    }
+        if(parent?.id == R.id.inspectionHospitalSpinner){
+            tempRepair.hospitalString = parent.getItemAtPosition(position).toString()
+        }    }
 
+    // Hospital spienner implementation - onNothingSelected
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
     }
 
 }

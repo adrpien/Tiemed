@@ -15,4 +15,8 @@ class InspectionListViewModel: ViewModel() {
         return firebaseRepository.getInspection(id)
     }
 
+    fun updateInspection(map: Map<String, String>, id: String){
+        firebaseRepository.updateInspection(map, id)
+    }
+
 }

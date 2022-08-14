@@ -28,12 +28,12 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
 
         // Technician Button onClickListener
         holder.inspectionRowStateButton.setOnClickListener { view ->
-            listener.setOnStateButtonClickListener(view)
+            listener.setOnStateButtonClickListener(view, holder.adapterPosition)
         }
 
         // State Button onClickListener
         holder.inspectionRowDateButton.setOnClickListener { view ->
-            listener.setOnDateButtonClickListener(view)
+            listener.setOnDateButtonClickListener(view, holder.adapterPosition)
         }
 
         // Inspection row onClickListener
@@ -59,7 +59,6 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         holder.inspectionRowModelTextView.setText(inspectionList[position].model)
 
         // Setting inspectionRowSNTextView
-        //holder.inspectionRowSNTextView.append(inspectionList[position].serialNumber)
         holder.inspectionRowSNTextView.append(inspectionList[position].serialNumber)
 
         // Setting inspectionRowINTextView
@@ -83,8 +82,6 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
 
     inner class InspectionViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
-
-
         // State marker
         val inspectionRowStateMarker = itemview.findViewById<View>(R.id.inspectionRowStateMarker)
 
@@ -103,14 +100,13 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         val inspectionRowHospitalTextView = itemView.findViewById<TextView>(R.id.inspectionRowHospitalTextView)
         val inspectionRowWardTextView = itemView.findViewById<TextView>(R.id.inspectionRowWardTextView)
 
-
     }
 }
 
 interface OnInspectionClickListener {
     fun setOnInspectionItemClickListener(itemview: View, position: Int)
-    fun setOnDateButtonClickListener(itemview: View)
-    fun setOnStateButtonClickListener(itemview: View)
+    fun setOnDateButtonClickListener(itemview: View, position: Int)
+    fun setOnStateButtonClickListener(itemview: View, position: Int)
 }
 
 // Returns date in format YYYY/MM/DD String representation using date in millis

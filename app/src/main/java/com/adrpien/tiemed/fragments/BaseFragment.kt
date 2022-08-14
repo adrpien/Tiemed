@@ -3,9 +3,11 @@ package com.adrpien.tiemed.fragments
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.main.MainActivity
 import java.text.DateFormat
 import java.util.*
+import kotlin.reflect.full.memberProperties
 
 abstract class BaseFragment: Fragment(){
 
@@ -53,5 +55,14 @@ abstract class BaseFragment: Fragment(){
         var date: Calendar = Calendar.getInstance()
         var string: String = date.getTime().toString()
         return string
+    }
+
+    // Creating map of inspection fields with their values
+    fun createInspectionMap(inspection: Inspection): Map<String, String> {
+        var map: MutableMap<String, String> = mutableMapOf()
+        for (component in Inspection::class.memberProperties){
+            map.put(component.name, component.get(inspection).toString())
+        }
+        return map
     }
 }

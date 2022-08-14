@@ -11,6 +11,7 @@ import androidx.preference.SwitchPreference
 import com.adrpien.tiemed.R
 import com.google.firebase.auth.FirebaseAuth
 
+// TODO SettingsFragment
 class SettingsFragment() : PreferenceFragmentCompat() {
 
     val firebaseAuth = FirebaseAuth.getInstance()
@@ -36,7 +37,6 @@ class SettingsFragment() : PreferenceFragmentCompat() {
         val darkModeButton: SwitchPreference? =
             findPreference<SwitchPreference>(getString(R.string.dark_mode))
         darkModeButton?.setOnPreferenceClickListener {
-            // TODO Dark mode
             if (darkModeButton.isChecked) {
             }
             else {
