@@ -41,7 +41,7 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
     private  val DEFECT_DESCRIPTION_TAG = "DEFECT DESCRIPTION TAG"
 
-    private lateinit var hospitalList: MutableLiveData<List<Hospital>>
+    private lateinit var hospitalList: MutableLiveData<MutableList<Hospital>>
     private lateinit var inspection: MutableLiveData<Inspection>
     private lateinit var signature: MutableLiveData<ByteArray>
 

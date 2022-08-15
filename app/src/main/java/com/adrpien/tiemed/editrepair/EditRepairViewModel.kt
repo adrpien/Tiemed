@@ -23,7 +23,7 @@ class EditRepairViewModel: ViewModel() {
         return firebaseRepository.getRepair(id)
     }
 
-    fun getHospitalList(): MutableLiveData<List<Hospital>>{
+    fun getHospitalList(): MutableLiveData<MutableList<Hospital>>{
         return firebaseRepository.getHospitalList()
     }
 

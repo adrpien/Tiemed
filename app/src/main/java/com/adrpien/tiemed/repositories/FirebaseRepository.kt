@@ -31,13 +31,13 @@ class FirebaseRepository {
     private lateinit var repair: MutableLiveData<Repair>
 
     // MutableLiveData with list of inspections
-    private lateinit var inspectionList: MutableLiveData<List<Inspection>>
+    private lateinit var inspectionList: MutableLiveData<MutableList<Inspection>>
 
     // MutableLiveData with list of repairs
-    private lateinit var repairList: MutableLiveData<List<Repair>>
+    private lateinit var repairList: MutableLiveData<MutableList<Repair>>
 
     // MutableLiveData with list of hospitals
-    private lateinit var hospitalList: MutableLiveData<List<Hospital>>
+    private lateinit var hospitalList: MutableLiveData<MutableList<Hospital>>
 
     // Firebase initialization
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -125,8 +125,8 @@ class FirebaseRepository {
     }
 
     // Return list of repairs
-    fun getRepairList(): MutableLiveData<List<Repair>>{
-        repairList = MutableLiveData<List<Repair>>()
+    fun getRepairList(): MutableLiveData<MutableList<Repair>>{
+        repairList = MutableLiveData<MutableList<Repair>>()
         firebaseFirestore.collection("repairs")
             .get()
             .addOnSuccessListener {
@@ -176,8 +176,8 @@ class FirebaseRepository {
      */
 
     // Returns list of inspections
-    fun getInspectionList():MutableLiveData<List<Inspection>>{
-        inspectionList = MutableLiveData<List<Inspection>>()
+    fun getInspectionList():MutableLiveData<MutableList<Inspection>>{
+        inspectionList = MutableLiveData<MutableList<Inspection>>()
         firebaseFirestore.collection("inspections")
             .get()
             .addOnSuccessListener{
@@ -291,8 +291,8 @@ class FirebaseRepository {
      */
 
     // Return list of hospitals
-    fun getHospitalList(): MutableLiveData<List<Hospital>>{
-        hospitalList = MutableLiveData<List<Hospital>>()
+    fun getHospitalList(): MutableLiveData<MutableList<Hospital>>{
+        hospitalList = MutableLiveData<MutableList<Hospital>>()
         firebaseFirestore.collection("hospitals")
             .get()
             .addOnSuccessListener {

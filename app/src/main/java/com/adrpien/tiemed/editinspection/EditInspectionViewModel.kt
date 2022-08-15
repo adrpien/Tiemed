@@ -29,7 +29,7 @@ class EditInspectionViewModel: ViewModel() {
         return firebaseRepository.getInspection(uid)
     }
 
-    fun getHospitalList(): MutableLiveData<List<Hospital>>{
+    fun getHospitalList(): MutableLiveData<MutableList<Hospital>>{
         return firebaseRepository.getHospitalList()
     }
 

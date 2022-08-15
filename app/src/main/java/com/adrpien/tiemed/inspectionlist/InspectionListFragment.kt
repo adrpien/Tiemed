@@ -21,7 +21,9 @@ import com.adrpien.tiemed.fragments.BaseFragment
 
 class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
 
-    private var checkedItem: Int = 1
+    private var sortSelection: Int = 0
+    private var sortSelectionString: String = ""
+    private var stateSelection: Int = 0
 
     // ViewBinding
     private var _binding: FragmentInspectionListBinding? = null
@@ -29,7 +31,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         get() = _binding!!
 
     private lateinit var inspectionUid: String
-    private lateinit var inspectionList: List<Inspection>
+    private lateinit var inspectionList: MutableList<Inspection>
 
     private val ACTION_BAR_TITLE: String = "Inspection List"
 
@@ -64,7 +66,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.inspectionSortItem -> {
-                // TODO Inspection list sorting
+                sortInspections()
                 true
             }
             R.id.inspectionFilterItem -> {
@@ -77,6 +79,53 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun sortInspections() {
+
+        createSortAlertDialog(sortSelection)
+
+    }
+
+    private fun createSortAlertDialog(position: Int) {
+
+
+        // Alternative version of creating sortSelectionList
+
+        /*
+        val sortSelectionList = mutableListOf<String>()
+        for(selection in Inspection::class.memberProperties){
+            sortSelectionList.add(selection.name)
+        }
+
+        */
+
+        val sortSelectionList = mutableListOf<String>("Date", "State",  )
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Sort by")
+        builder.setSingleChoiceItems(sortSelectionList.toTypedArray(), sortSelection, null)
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            inspectionList.sortWith(compareBy { it ->
+                //
+                val listView = (dialog as AlertDialog).listView
+                sortSelectionString = listView.adapter.getItem(listView.checkedItemPosition).toString()
+                sortSelection = listView.checkedItemPosition
+
+                if(sortSelectionString == "Date"){
+                    it.inspectionDate
+                } else if(sortSelectionString == "State"){
+                   it.inspectionStateString
+                }
+                else {
+                    it.inspectionUid
+                }
+            })
+            binding.inspectionRecyclerView.adapter = InspectionListAdapter(inspectionList, this)
+        })
+        builder.setNegativeButton("Cancel", null)
+        val dialog = builder.create()
+        dialog.show()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,17 +195,17 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         // getSelectedInspection
         updateTempInspection(position)
 
-        checkedItem = 0
+        stateSelection = 0
         var selection = 0
         for (item in InspectionState.values()) {
             if (tempInspection.inspectionStateString == item.toString()) {
-                checkedItem = selection
+                stateSelection = selection
             }
             selection += 1
         }
 
         // Creating inspection state selection dialog
-        createInspectionSelectionDialog(checkedItem)
+        createInspectionSelectionDialog(stateSelection)
 
     }
 

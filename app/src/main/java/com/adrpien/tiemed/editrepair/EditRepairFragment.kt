@@ -60,7 +60,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, o
     private val REPAIR_UPDATE_TAG = "INSPECTION UPDATE TAG"
     private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
 
-    private lateinit var hospitalList: MutableLiveData<List<Hospital>>
+    private lateinit var hospitalList: MutableLiveData<MutableList<Hospital>>
     private lateinit var repair: MutableLiveData<Repair>
     private lateinit var signature: MutableLiveData<ByteArray>
 
