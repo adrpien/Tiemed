@@ -122,7 +122,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inspectionWardTextInputLayout"
-                style="@style/EditTextStyle">
+                style="@style/EditTextStyle"
+                android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/inspectionWardTextInputEditText"
