@@ -3,6 +3,7 @@ package com.adrpien.tiemed.inspectionlist
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.DialogInterface
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
@@ -23,7 +24,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
     private var sortSelection: Int = 0
     private var sortSelectionString: String = ""
-    private var stateSelection: Int = 0
+    private var tempStateSelection: Int = 0
 
     // ViewBinding
     private var _binding: FragmentInspectionListBinding? = null
@@ -51,6 +52,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
         // ViewBinding
         _binding = FragmentInspectionListBinding.inflate(layoutInflater)
+        // _binding.lifecycleOwner = this.viewLifecycleOwner
         return binding.root
     }
 
@@ -88,8 +90,6 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     }
 
     private fun createSortAlertDialog(position: Int) {
-
-
         // Alternative version of creating sortSelectionList
 
         /*
@@ -100,7 +100,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
         */
 
-        val sortSelectionList = mutableListOf<String>("Date", "State",  )
+        val sortSelectionList = mutableListOf<String>("Date", "State")
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Sort by")
         builder.setSingleChoiceItems(sortSelectionList.toTypedArray(), sortSelection, null)
@@ -131,6 +131,8 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         // inspectionStates
         inspectionStates = mutableListOf<String>()
         for(item in InspectionState.values()){
@@ -155,7 +157,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun setOnInspectionItemClickListener(itemView: View, position: Int) {
 
         // updateInspectionUid
-        updateInspectionUid(position)
+        updateTempInspectionUid(position)
 
         if(inspectionUid != null) {
             findNavController().navigate(
@@ -173,59 +175,63 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun setOnDateButtonClickListener(itemview: View, position: Int) {
 
         // update InspectionUid
-        updateInspectionUid(position)
+        updateTempInspectionUid(position)
 
         // getSelectedInspection
         updateTempInspection(position)
 
+        val millis = inspectionList[position].inspectionDate.toLong()
+
         // Create TimePicker
-        val dialog = InspectionDatePickerDialog()
+        val dialog = InspectionDatePickerDialog(millis)
 
         // show MyTimePicker
         dialog.show(childFragmentManager, "inspection_time_picker")
     }
 
-    // TODO HOW TO MAKE WAIT THIS FUNCTION TILL TEMPINSPECTION UPDATED
     // Implementing inspectionRowStateButton click reaction
     override fun setOnStateButtonClickListener(itemview: View, position: Int) {
 
-        // UpdateInspectionUid
-        updateInspectionUid(position)
+        // UpdateTempInspectionUid
+        updateTempInspectionUid(position)
 
-        // getSelectedInspection
+        // getTempSelectedInspection
         updateTempInspection(position)
 
-        stateSelection = 0
+        // updateTempStateSelection
+        updateTempInspectionStateSelection(position)
+
+        // Creating inspection state selection dialog
+        createInspectionStateSelectionDialog(tempStateSelection)
+
+    }
+
+    private fun updateTempInspectionStateSelection(position: Int) {
+        tempStateSelection = 0
         var selection = 0
         for (item in InspectionState.values()) {
-            if (tempInspection.inspectionStateString == item.toString()) {
-                stateSelection = selection
+            if (inspectionList[position].inspectionStateString == item.toString()) {
+                tempStateSelection = selection
             }
             selection += 1
         }
-
-        // Creating inspection state selection dialog
-        createInspectionSelectionDialog(stateSelection)
-
     }
+
+    private fun updateTempInspectionStateSelection(state: String) {
+        tempInspection.inspectionStateString = state
+    }
+
 
     private fun updateTempInspection(position: Int) {
-
-        viewModelProvider.getInspection(inspectionUid).observe(viewLifecycleOwner) { inspection ->
-            tempInspection = inspection
-
-        }
+        tempInspection = inspectionList[position]
     }
 
-    private fun updateInspectionUid(position: Int) {
+
+    private fun updateTempInspectionUid(position: Int) {
         inspectionUid = inspectionList[position].inspectionUid
-
     }
 
-    private fun createInspectionSelectionDialog(checkedItem: Int) {
-
-
-
+    private fun createInspectionStateSelectionDialog(checkedItem: Int) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Device State")
         builder.setSingleChoiceItems(inspectionStates.toTypedArray(), checkedItem, null)
@@ -236,7 +242,24 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        // TODO Implement InspectionDateDialogPicker date set reaction
+        val date = Calendar.getInstance()
+        date.set(year, month, dayOfMonth)
+        val millis: Long = date.timeInMillis
+
+        // update tempInspectionDate
+        updateTempInspectionDate(millis.toString())
+
+        // updateInspectionState
+        updateInspectionDate()
+    }
+
+    private fun updateTempInspectionDate(date: String) {
+        tempInspection.inspectionDate = date
+    }
+
+    private fun updateInspectionDate() {
+        val map: Map<String, String> = createInspectionMap(tempInspection)
+        viewModelProvider.updateInspection(map, inspectionUid)
     }
 
     override fun onDestroy() {
@@ -244,13 +267,21 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         _binding = null
     }
 
+    // Save inspection state
     override fun onClick(dialog: DialogInterface?, which: Int) {
-
-        // Getting single choice AlertDialog selected position
+        // Getting single choice AlertDialog selection
         val listView: ListView = (dialog as AlertDialog).listView
+        val state= listView.getItemAtPosition(listView.checkedItemPosition).toString()
 
+        //  updateTempStateSelection
+        updateTempInspectionStateSelection(state)
+
+        updateInspectionStateString()
+
+    }
+
+    private fun updateInspectionStateString() {
         val map: Map<String, String> = createInspectionMap(tempInspection)
         viewModelProvider.updateInspection(map, inspectionUid)
-
     }
 }

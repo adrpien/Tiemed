@@ -51,12 +51,6 @@ abstract class BaseFragment: Fragment(){
         return string
     }
 
-    fun getDateString(): String{
-        var date: Calendar = Calendar.getInstance()
-        var string: String = date.getTime().toString()
-        return string
-    }
-
     // Creating map of inspection fields with their values
     fun createInspectionMap(inspection: Inspection): Map<String, String> {
         var map: MutableMap<String, String> = mutableMapOf()

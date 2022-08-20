@@ -11,6 +11,7 @@ class InspectionListViewModel: ViewModel() {
 
     val inspectionList = firebaseRepository.getInspectionList()
 
+
     fun getInspection(id: String): MutableLiveData<Inspection>{
         return firebaseRepository.getInspection(id)
     }

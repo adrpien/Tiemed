@@ -5,15 +5,16 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.util.*
+import kotlin.system.measureTimeMillis
 
 
-class InspectionDatePickerDialog: DialogFragment() {
+class InspectionDatePickerDialog(val millis: Long): DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-
         // Create date (moment of class instance creating) and set day, month, year values
         val calendar = Calendar.getInstance()
+        calendar.timeInMillis = millis
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)

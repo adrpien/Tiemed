@@ -47,7 +47,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: 
         holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionUid)
 
         // Setting inspectionRowDateTextView
-        holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate))
+        holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate.toLong()))
 
         // Setting inspectionRowNameTextView
         holder.inspectionRowNameTextView.setText(inspectionList[position].name)
@@ -110,17 +110,15 @@ interface OnInspectionClickListener {
 }
 
 // Returns date in format YYYY/MM/DD String representation using date in millis
-fun getDateString(date: String): String {
+fun getDateString(millis: Long): String {
 
     var text: String = ""
 
-    // Parsing millis in String to Calendar Object
-    val millis: Long = parseLong(date).toLong()
     val date = Calendar.getInstance()
     date.timeInMillis = millis
 
     // Creating String with with date
-    val yearString = date.get(Calendar.YEAR). toString()
+    val yearString = date.get(Calendar.YEAR).toString()
 
     val month = date.get(Calendar.MONTH) + 1
     val monthString = if(month<10){

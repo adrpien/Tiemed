@@ -77,12 +77,15 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
         // Get inspection uid if passed in bundle
         inspectionUid = arguments?.getString("uid", null)
+
         // Fill fields with record data if
         if(inspectionUid != null) {
             inspection = viewModelProvider.getInspection(inspectionUid!!)
             viewModelProvider.getInspection(inspectionUid!!).observe(viewLifecycleOwner) { inspection ->
+                tempInspection = inspection
+
                 // Filling fields with data of opened record (when record is updated)
-                bindInspectionData(inspection)
+                bindInspectionData(tempInspection)
             }
         }
 
@@ -143,7 +146,8 @@ class EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // Date button implementation
         binding.inspectionDateButton.setOnClickListener {
             // Create TimePicker
-            val dialog = InspectionDatePickerDialog()
+            val millis = tempInspection.inspectionDate.toLong()
+            val dialog = InspectionDatePickerDialog(millis)
             // show MyTimePicker
             dialog.show(childFragmentManager, "inspection_time_picker")
 
