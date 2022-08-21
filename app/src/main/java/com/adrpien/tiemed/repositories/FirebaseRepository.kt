@@ -31,7 +31,7 @@ class FirebaseRepository {
     private lateinit var repair: MutableLiveData<Repair>
 
     // MutableLiveData with list of inspections
-    private lateinit var inspectionList: MutableLiveData<MutableList<Inspection>>
+    private lateinit var inspectionList: MutableLiveData<List<Inspection>>
 
     // MutableLiveData with list of repairs
     private lateinit var repairList: MutableLiveData<MutableList<Repair>>
@@ -176,13 +176,13 @@ class FirebaseRepository {
      */
 
     // Returns list of inspections
-    fun getInspectionList():MutableLiveData<MutableList<Inspection>>{
-        inspectionList = MutableLiveData<MutableList<Inspection>>()
+    fun getInspectionList():MutableLiveData<List<Inspection>>{
+        inspectionList = MutableLiveData<List<Inspection>>()
         firebaseFirestore.collection("inspections")
             .get()
             .addOnSuccessListener{
-                val inspection = it.toObjects(Inspection::class.java)
-                inspectionList.postValue(inspection)
+                val list = it.toObjects(Inspection::class.java)
+                inspectionList.postValue(list)
             }
             .addOnFailureListener {
                 Log.d(REPOSITORY_DEBUG, it.message.toString())

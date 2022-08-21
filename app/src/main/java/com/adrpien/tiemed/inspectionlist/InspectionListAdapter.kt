@@ -12,9 +12,16 @@ import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.fragments.BaseFragment
 import java.lang.Long.parseLong
 
-class InspectionListAdapter(val inspectionList: List<Inspection>, val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
+class InspectionListAdapter(val inspectionList: ArrayList<Inspection> = ArrayList<Inspection>(), val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
 
 
+
+    // SubmitInspectionList
+    fun refreshInspectionList(list: List<Inspection>){
+        inspectionList.clear()
+        inspectionList.addAll(list)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InspectionViewHolder {
 

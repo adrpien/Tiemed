@@ -32,7 +32,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         get() = _binding!!
 
     private lateinit var inspectionUid: String
-    private lateinit var inspectionList: MutableList<Inspection>
+    private lateinit var inspectionList: ArrayList<Inspection>
 
     private val ACTION_BAR_TITLE: String = "Inspection List"
 
@@ -41,6 +41,8 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     private var tempInspection = Inspection()
 
     private lateinit var inspectionStates: MutableList<String>
+
+    var adapter = InspectionListAdapter(listener = this)
 
     init {
 
@@ -52,7 +54,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
         // ViewBinding
         _binding = FragmentInspectionListBinding.inflate(layoutInflater)
-        // _binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.lifecycleOwner = this.viewLifecycleOwner
         return binding.root
     }
 
@@ -131,8 +133,6 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         // inspectionStates
         inspectionStates = mutableListOf<String>()
         for(item in InspectionState.values()){
@@ -141,10 +141,21 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
         // implementing inspection list Recycler View
         binding.inspectionRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        viewModelProvider.inspectionList.observe(viewLifecycleOwner) { t ->
-            if(t.isNotEmpty())
+        binding.inspectionRecyclerView.adapter = adapter
+
+        /*
+        TODO MutableLiveData does not work properly
+        MutableLiveData does not trigger observer when inspectionDateButton and inspectionStateButton clicked.
+        Changes are saved in FirebaseStorage, but observer of the MutableLiveData is not triggered.
+        */
+        viewModelProvider.inspectionList.observe(viewLifecycleOwner) {
+            it?.let {
+                inspectionList = ArrayList(it)
+                adapter.refreshInspectionList(it)
+            }
+            /*if(t.isNotEmpty())
             binding.inspectionRecyclerView.adapter = InspectionListAdapter(t, this)
-            inspectionList = t
+            inspectionList = t*/
         }
 
         // FAB Button implementation
