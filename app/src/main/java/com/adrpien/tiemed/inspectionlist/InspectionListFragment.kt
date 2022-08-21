@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,8 +23,13 @@ import com.adrpien.tiemed.fragments.BaseFragment
 
 class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
 
+    private lateinit var filteredInspectionList: List<Inspection>
+
+    private var groupSelection: Int = 0
+    private var groupSelectionString: String = ""
     private var sortSelection: Int = 0
     private var sortSelectionString: String = ""
+
     private var tempStateSelection: Int = 0
 
     // ViewBinding
@@ -41,6 +47,10 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     private var tempInspection = Inspection()
 
     private lateinit var inspectionStates: MutableList<String>
+
+    private lateinit var filterDate: Calendar
+
+    private lateinit var filterAlertDialogView: View
 
     var adapter = InspectionListAdapter(listener = this)
 
@@ -70,38 +80,68 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.inspectionSortItem -> {
-                sortInspections()
+                sortInspectionList()
                 true
             }
             R.id.inspectionFilterItem -> {
-                // TODO Inspection list filtering
+                filterInspectionList()
                 true
             }
             R.id.inspectionGroupItem -> {
-                // TODO Inspection list filtering
+                groupInspectionList()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun sortInspections() {
+    private fun groupInspectionList() {
+        val groupSelectionList = mutableListOf<String>("Hospital", "State")
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Group by")
+        builder.setSingleChoiceItems(groupSelectionList.toTypedArray(), groupSelection, null)
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            inspectionList.groupBy {
+                val groupListView = (dialog as AlertDialog).listView
+                groupSelectionString = groupListView.adapter.getItem(groupListView.checkedItemPosition).toString()
+                groupSelection = groupListView.checkedItemPosition
 
-        createSortAlertDialog(sortSelection)
-
+                if(groupSelectionString == "Hospital") {
+                    it.hospitalString
+                } else if ( groupSelectionString == "State"){
+                    it.inspectionStateString
+                } else {
+                    it.inspectionUid
+                }
+            }
+            // TODO groupInspectionList to implement
+            binding.inspectionRecyclerView.adapter = InspectionListAdapter(ArrayList(filteredInspectionList), this)
+        })
+        builder.setNegativeButton("Cancel", null)
+        val dialog = builder.create()
+        dialog.show()
     }
 
-    private fun createSortAlertDialog(position: Int) {
-        // Alternative version of creating sortSelectionList
+    private fun filterInspectionList() {
 
-        /*
-        val sortSelectionList = mutableListOf<String>()
-        for(selection in Inspection::class.memberProperties){
-            sortSelectionList.add(selection.name)
-        }
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Filter")
+        builder.setView(filterAlertDialogView)
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            filteredInspectionList = inspectionList.filter {
+                it.inspectionDate.toLong() > filterDate.timeInMillis
+            }
+            binding.inspectionRecyclerView.adapter = InspectionListAdapter(ArrayList(filteredInspectionList), this)
+        })
 
-        */
 
+        builder.setNegativeButton("Cancel", null)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+
+    private fun sortInspectionList() {
         val sortSelectionList = mutableListOf<String>("Date", "State")
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Sort by")
@@ -109,9 +149,9 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             inspectionList.sortWith(compareBy { it ->
                 //
-                val listView = (dialog as AlertDialog).listView
-                sortSelectionString = listView.adapter.getItem(listView.checkedItemPosition).toString()
-                sortSelection = listView.checkedItemPosition
+                val sortListView = (dialog as AlertDialog).listView
+                sortSelectionString = sortListView.adapter.getItem(sortListView.checkedItemPosition).toString()
+                sortSelection = sortListView.checkedItemPosition
 
                 if(sortSelectionString == "Date"){
                     it.inspectionDate
@@ -163,6 +203,26 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
             findNavController().navigate(InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment())
         }
 
+        // inspectionListFilterDateButton implementation
+        setFilterDateButton()
+
+    }
+
+    private fun setFilterDateButton() {
+        filterDate = Calendar.getInstance()
+        val filterDateYear = filterDate.get(Calendar.YEAR)
+        val filterDateMonth = filterDate.get(Calendar.MONTH)
+        val filterDateDay = filterDate.get(Calendar.DAY_OF_MONTH)
+        filterAlertDialogView = layoutInflater.inflate(R.layout.filter_view, null)
+        val filterButton = filterAlertDialogView.findViewById<Button>(R.id.inspectionListFilterDateButton)
+        filterButton.setText(getDateString(filterDate.timeInMillis))
+        filterButton.setOnClickListener {
+            val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                filterDate.set(year, month, dayOfMonth)
+                filterButton.setText(getDateString(filterDate.timeInMillis))
+            }, filterDateYear, filterDateMonth, filterDateDay)
+            datePicker.show()
+        }
     }
 
     override fun setOnInspectionItemClickListener(itemView: View, position: Int) {
@@ -296,3 +356,4 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         viewModelProvider.updateInspection(map, inspectionUid)
     }
 }
+
