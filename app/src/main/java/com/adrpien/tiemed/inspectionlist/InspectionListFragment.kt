@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ListView
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -20,6 +21,7 @@ import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
+
 
 class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
 
@@ -102,6 +104,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         builder.setSingleChoiceItems(groupSelectionList.toTypedArray(), groupSelection, null)
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             inspectionList.groupBy {
+                /*
                 val groupListView = (dialog as AlertDialog).listView
                 groupSelectionString = groupListView.adapter.getItem(groupListView.checkedItemPosition).toString()
                 groupSelection = groupListView.checkedItemPosition
@@ -113,9 +116,9 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
                 } else {
                     it.inspectionUid
                 }
+                */
             }
             // TODO groupInspectionList to implement
-            binding.inspectionRecyclerView.adapter = InspectionListAdapter(ArrayList(filteredInspectionList), this)
         })
         builder.setNegativeButton("Cancel", null)
         val dialog = builder.create()
@@ -124,12 +127,22 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
     private fun filterInspectionList() {
 
+        // Remove view if that view have already parent
+        if (filterAlertDialogView.parent != null) {
+                (filterAlertDialogView.parent as ViewGroup).removeView(filterAlertDialogView)
+        }
+
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filter")
         builder.setView(filterAlertDialogView)
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             filteredInspectionList = inspectionList.filter {
-                it.inspectionDate.toLong() > filterDate.timeInMillis
+                val filterSwitch = filterAlertDialogView.findViewById<Switch>(R.id.inspectionListFilterSwitch)
+                if(filterSwitch.isChecked) {
+                    it.inspectionDate.toLong() >= filterDate.timeInMillis
+                } else {
+                    it.inspectionDate.toLong() <= filterDate.timeInMillis
+                }
             }
             binding.inspectionRecyclerView.adapter = InspectionListAdapter(ArrayList(filteredInspectionList), this)
         })
@@ -208,6 +221,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
 
     }
 
+    // inspectionListFilterButton implementation
     private fun setFilterDateButton() {
         filterDate = Calendar.getInstance()
         val filterDateYear = filterDate.get(Calendar.YEAR)
