@@ -21,6 +21,7 @@ import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.datepickers.InspectionDatePickerDialog
 import com.adrpien.tiemed.fragments.BaseFragment
+import com.google.android.material.snackbar.Snackbar
 
 
 class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
@@ -103,21 +104,7 @@ class InspectionListFragment : BaseFragment(), OnInspectionClickListener, DatePi
         builder.setTitle("Group by")
         builder.setSingleChoiceItems(groupSelectionList.toTypedArray(), groupSelection, null)
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-            inspectionList.groupBy {
-                /*
-                val groupListView = (dialog as AlertDialog).listView
-                groupSelectionString = groupListView.adapter.getItem(groupListView.checkedItemPosition).toString()
-                groupSelection = groupListView.checkedItemPosition
-
-                if(groupSelectionString == "Hospital") {
-                    it.hospitalString
-                } else if ( groupSelectionString == "State"){
-                    it.inspectionStateString
-                } else {
-                    it.inspectionUid
-                }
-                */
-            }
+            Snackbar.make(requireView(), "Wait for implementation", Snackbar.LENGTH_SHORT).show()
             // TODO groupInspectionList to implement
         })
         builder.setNegativeButton("Cancel", null)
