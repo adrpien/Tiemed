@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature_settings.SettingsActivity">
+    tools:context=".presentation.feature_settings.SettingsActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.adrpien.tiemed.feature_settings.SettingsFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_settings.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
     app:startDestination="@id/repairListFragment">
     <fragment
         android:id="@+id/repairListFragment"
-        android:name="com.adrpien.tiemed.feature_repairs.presentation.RepairListFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_repairs.RepairListFragment"
         android:label="repair_list_fragment"
         tools:layout="@layout/fragment_repair_list" >
         <action
@@ -18,12 +18,12 @@
     </fragment>
     <fragment
         android:id="@+id/editRepairFragment"
-        android:name="com.adrpien.tiemed.feature_repairs.presentation.EditRepairFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_repairs.EditRepairFragment"
         android:label="fragment_edit_repair"
         tools:layout="@layout/fragment_edit_repair" />
     <fragment
         android:id="@+id/inspectionListFragment"
-        android:name="com.adrpien.tiemed.feature_inspections.presentation.InspectionListFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_inspections.InspectionListFragment"
         android:label="InspectionListFragment" >
         <action
             android:id="@+id/action_inspectionListFragment_to_editInspectionFragment"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/editInspectionFragment"
-        android:name="com.adrpien.tiemed.feature_inspections.presentation.EditInspectionFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_inspections.EditInspectionFragment"
         android:label="fragment_edit_inspection"
         tools:layout="@layout/fragment_edit_inspection" >
         <action
@@ -43,12 +43,12 @@
     </fragment>
     <fragment
         android:id="@+id/viewRepairFragment"
-        android:name="com.adrpien.tiemed.feature_repairs.presentation.ViewRepairFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_repairs.ViewRepairFragment"
         android:label="fragment_view_repair"
         tools:layout="@layout/fragment_view_repair" />
     <fragment
         android:id="@+id/viewInspectionFragment"
-        android:name="com.adrpien.tiemed.feature_inspections.presentation.ViewInspectionFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_inspections.ViewInspectionFragment"
         android:label="fragment_view_inspection"
         tools:layout="@layout/fragment_view_inspection" >
         <action

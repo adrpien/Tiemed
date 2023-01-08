@@ -11,8 +11,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.ActivityMainBinding
-import com.adrpien.tiemed.feature_settings.SettingsActivity
-import com.adrpien.tiemed.feature_users.domain.UserViewModel
+import com.adrpien.tiemed.presentation.feature_settings.SettingsActivity
+import com.adrpien.tiemed.presentation.feature_users.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 

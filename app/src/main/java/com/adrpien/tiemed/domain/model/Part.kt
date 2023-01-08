@@ -1,12 +1,10 @@
-package com.adrpien.tiemed.data.local.entities
+package com.adrpien.tiemed.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class PartEntity(
+data class Part(
 
-    @PrimaryKey
     val partId: Int,
 
     val name: String = "",

@@ -4,12 +4,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class RepairStateEntity (
+data class EstStateEntity (
 
     @PrimaryKey(autoGenerate = true)
-    val repairStateId: String,
+    val EstStateId: String,
 
     val state: String = ""
-        ) {
+){
 
 }
+

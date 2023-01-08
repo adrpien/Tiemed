@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiemed">
         <activity
-            android:name=".feature_settings.SettingsActivity"
+            android:name=".presentation.feature_settings.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".core.splash_screen.SplashScreenActivity"
@@ -28,7 +28,7 @@
             android:name=".main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".feature_users.presentation.LoginActivity"
+            android:name=".presentation.feature_users.LoginActivity"
             android:exported="false" />
     </application>
 

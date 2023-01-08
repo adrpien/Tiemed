@@ -8,7 +8,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.adrpien.tiemed.databinding.ActivitySplashScreenActivityBinding
-import com.adrpien.tiemed.feature_users.presentation.LoginActivity
+import com.adrpien.tiemed.presentation.feature_users.LoginActivity
 
 class  SplashScreenActivity : AppCompatActivity() {
 

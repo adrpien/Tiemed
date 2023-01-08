@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="15dp"
-    tools:context=".feature_repairs.presentation.EditRepairFragment">
+    tools:context=".presentation.feature_repairs.EditRepairFragment">
 
     <ScrollView
         android:layout_width="match_parent"

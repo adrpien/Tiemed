@@ -1,12 +1,10 @@
-package com.adrpien.tiemed.data.local.entities
+package com.adrpien.tiemed.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class RepairStateEntity (
+data class RepairState (
 
-    @PrimaryKey(autoGenerate = true)
     val repairStateId: String,
 
     val state: String = ""
