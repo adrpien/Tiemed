@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.adrpien.tiemed.data.local.entities.*
+import com.adrpien.tiemed.data.local.relations.RepairPartCrossReference
 
 
 @Database (
@@ -12,12 +13,14 @@ import com.adrpien.tiemed.data.local.entities.*
         DeviceEntity::class,
         EstStateEntity::class,
         HospitalEntity::class,
-            InspectionStateEntity::class,
-            InspectionEntity::class,
-            PartEntity::class,
-            RepairEntity::class,
-            RepairStateEntity::class,
-            TechnicianEntity::class
+        InspectionStateEntity::class,
+        InspectionEntity::class,
+        PartEntity::class,
+        RepairEntity::class,
+        RepairStateEntity::class,
+        TechnicianEntity::class,
+        RepairPartCrossReference::class
+
             ],
     version = 1
 )

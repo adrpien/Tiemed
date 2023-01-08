@@ -26,6 +26,10 @@ interface TiemedDao {
     suspend fun getRepairList(): List<RepairEntity>
 
 
+    @Transaction
+    @Query("DELETE FROM repairentity WHERE repairId LIKE :repairId")
+    suspend fun deleteRepair(repairId: String)
+
     /* ***** Inspections ***** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInspection(inspection: InspectionEntity)
@@ -37,6 +41,10 @@ interface TiemedDao {
     @Transaction
     @Query("SELECT * FROM inspectionentity")
     suspend fun getInspectionList(): List<InspectionEntity>
+
+    @Transaction
+    @Query("DELETE FROM inspectionentity WHERE inspectionId LIKE :inspectionId")
+    suspend fun deleteInspection(inspectionId: String)
 
     /* ***** Hospitals ***** */
     @Transaction
@@ -55,6 +63,10 @@ interface TiemedDao {
     @Transaction
     @Query("SELECT * FROM partentity")
     suspend fun getPartList(): List<PartEntity>
+
+    @Transaction
+    @Query("DELETE FROM partentity WHERE partId LIKE :partId")
+    suspend fun deletePart(partId: String)
 
     /* ***** Technicians ***** */
     @Transaction

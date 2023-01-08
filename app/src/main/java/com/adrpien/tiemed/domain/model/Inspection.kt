@@ -18,6 +18,8 @@ data class Inspection(
 
     var inspectionDate: String = Calendar.getInstance().timeInMillis.toString(),
 
+    var technicianId: String = "",
+
     var recipient: String = "",
     var recipientSignature: String = "",
 
