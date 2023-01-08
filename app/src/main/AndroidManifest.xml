@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.adrpien.tiemed">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiemed">
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".feature_settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".splashscreen.SplashScreenActivity"
+            android:name=".core.splash_screen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +28,7 @@
             android:name=".main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".feature_users.presentation.LoginActivity"
             android:exported="false" />
     </application>
 

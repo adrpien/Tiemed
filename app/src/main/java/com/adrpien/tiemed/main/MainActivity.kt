@@ -1,25 +1,18 @@
 package com.adrpien.tiemed.main
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.datamodels.users.User
 import com.adrpien.tiemed.databinding.ActivityMainBinding
-import com.adrpien.tiemed.settings.SettingsActivity
-import com.adrpien.tiemed.viewmodels.UserViewModel
+import com.adrpien.tiemed.feature_settings.SettingsActivity
+import com.adrpien.tiemed.feature_users.domain.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 

@@ -1,5 +1,7 @@
 package com.adrpien.tiemed.datamodels
 
+import com.adrpien.tiemed.data.local.entities.Repair
+
 data class Device(
 
     // Basic information

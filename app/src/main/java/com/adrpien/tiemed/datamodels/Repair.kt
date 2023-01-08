@@ -1,7 +1,5 @@
 package com.adrpien.tiemed.datamodels
 
-import com.adrpien.tiemed.datamodels.users.User
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -32,7 +30,7 @@ data class Repair(
 
 
     // Repair description
-    var photosList: ArrayList<Photo> = arrayListOf(),
+    var photosList: ArrayList<String> = arrayListOf(),
     var defectDescription: String = "",
     var repairDescription: String = "",
 
