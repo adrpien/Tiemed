@@ -4,9 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 data class  InspectionState (
-
     val inspectionStateId: String,
-
     val state: String =  ""
         ){
 

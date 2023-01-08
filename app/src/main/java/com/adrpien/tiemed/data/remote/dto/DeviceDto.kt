@@ -1,21 +1,31 @@
 package com.adrpien.tiemed.data.remote.dto
 
+import com.adrpien.tiemed.data.local.entities.DeviceEntity
+import com.adrpien.tiemed.domain.model.Device
+
 data class DeviceDto(
+    val deviceId: String,
+    var name: String = "",
+    var manufacturer: String = "",
+    var model: String = "",
+    var serialNumer: String = "",
+    var inventoryNumber: String = "",
+    var localizationId : String = "",
+    var inspections: List<String> = emptyList(),
+    var repairs: List<String>? = emptyList()
+){
 
-    // Basic information
-    val deviceId: Int? = null,
-    var name: String? = null,
-    var manufacturer: String? = null,
-    var model: String? = null,
-    var serialNumer: String? = null,
-    var inventoryNumber: String? = null,
-
-    // Device localization
-    var localization : Localization? = null,
-
-    // List of inspections
-    var inspections: ArrayList<Inspection>? = null,
-
-    // List of repairs:
-    var repairs: ArrayList<Repair>? = null
-)
+    fun toDeviceEntity(): DeviceEntity {
+        return DeviceEntity(
+            deviceId = deviceId,
+            name = name,
+            manufacturer = manufacturer,
+            model = model,
+            serialNumer = serialNumer,
+            inventoryNumber = inventoryNumber,
+            localizationId = localizationId,
+            inspections = inspections,
+            repairs = repairs
+        )
+    }
+}

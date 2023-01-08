@@ -2,10 +2,11 @@ package com.adrpien.tiemed.data
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.adrpien.tiemed.datamodels.Hospital
-import com.adrpien.tiemed.datamodels.Inspection
-import com.adrpien.tiemed.data.local.entities.Repair
-import com.adrpien.tiemed.datamodels.users.User
+import com.adrpien.tiemed.data.local.TiemedDao
+import com.adrpien.tiemed.data.remote.FirebaseApi
+import com.adrpien.tiemed.domain.model.Hospital
+import com.adrpien.tiemed.domain.model.Inspection
+import com.adrpien.tiemed.domain.model.Repair
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,7 +14,39 @@ import com.google.firebase.storage.FirebaseStorage
 
 
 // Repository class
-class  TiemedRepositoryImplementation: TiemedRepository {
+class  TiemedRepositoryImplementation(
+    val tiemedDao: TiemedDao,
+    val firebaseApi: FirebaseApi
+): TiemedRepository {
+
+    /*
+    *********************************
+    INSPECTIONS
+    *********************************
+     */
+
+    // MutableLiveData with inspection
+    private var inspection: MutableLiveData<Inspection> = MutableLiveData<Inspection>()
+
+    override fun getInspection(inspectionId: String): MutableLiveData<Inspection> {
+        firebaseFirestore.collection("inspections")
+            .document(inspectionId)
+            .get()
+            .addOnSuccessListener {
+                val inspection = it.toObject(Inspection::class.java)!!
+                this.inspection.postValue(inspection)
+                Log.d(REPOSITORY_DEBUG, "Inspection record delivered")
+            }
+            .addOnFailureListener {
+                Log.d(REPOSITORY_DEBUG, it.message.toString())
+            }
+        return inspection
+    }
+
+    // MutableLiveData with list of inspections
+    private lateinit var inspectionList: MutableLiveData<List<Inspection>>
+
+    // _____________________________________________________
 
     private val REPOSITORY_DEBUG = "REPOSITORY_DEBUG"
 
@@ -21,18 +54,15 @@ class  TiemedRepositoryImplementation: TiemedRepository {
     private lateinit var signatureURL: MutableLiveData<String>
 
     // User
-    private lateinit var user: MutableLiveData<User>
+    private lateinit var user: MutableLiveData<String>
 
     private var signature: MutableLiveData<ByteArray> = MutableLiveData<ByteArray>()
 
-    // MutableLiveData with inspection
-    private var inspection: MutableLiveData<Inspection> = MutableLiveData<Inspection>()
 
     // Repair
     private lateinit var repair: MutableLiveData<Repair>
 
-    // MutableLiveData with list of inspections
-    private lateinit var inspectionList: MutableLiveData<List<Inspection>>
+
 
     // MutableLiveData with list of repairs
     private lateinit var repairList: MutableLiveData<MutableList<Repair>>
@@ -229,22 +259,6 @@ class  TiemedRepositoryImplementation: TiemedRepository {
             .addOnFailureListener{
                 Log.d(REPOSITORY_DEBUG, it.message.toString())
             }
-    }
-
-    //  Return inspection record according do delivered id
-    fun getInspection(uid: String): MutableLiveData<Inspection> {
-        firebaseFirestore.collection("inspections")
-            .document(uid)
-            .get()
-            .addOnSuccessListener {
-                val inspection = it.toObject(Inspection::class.java)!!
-                this.inspection.postValue(inspection)
-                Log.d(REPOSITORY_DEBUG, "Inspection record delivered")
-            }
-            .addOnFailureListener {
-                Log.d(REPOSITORY_DEBUG, it.message.toString())
-            }
-        return inspection
     }
 
     /*

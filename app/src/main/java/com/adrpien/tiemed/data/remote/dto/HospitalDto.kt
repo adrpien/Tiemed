@@ -1,7 +1,15 @@
 package com.adrpien.tiemed.data.remote.dto
 
-// Unused
+import com.adrpien.tiemed.data.local.entities.HospitalEntity
 
-data class HospitalDto(val hospitalId: String = "", val name: String = ""){
-
+data class HospitalDto(
+    val hospitalId: String,
+    val name: String = ""
+){
+    fun toHospitalEntity(): HospitalEntity {
+        return HospitalEntity(
+            hospitalId = hospitalId,
+            name = name
+        )
+    }
 }

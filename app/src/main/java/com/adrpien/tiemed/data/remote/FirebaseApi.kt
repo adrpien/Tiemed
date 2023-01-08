@@ -8,7 +8,7 @@ import com.adrpien.tiemed.datamodels.users.User
 
 
 // Repository class
-class  InspectionsFirebaseAPI {
+class  FirebaseApi {
 
     private val INSPECTION_REPOSITORY_DEBUG = "INSPECTION_REPOSITORY_DEBUG"
 

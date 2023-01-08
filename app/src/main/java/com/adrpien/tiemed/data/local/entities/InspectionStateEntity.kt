@@ -2,14 +2,19 @@ package com.adrpien.tiemed.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.adrpien.tiemed.domain.model.InspectionState
 
 @Entity
 data class  InspectionStateEntity (
-
     @PrimaryKey(autoGenerate = true)
     val inspectionStateId: String,
-
     val state: String =  ""
-        ){
+    ){
 
+    fun toInspectionState(): InspectionState{
+        return InspectionState(
+            inspectionStateId = inspectionStateId,
+            state = state
+        )
+    }
 }
