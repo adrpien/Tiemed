@@ -12,8 +12,8 @@ package com.adrpien.dictionaryapp.core.util
 // Example: Wrapped around list of songs
 data class Resource <out T>(
     val resourceState: ResourceState,
-    val data: T?,
-    val message: String?
+    val data: T? = null,
+    val message: String? = null
     ) {
     /*
     ********** COMPANION OBJECT *********************

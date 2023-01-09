@@ -6,7 +6,7 @@ import com.adrpien.tiemed.domain.model.RepairState
 
 @Entity
 data class RepairStateEntity (
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val repairStateId: String,
     val state: String = ""
 ) {

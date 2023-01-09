@@ -6,7 +6,7 @@ import com.adrpien.tiemed.domain.model.InspectionState
 
 @Entity
 data class  InspectionStateEntity (
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val inspectionStateId: String,
     val state: String =  ""
     ){

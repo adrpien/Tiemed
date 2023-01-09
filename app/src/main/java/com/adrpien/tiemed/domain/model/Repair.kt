@@ -7,10 +7,10 @@ data class Repair(
     val deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
-    var photoList: List<String> = emptyList<String>(),
+    // var photoList: List<String> = emptyList<String>(),
     var defectDescription: String = "",
     var repairDescription: String = "",
-    var partList: List<String> = emptyList(),
+    //var partList: List<String> = emptyList(),
     var partDescription: String = "",
     var comment: String = "",
     var estTestId: String = "",
@@ -22,6 +22,6 @@ data class Repair(
     var returnTechnicianId: String = "",
     var rate: String = "",
     var recipient: String = "",
-    var recipientSignature: String = "",
+    var recipientSignatureId: String = "",
     )
 

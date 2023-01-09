@@ -7,7 +7,7 @@ import com.adrpien.tiemed.domain.model.Repair
 
 @Entity
 data class PartEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val partId: Int,
     val name: String = "",
     var quantity: Int = 0

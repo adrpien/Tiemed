@@ -9,10 +9,10 @@ data class RepairDto(
     val deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
-    var photoList: List<String> = emptyList<String>(),
+    //var photoList: List<String> = emptyList<String>(),
     var defectDescription: String = "",
     var repairDescription: String = "",
-    var partList: List<String> = emptyList(),
+    // var partList: List<String> = emptyList(),
     var partDescription: String = "",
     var comment: String = "",
     var estTestId: String = "",
@@ -24,7 +24,7 @@ data class RepairDto(
     var returnTechnicianId: String = "",
     var rate: String = "",
     var recipient: String = "",
-    var recipientSignature: String = "",
+    var recipientSignatureId: String = "",
     ) {
 
     fun toRepairEntity(): RepairEntity {
@@ -34,10 +34,10 @@ data class RepairDto(
         deviceId = deviceId,
         hospitalId = hospitalId,
         ward = ward,
-        photoList = photoList,
+        // photoList = photoList,
         defectDescription = defectDescription,
         repairDescription = repairDescription,
-        partList = partList,
+        // partList = partList,
         partDescription = partDescription,
         comment = comment,
         estTestId = estTestId,
@@ -49,7 +49,7 @@ data class RepairDto(
         returnTechnicianId = returnTechnicianId,
         rate = rate,
         recipient = recipient,
-        recipientSignature = recipientSignature
+        recipientSignatureId = recipientSignatureId
     )
     }
 

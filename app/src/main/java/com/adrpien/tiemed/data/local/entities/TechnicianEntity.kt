@@ -6,7 +6,7 @@ import com.adrpien.tiemed.domain.model.Technician
 
 @Entity
 data class TechnicianEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val technicianId: String,
     val name: String = ""
 ) {

@@ -13,7 +13,7 @@ import com.adrpien.tiemed.domain.model.Repair
 @Dao
 interface TiemedDao {
 
-    /* ***** Repairs ***** */
+    /* ***** Repairs **************************************************************************** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRepair(repair: RepairEntity)
 
@@ -25,12 +25,11 @@ interface TiemedDao {
     @Query("SELECT * FROM repairentity")
     suspend fun getRepairList(): List<RepairEntity>
 
-
     @Transaction
     @Query("DELETE FROM repairentity WHERE repairId LIKE :repairId")
     suspend fun deleteRepair(repairId: String)
 
-    /* ***** Inspections ***** */
+    /* ***** Inspections ************************************************************************ */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInspection(inspection: InspectionEntity)
 
@@ -46,13 +45,7 @@ interface TiemedDao {
     @Query("DELETE FROM inspectionentity WHERE inspectionId LIKE :inspectionId")
     suspend fun deleteInspection(inspectionId: String)
 
-    /* ***** Hospitals ***** */
-    @Transaction
-    @Query("SELECT * FROM hospitalentity")
-    suspend fun getHospitalList(): List<HospitalEntity>
-
-
-    /* ***** Parts ***** */
+    /* ***** Parts ****************************************************************************** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPart(part: Part)
 
@@ -68,22 +61,27 @@ interface TiemedDao {
     @Query("DELETE FROM partentity WHERE partId LIKE :partId")
     suspend fun deletePart(partId: String)
 
-    /* ***** Technicians ***** */
+    /* ***** Hospitals ************************************************************************** */
+    @Transaction
+    @Query("SELECT * FROM hospitalentity")
+    suspend fun getHospitalList(): List<HospitalEntity>
+
+    /* ***** Technicians ************************************************************************ */
     @Transaction
     @Query("SELECT * FROM technicianentity")
     suspend fun getTechnicianList(): List<TechnicianEntity>
 
-    /* ***** ESTStates ***** */
+    /* ***** EstStates ************************************************************************** */
     @Transaction
     @Query("SELECT * FROM eststateentity")
     suspend fun getESTStateList(): List<EstStateEntity>
 
-    /* ***** InspectionState ***** */
+    /* ***** InspectionState ******************************************************************** */
     @Transaction
     @Query("SELECT * FROM inspectionstateentity")
     suspend fun getInspectionStateList(): List<InspectionStateEntity>
 
-    /* ***** RepairStates ***** */
+    /* ***** RepairStates *********************************************************************** */
     @Transaction
     @Query("SELECT * FROM repairstateentity")
     suspend fun getRepairStateList(): List<RepairStateEntity>

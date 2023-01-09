@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity
 data class InspectionEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var inspectionId: String,
     var deviceId: String = "",
     var hospitalId: String = "",

@@ -1,18 +1,16 @@
 package com.adrpien.tiemed.data.remote.dto
 
 import com.adrpien.tiemed.data.local.entities.DeviceEntity
-import com.adrpien.tiemed.domain.model.Device
 
 data class DeviceDto(
     val deviceId: String,
     var name: String = "",
     var manufacturer: String = "",
     var model: String = "",
-    var serialNumer: String = "",
+    var serialNumber: String = "",
     var inventoryNumber: String = "",
-    var localizationId : String = "",
-    var inspections: List<String> = emptyList(),
-    var repairs: List<String>? = emptyList()
+    // var inspections: List<String> = emptyList(),
+    // var repairs: List<String>? = emptyList()
 ){
 
     fun toDeviceEntity(): DeviceEntity {
@@ -21,11 +19,10 @@ data class DeviceDto(
             name = name,
             manufacturer = manufacturer,
             model = model,
-            serialNumer = serialNumer,
+            serialNumber = serialNumber,
             inventoryNumber = inventoryNumber,
-            localizationId = localizationId,
-            inspections = inspections,
-            repairs = repairs
+            // inspections = inspections,
+            // repairs = repairs
         )
     }
 }

@@ -7,16 +7,16 @@ import com.adrpien.tiemed.domain.model.Repair
 
 @Entity
 data class RepairEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val repairId: String,
     var repairStateId: String = "",
     val deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
-    var photoList: List<String> = emptyList<String>(),
+    // var photoList: List<String> = emptyList<String>(),
     var defectDescription: String = "",
     var repairDescription: String = "",
-    var partList: List<String> = emptyList(),
+    // var partList: List<String> = emptyList(),
     var partDescription: String = "",
     var comment: String = "",
     var estTestId: String = "",
@@ -28,7 +28,7 @@ data class RepairEntity(
     var returnTechnicianId: String = "",
     var rate: String = "",
     var recipient: String = "",
-    var recipientSignature: String = "",
+    var recipientSignatureId: String = "",
 ) {
 
     fun toRepair(): Repair {
@@ -38,10 +38,10 @@ data class RepairEntity(
             deviceId = deviceId,
             hospitalId = hospitalId,
             ward = ward,
-            photoList = photoList,
+            //photoList = photoList,
             defectDescription = defectDescription,
             repairDescription = repairDescription,
-            partList = partList,
+            // partList = partList,
             partDescription = partDescription,
             comment = comment,
             estTestId = estTestId,
@@ -53,7 +53,7 @@ data class RepairEntity(
             returnTechnicianId = returnTechnicianId,
             rate = rate,
             recipient = recipient,
-            recipientSignature = recipientSignature
+            recipientSignatureId = recipientSignatureId
         )
     }
 }
