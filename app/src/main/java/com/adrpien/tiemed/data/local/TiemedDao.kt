@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.adrpien.tiemed.data.local.entities.*
+import com.adrpien.tiemed.domain.model.Device
 import com.adrpien.tiemed.domain.model.Inspection
 import com.adrpien.tiemed.domain.model.Part
 import com.adrpien.tiemed.domain.model.Repair
@@ -61,6 +62,23 @@ interface TiemedDao {
     @Query("DELETE FROM partentity WHERE partId LIKE :partId")
     suspend fun deletePart(partId: String)
 
+    /* ***** Devices **************************************************************************** */
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDevice(device: Device)
+
+    @Transaction
+    @Query("SELECT * FROM deviceentity WHERE deviceId LIKE :deviceId")
+    suspend fun getDevice(deviceId: String): DeviceEntity
+
+    @Transaction
+    @Query("SELECT * FROM deviceentity")
+    suspend fun getDeviceList(): List<DeviceEntity>
+
+    @Transaction
+    @Query("DELETE FROM deviceentity WHERE deviceId LIKE :deviceId")
+    suspend fun deleteDevice(deviceId: String)
+
     /* ***** Hospitals ************************************************************************** */
     @Transaction
     @Query("SELECT * FROM hospitalentity")
@@ -74,7 +92,7 @@ interface TiemedDao {
     /* ***** EstStates ************************************************************************** */
     @Transaction
     @Query("SELECT * FROM eststateentity")
-    suspend fun getESTStateList(): List<EstStateEntity>
+    suspend fun getEstStateList(): List<EstStateEntity>
 
     /* ***** InspectionState ******************************************************************** */
     @Transaction

@@ -12,5 +12,12 @@ data class EstStateDto (
                 state = state
             )
         }
+
+    fun toEstStateDto(): EstStateDto {
+        return EstStateDto(
+            estStateId = estStateId,
+            state = state
+        )
+    }
 }
 

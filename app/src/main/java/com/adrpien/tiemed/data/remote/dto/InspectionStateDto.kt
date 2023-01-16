@@ -13,4 +13,11 @@ data class  InspectionStateDto (
             state = state
         )
     }
+
+    fun toInspectionStateDto(): InspectionStateDto{
+        return InspectionStateDto(
+            inspectionStateId = inspectionStateId,
+            state = state
+        )
+    }
 }

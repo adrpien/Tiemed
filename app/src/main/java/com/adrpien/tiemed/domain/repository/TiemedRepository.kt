@@ -12,31 +12,35 @@ interface TiemedRepository {
     suspend fun getInspectionList() : Flow<Resource<List<Inspection>>>
     fun insertInspection (inspection: Inspection): Flow<Resource<Boolean>>
 
-
     /* ***** Repairs **************************************************************************** */
     fun getRepair(repairId: String): Flow<Resource<Repair>>
-    fun getRepairList(): Flow<Resource<List<Repair>>>
+    suspend fun getRepairList(): Flow<Resource<List<Repair>>>
     fun insertRepair (repair: Repair): Flow<Resource<Boolean>>
+
+    /* ***** Devices **************************************************************************** */
+
+    fun getDevice(deviceId: String): Flow<Resource<Device>>
+    suspend fun getDeviceList(): Flow<Resource<List<Device>>>
+    fun insertDevice (device: Device): Flow<Resource<Boolean>>
 
     /* ***** Parts ****************************************************************************** */
     fun getPart(partId: String): Flow<Resource<Part>>
-    fun getPartList(): Flow<Resource<List<Part>>>
+    suspend fun getPartList(): Flow<Resource<List<Part>>>
     fun insertPart (part: Part): Flow<Resource<Boolean>>
 
     /* ***** Hospitals ************************************************************************** */
-    fun getHospitalList(): Flow<Resource<List<Hospital>>>
+    suspend fun getHospitalList(): Flow<Resource<List<Hospital>>>
 
     /* ***** Technicians ************************************************************************ */
-    fun getTechnicianList(): Flow<Resource<List<Technician>>>
+    suspend fun getTechnicianList(): Flow<Resource<List<Technician>>>
 
     /* ***** EstStates ************************************************************************** */
-    fun getEstStateList(): Flow<Resource<List<EstState>>>
+    suspend fun getEstStateList(): Flow<Resource<List<EstState>>>
 
     /* ***** InspectionState ******************************************************************** */
-    fun getInspectionStateList(): Flow<Resource<List<InspectionState>>>
+    suspend fun getInspectionStateList(): Flow<Resource<List<InspectionState>>>
 
     /* ***** RepairStates *********************************************************************** */
-    fun getRepairStateList(): Flow<Resource<List<RepairState>>>
-
+    suspend fun getRepairStateList(): Flow<Resource<List<RepairState>>>
 
 }

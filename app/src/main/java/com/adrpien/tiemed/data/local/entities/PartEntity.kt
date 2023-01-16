@@ -8,9 +8,9 @@ import com.adrpien.tiemed.domain.model.Repair
 @Entity
 data class PartEntity(
     @PrimaryKey(autoGenerate = false)
-    val partId: Int,
+    val partId: String,
     val name: String = "",
-    var quantity: Int = 0
+    var quantity: String = "0"
 ) {
     fun toPart(): Part {
         return Part(

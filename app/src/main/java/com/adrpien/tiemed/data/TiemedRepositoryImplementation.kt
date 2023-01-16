@@ -19,7 +19,7 @@ class  TiemedRepositoryImplementation(
 
     /* ********************************* INSPECTIONS ******************************************** */
 
-    private fun inspectionListFlow(): Flow<Resource<List<Inspection>>>{
+    private fun inspectionListFlow(): Flow<Resource<List<Inspection>>> {
         return firebaseApi.getInspectionList()
     }
     override suspend fun getInspectionList() = flow {
@@ -29,7 +29,7 @@ class  TiemedRepositoryImplementation(
     }.flatMapLatest {
         inspectionListFlow()
     }
-    override fun getInspection(repairId: String): Flow<Resource<Inspection>>  = flow {
+    override fun getInspection(repairId: String): Flow<Resource<Inspection>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val repair = tiemedDao.getInspection(repairId).toInspection()
         emit(Resource(ResourceState.SUCCESS, repair))
@@ -41,9 +41,9 @@ class  TiemedRepositoryImplementation(
 
     }
 
-    /* ********************************* REPAIRS ******************************************** */
+    /* ********************************* REPAIRS ************************************************ */
 
-    private fun repairListFlow(): Flow<Resource<List<Repair>>>{
+    private fun repairListFlow(): Flow<Resource<List<Repair>>> {
         return firebaseApi.getRepairList()
     }
     override suspend fun getRepairList() = flow {
@@ -53,7 +53,7 @@ class  TiemedRepositoryImplementation(
     }.flatMapLatest {
         repairListFlow()
     }
-    override fun getRepair(repairId: String): Flow<Resource<Repair>>  = flow {
+    override fun getRepair(repairId: String): Flow<Resource<Repair>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val repair = tiemedDao.getRepair(repairId).toRepair()
         emit(Resource(ResourceState.SUCCESS, repair))
@@ -65,7 +65,31 @@ class  TiemedRepositoryImplementation(
 
     }
 
-    /* ********************************* PARTS ******************************************** */
+    /* ********************************* DEVICES ************************************************ */
+
+    private fun deviceListFlow(): Flow<Resource<List<Device>>> {
+        return firebaseApi.getDeviceList()
+    }
+    override suspend fun getDeviceList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val deviceList = tiemedDao.getDeviceList()
+        emit(Resource(ResourceState.LOADING, deviceList.map { it.toDevice() }))
+    }.flatMapLatest {
+        deviceListFlow()
+    }
+    override fun getDevice(deviceId: String): Flow<Resource<Device>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val device = tiemedDao.getDevice(deviceId).toDevice()
+        emit(Resource(ResourceState.SUCCESS, device))
+    }
+    override fun insertDevice(device: Device): Flow<Resource<Boolean>> = flow {
+        emit(Resource((ResourceState.LOADING), false))
+        firebaseApi.createNewDevice(device.toDeviceDto())
+        emit(Resource(ResourceState.SUCCESS, true))
+
+    }
+
+    /* ********************************* PARTS ************************************************** */
 
     private fun partListFlow(): Flow<Resource<List<Part>>>{
         return firebaseApi.getPartList()
@@ -88,39 +112,69 @@ class  TiemedRepositoryImplementation(
         emit(Resource(ResourceState.SUCCESS, true))
     }
 
-    /* ********************************* HOSPITALS ******************************************** */
+    /* ********************************* HOSPITALS ********************************************* */
 
-
-    override fun getHospitalList(): Flow<Resource<List<Hospital>>> {
-        TODO("Not yet implemented")
+    private fun hospitalListFlow(): Flow<Resource<List<Hospital>>>{
+        return firebaseApi.getHospitalList()
+    }
+    override suspend fun getHospitalList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val hospitalList = tiemedDao.getHospitalList()
+        emit(Resource(ResourceState.LOADING, hospitalList.map { it.toHospital() }))
+    }.flatMapLatest {
+        hospitalListFlow()
     }
 
     /* ********************************* TECHNICIANS ******************************************** */
 
 
-    override fun getTechnicianList(): Flow<Resource<List<Technician>>> {
-        TODO("Not yet implemented")
+    private fun technicianListFlow(): Flow<Resource<List<Technician>>>{
+        return firebaseApi.getTechnicianList()
+    }
+    override suspend fun getTechnicianList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val technicianList = tiemedDao.getTechnicianList()
+        emit(Resource(ResourceState.LOADING, technicianList.map { it.toTechnician() }))
+    }.flatMapLatest {
+        technicianListFlow()
     }
 
-    /* ********************************* HOSPITALS ******************************************** */
+    /* ********************************* INSPECTION STATES ************************************** */
 
-    override fun getEstStateList(): Flow<Resource<List<EstState>>> {
-        TODO("Not yet implemented")
+    private fun inspectionStateListFlow(): Flow<Resource<List<InspectionState>>>{
+        return firebaseApi.getInspectionStateList()
+    }
+    override suspend fun getInspectionStateList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val inspectionStateList = tiemedDao.getInspectionStateList()
+        emit(Resource(ResourceState.LOADING, inspectionStateList.map { it.toInspectionState()}))
+    }.flatMapLatest {
+        inspectionStateListFlow()
     }
 
-    /* ********************************* INSPECTION STATES ******************************************** */
+    /* ********************************* REPAIR STATES ****************************************** */
 
-
-        override fun getInspectionStateList(): Flow<Resource<List<InspectionState>>> {
-        TODO("Not yet implemented")
+    private fun repairStateListFlow(): Flow<Resource<List<RepairState>>>{
+        return firebaseApi.getRepairStateList()
+    }
+    override suspend fun getRepairStateList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val repairStateList = tiemedDao.getRepairStateList()
+        emit(Resource(ResourceState.LOADING, repairStateList.map { it.toRepairState()}))
+    }.flatMapLatest {
+        repairStateListFlow()
     }
 
-    /* ********************************* REPAIR STATES ******************************************** */
+    /* ********************************* EST STATES ****************************************** */
 
-
-        override fun getRepairStateList(): Flow<Resource<List<RepairState>>> {
-        TODO("Not yet implemented")
+    private fun estStateListFlow(): Flow<Resource<List<EstState>>>{
+        return firebaseApi.getEstStateList()
     }
-
-
+    override suspend fun getEstStateList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val estStateList = tiemedDao.getEstStateList()
+        emit(Resource(ResourceState.LOADING, estStateList.map { it.toEstState()}))
+    }.flatMapLatest {
+        estStateListFlow()
+    }
 }

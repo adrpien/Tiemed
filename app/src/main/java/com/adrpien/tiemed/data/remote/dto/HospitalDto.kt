@@ -12,4 +12,11 @@ data class HospitalDto(
             name = name
         )
     }
+
+    fun toHospitalDto(): HospitalDto {
+        return HospitalDto(
+            hospitalId = hospitalId,
+            name = name
+        )
+    }
 }

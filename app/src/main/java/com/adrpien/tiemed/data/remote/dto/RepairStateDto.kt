@@ -13,4 +13,11 @@ data class RepairStateDto (
             state = state
         )
     }
+
+    fun toRepairStateDto(): RepairStateDto {
+        return RepairStateDto(
+            repairStateId = repairStateId,
+            state = state
+        )
+    }
 }

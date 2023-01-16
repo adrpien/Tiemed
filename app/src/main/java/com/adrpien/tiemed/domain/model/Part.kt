@@ -2,10 +2,28 @@ package com.adrpien.tiemed.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.adrpien.tiemed.data.local.entities.InspectionEntity
+import com.adrpien.tiemed.data.local.entities.PartEntity
+import com.adrpien.tiemed.data.remote.dto.PartDto
 
 data class Part(
-    val partId: Int,
-    val name: String = "",
-    var quantity: Int = 0
+    val partId: String,
+    var name: String = "",
+    var quantity: String = "0"
     ) {
+    fun toPartEntity(): PartEntity {
+        return PartEntity(
+            partId = partId,
+            name = name,
+            quantity = quantity
+        )
+    }
+
+    fun toPartDto(): PartDto {
+        return PartDto(
+            partId = partId,
+            name = name,
+            quantity = quantity
+        )
+    }
 }

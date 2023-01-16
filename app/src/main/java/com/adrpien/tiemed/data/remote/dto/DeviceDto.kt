@@ -25,4 +25,17 @@ data class DeviceDto(
             // repairs = repairs
         )
     }
+
+    fun toDeviceDto(): DeviceDto {
+        return DeviceDto(
+            deviceId = deviceId,
+            name = name,
+            manufacturer = manufacturer,
+            model = model,
+            serialNumber = serialNumber,
+            inventoryNumber = inventoryNumber,
+            // inspections = inspections,
+            // repairs = repairs
+        )
+    }
 }

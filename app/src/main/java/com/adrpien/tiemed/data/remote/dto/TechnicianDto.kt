@@ -13,4 +13,11 @@ data class TechnicianDto(
             name = name
         )
     }
+
+    fun toTechnicianDto(): TechnicianDto {
+        return TechnicianDto(
+            technicianId = technicianId,
+            name = name
+        )
+    }
 }

@@ -53,6 +53,30 @@ data class RepairDto(
     )
     }
 
-
+    fun toRepairDto(): RepairDto {
+        return RepairDto(
+            repairId = repairId,
+            repairStateId = repairStateId,
+            deviceId = deviceId,
+            hospitalId = hospitalId,
+            ward = ward,
+            // photoList = photoList,
+            defectDescription = defectDescription,
+            repairDescription = repairDescription,
+            // partList = partList,
+            partDescription = partDescription,
+            comment = comment,
+            estTestId = estTestId,
+            closingDate = closingDate,
+            openingDate = openingDate,
+            repairingDate = repairingDate,
+            pickupTechnicianId = pickupTechnicianId,
+            repairTechnicianId = repairTechnicianId,
+            returnTechnicianId = returnTechnicianId,
+            rate = rate,
+            recipient = recipient,
+            recipientSignatureId = recipientSignatureId
+        )
+    }
 }
 

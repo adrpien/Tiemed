@@ -5,9 +5,7 @@ import androidx.annotation.RequiresFeature
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.data.remote.dto.*
-import com.adrpien.tiemed.domain.model.EstState
-import com.adrpien.tiemed.domain.model.Inspection
-import com.adrpien.tiemed.domain.model.Repair
+import com.adrpien.tiemed.domain.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -142,14 +140,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetch error")
         }
     }
-    fun getRepair(repairId: String): Flow<Resource<RepairDto>> = flow {
+    fun getRepair(repairId: String): Flow<Resource<Repair>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
             .document(repairId)
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
-            val data =  result.result.toObject(RepairDto::class.java)
+            val data =  result.result.toObject(Repair::class.java)
             emit(Resource(ResourceState.SUCCESS, data))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetched")
 
@@ -242,13 +240,13 @@ class  FirebaseApi(
     private lateinit var device: DeviceDto
     private lateinit var deviceList: List<DeviceDto>
 
-    fun getDeviceList(): Flow<Resource<List<DeviceDto>>> = flow {
+    fun getDeviceList(): Flow<Resource<List<Device>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
-            val data =  result.result.toObjects(DeviceDto::class.java)
+            val data =  result.result.toObjects(Device::class.java)
             emit(Resource(ResourceState.SUCCESS, data))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetched")
 
@@ -257,14 +255,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
         }
     }
-    fun getDevice(repairId: String): Flow<Resource<DeviceDto>> = flow {
+    fun getDevice(repairId: String): Flow<Resource<Device>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
             .document(repairId)
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
-            val data =  result.result.toObject(DeviceDto::class.java)
+            val data =  result.result.toObject(Device::class.java)
             emit(Resource(ResourceState.SUCCESS, data))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetched")
 
@@ -274,7 +272,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createNewDevice(repair: DeviceDto): Flow<Resource<Boolean>> = flow {
+    fun createNewDevice(device: DeviceDto): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -301,7 +299,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun updateDevice(repair: DeviceDto): Flow<Resource<Boolean>> = flow {
+    fun updateDevice(device: DeviceDto): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
@@ -363,17 +361,96 @@ class  FirebaseApi(
                     }
     }
 
+    /* ********************************* PARTS ************************************************** */
+
+    private lateinit var part: PartDto
+    private lateinit var partList: List<PartDto>
+
+    fun getPartList(): Flow<Resource<List<Part>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObjects(Part::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part list fetch error")
+        }
+    }
+    fun getPart(repairId: String): Flow<Resource<Part>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
+            .document(repairId)
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObject(Part::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part list fetch error")
+        }
+    }
+    // TODO Need to implement caching mechanism
+    fun createNewPart(part: PartDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        var documentReference = firebaseFirestore.collection("repairs")
+            .document()
+        var map = mapOf<String, String>(
+            "partId" to part.partId,
+            "name" to part.name,
+            "quantity" to part.quantity,
+        )
+        val result = documentReference.set(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part record created")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part record creation error")
+
+        }
+    }
+    // TODO Need to implement caching mechanism
+    fun updatePart(part: PartDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        var map = mapOf<String, String>(
+            "partId" to part.partId,
+            "name" to part.name,
+            "quantity" to part.quantity,
+        )
+        val documentReference = firebaseFirestore.collection("repairs").document(part.partId)
+        val result = documentReference.update(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part record updated")
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Part record update error")
+        }
+
+    }
+
     /* ********************************* HOSPITALS ********************************************** */
 
     private lateinit var hospitalList: List<HospitalDto>
 
-    fun getHospitalList(): Flow<Resource<List<HospitalDto>>> = flow {
+    fun getHospitalList(): Flow<Resource<List<Hospital>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
-            val hospitalList = data.result.toObjects(HospitalDto::class.java)
+            val hospitalList = data.result.toObjects(Hospital::class.java)
             emit(Resource(ResourceState.SUCCESS, hospitalList))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetched")
 
@@ -387,13 +464,13 @@ class  FirebaseApi(
 
     private lateinit var technicianList: List<TechnicianDto>
 
-    fun getTechnicianList(): Flow<Resource<List<HospitalDto>>> = flow {
+    fun getTechnicianList(): Flow<Resource<List<Technician>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
-            val hospitalList = data.result.toObjects(HospitalDto::class.java)
+            val hospitalList = data.result.toObjects(Technician::class.java)
             emit(Resource(ResourceState.SUCCESS, hospitalList))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetched")
 
@@ -407,13 +484,13 @@ class  FirebaseApi(
 
     private lateinit var estStateList: List<EstStateDto>
 
-    fun getEstStateList(): Flow<Resource<List<EstStateDto>>> = flow {
+    fun getEstStateList(): Flow<Resource<List<EstState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
-            val hospitalList = data.result.toObjects(EstStateDto::class.java)
+            val hospitalList = data.result.toObjects(EstState::class.java)
             emit(Resource(ResourceState.SUCCESS, hospitalList))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Est states list fetched")
 
@@ -429,13 +506,13 @@ class  FirebaseApi(
     private lateinit var repairStateList: List<RepairStateDto>
 
 
-    fun getRepairStateList(): Flow<Resource<List<RepairStateDto>>> = flow {
+    fun getRepairStateList(): Flow<Resource<List<RepairState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repair_states")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
-            val repairStateList = data.result.toObjects(RepairStateDto::class.java)
+            val repairStateList = data.result.toObjects(RepairState::class.java)
             emit(Resource(ResourceState.SUCCESS, repairStateList))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair states list fetched")
 
@@ -450,13 +527,13 @@ class  FirebaseApi(
 
     private lateinit var inspectionStateList: List<InspectionStateDto>
 
-    fun getInspectionStateList(): Flow<Resource<List<InspectionStateDto>>> = flow {
+    fun getInspectionStateList(): Flow<Resource<List<InspectionState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repair_states")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
-            val inspectionStateList = data.result.toObjects(InspectionStateDto::class.java)
+            val inspectionStateList = data.result.toObjects(InspectionState::class.java)
             emit(Resource(ResourceState.SUCCESS, inspectionStateList))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection states list fetched")
 
