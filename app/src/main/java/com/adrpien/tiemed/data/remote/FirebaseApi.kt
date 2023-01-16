@@ -1,15 +1,19 @@
 package com.adrpien.tiemed.data.remote
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import androidx.annotation.RequiresFeature
 import com.adrpien.dictionaryapp.core.util.Resource
+import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.data.remote.dto.*
-import com.adrpien.tiemed.datamodels.Hospital
-import com.adrpien.tiemed.domain.model.Technician
+import com.adrpien.tiemed.domain.model.EstState
+import com.adrpien.tiemed.domain.model.Inspection
+import com.adrpien.tiemed.domain.model.Repair
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
 
 
 // Repository class
@@ -28,33 +32,40 @@ class  FirebaseApi(
     private lateinit var inspection: InspectionDto
     private lateinit var inspectionList: List<InspectionDto>
 
-    fun getInspectionList():List<InspectionDto>{
-        firebaseFirestore.collection("inspections")
-            .get()
-            .addOnSuccessListener{
-                inspectionList = it.toObjects(InspectionDto::class.java)
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection records fetched")
+    fun getInspectionList(): Flow<Resource<List<Inspection>>> = flow {
+        // emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("inspections")
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObjects(Inspection::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetched")
 
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return inspectionList
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetch error")
+        }
     }
-    fun getInspection(inspectionId: String): InspectionDto {
-        firebaseFirestore.collection("inspections")
+    fun getInspection(inspectionId: String): Flow<Resource<Inspection>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("inspections")
             .document(inspectionId)
-            .get()
-            .addOnSuccessListener {
-                inspection = it.toObject(InspectionDto::class.java)!!
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record fetched")
+            val result = documentReference.get()
+            result.await()
+            if (result.isSuccessful) {
+                val data =  result.result.toObject(Inspection::class.java)
+                emit(Resource(ResourceState.SUCCESS, data))
+                Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetched")
+
+            } else {
+                emit(Resource(ResourceState.ERROR, null))
+                Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetch error")
             }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return inspection
     }
-    fun createNewInspection(inspection: InspectionDto){
+    // TODO Need to implement caching mechanism
+    fun createNewInspection(inspection: InspectionDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
         var map = mapOf<String, String>(
@@ -70,9 +81,21 @@ class  FirebaseApi(
             "signature" to inspection.recipientSignature,
             "technicianId" to inspection.technicianId
         )
-        documentReference.set(map)
+        val result = documentReference.set(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record created")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record creation error")
+
+        }
     }
-    fun updateInspection(inspection: InspectionDto){
+    // TODO Need to implement caching mechanism
+    fun updateInspection(inspection: InspectionDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "inspectionId" to inspection.inspectionId,
             "inspectionStateId" to inspection.inspectionStateId,
@@ -86,15 +109,17 @@ class  FirebaseApi(
             "signature" to inspection.recipientSignature,
             "technicianId" to inspection.technicianId
         )
-        firebaseFirestore.collection("inspections")
-            .document(inspection.inspectionId)
-            .update(map)
-            .addOnSuccessListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record updated")
-            }
-            .addOnFailureListener{
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
+        val documentReference = firebaseFirestore.collection("inspections").document(inspection.inspectionId)
+        val result = documentReference.update(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record updated")
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record update error")
+        }
+
     }
 
     /* ********************************* REPAIRS ************************************************ */
@@ -102,41 +127,48 @@ class  FirebaseApi(
     private lateinit var repair: RepairDto
     private lateinit var repairList: List<RepairDto>
 
-    fun getRepairList():List<RepairDto>{
-        firebaseFirestore.collection("repairs")
-            .get()
-            .addOnSuccessListener{
-                repairList = it.toObjects(RepairDto::class.java)
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Repair records fetched")
+    fun getRepairList(): Flow<Resource<List<Repair>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObjects(Repair::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetched")
 
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return repairList
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetch error")
+        }
     }
-    fun getRepair(repairId: String): RepairDto {
-        firebaseFirestore.collection("repairs")
+    fun getRepair(repairId: String): Flow<Resource<RepairDto>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
             .document(repairId)
-            .get()
-            .addOnSuccessListener {
-                repair = it.toObject(RepairDto::class.java)!!
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record fetched")
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return repair
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObject(RepairDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetch error")
+        }
     }
-    fun createNewRepair(repair: RepairDto){
+    // TODO Need to implement caching mechanism
+    fun createNewRepair(repair: RepairDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
-            "repairId" to documentReference.id,
-            "repairStateId" to inspection.inspectionStateId,
-            "deviceId" to inspection.deviceId,
-            "hospitalId" to inspection.hospitalId,
-            "ward" to inspection.ward,
+            "repairId" to repair.repairId,
+            "repairStateId" to repair.repairStateId,
+            "deviceId" to repair.deviceId,
+            "hospitalId" to repair.hospitalId,
+            "ward" to repair.ward,
             // "photoList"  to repair.photoList,
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
@@ -154,60 +186,55 @@ class  FirebaseApi(
             "recipient" to repair.recipient,
             "recipientSignature" to repair.recipientSignatureId,
         )
-        documentReference.set(map)
+        val result = documentReference.set(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record created")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record creation error")
+
+        }
     }
-    fun updateRepair(repair: RepairDto){
+    // TODO Need to implement caching mechanism§
+    fun updateRepair(repair: RepairDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
-            "inspectionId" to inspection.inspectionId,
-            "inspectionStateId" to inspection.inspectionStateId,
-            "deviceId" to inspection.deviceId,
-            "hospitalId" to inspection.hospitalId,
-            "ward" to inspection.ward,
-            "estState" to inspection.estStateId,
-            "comment" to inspection.comment,
-            "inspectionDate" to inspection.inspectionDate,
-            "recipient" to inspection.recipient,
-            "signature" to inspection.recipientSignature,
-            "technicianId" to inspection.technicianId
+            "repairId" to repair.repairId,
+            "repairStateId" to repair.repairStateId,
+            "deviceId" to repair.deviceId,
+            "hospitalId" to repair.hospitalId,
+            "ward" to repair.ward,
+            // "photoList"  to repair.photoList,
+            "defectDescription" to repair.defectDescription,
+            "repairDescription" to repair.repairDescription,
+            // "partList" to repair.partList,
+            "partDescription" to repair.partDescription,
+            "comment" to repair.comment,
+            "estTestId" to repair.estTestId,
+            "closingDate" to repair.closingDate,
+            "openingDate" to repair.openingDate,
+            "repairingDate" to repair.repairingDate,
+            "pickupTechnicianId" to repair.pickupTechnicianId,
+            "repairTechnicianId" to repair.repairTechnicianId,
+            "returnTechnicianId" to repair.returnTechnicianId,
+            "rate" to repair.rate,
+            "recipient" to repair.recipient,
+            "recipientSignature" to repair.recipientSignatureId,
         )
-        firebaseFirestore.collection("repairs")
-            .document(repair.repairId)
-            .update(map)
-            .addOnSuccessListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record updated")
-            }
-            .addOnFailureListener{
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-    }
+        val documentReference = firebaseFirestore.collection("repairs").document(repair.repairId)
+        val result = documentReference.update(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record updated")
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record update error")
+        }
 
-    /* ********************************* SIGNATURES ********************************************* */
-
-    private lateinit var signatureURL: String
-    private lateinit var signature: ByteArray
-
-    fun uploadSignature(signatureBytes: ByteArray, signatureId: String){
-        firebaseStorage.getReference("signatures")
-            .child("${signatureId}.jpg")
-            .putBytes(signatureBytes)
-            .addOnSuccessListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Signature uploaded")
-            }
-            .addOnFailureListener{
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-    }
-    fun getSignature(signatureId: String): ByteArray {
-        firebaseStorage.getReference("signatures")
-            .child("${signatureId}.jpg")
-            .getBytes(10000000) // 10MB
-            .addOnSuccessListener {
-                signature = it
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return signature
     }
 
     /* ********************************* DEVICES ************************************************ */
@@ -215,34 +242,41 @@ class  FirebaseApi(
     private lateinit var device: DeviceDto
     private lateinit var deviceList: List<DeviceDto>
 
-    fun getDeviceList():List<DeviceDto>{
-        firebaseFirestore.collection("devices")
-            .get()
-            .addOnSuccessListener{
-                deviceList = it.toObjects(DeviceDto::class.java)
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Device records fetched")
+    fun getDeviceList(): Flow<Resource<List<DeviceDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObjects(DeviceDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetched")
 
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return deviceList
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
+        }
     }
-    fun getDevice(deviceId: String): DeviceDto {
-        firebaseFirestore.collection("devices")
-            .document(deviceId)
-            .get()
-            .addOnSuccessListener {
-                device = it.toObject(DeviceDto::class.java)!!
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Device record fetched")
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return device
+    fun getDevice(repairId: String): Flow<Resource<DeviceDto>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repairs")
+            .document(repairId)
+        val result = documentReference.get()
+        result.await()
+        if (result.isSuccessful) {
+            val data =  result.result.toObject(DeviceDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, data))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
+        }
     }
-    fun createNewDevice(device: DeviceDto){
-        var documentReference = firebaseFirestore.collection("devices")
+    // TODO Need to implement caching mechanism
+    fun createNewDevice(repair: DeviceDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
@@ -254,9 +288,21 @@ class  FirebaseApi(
             // "inspections" to device.inspections,
             // "repairs" to device.repairs
         )
-        documentReference.set(map)
+        val result = documentReference.set(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device record created")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device record creation error")
+
+        }
     }
-    fun updateDevice(repair: DeviceDto){
+    // TODO Need to implement caching mechanism
+    fun updateDevice(repair: DeviceDto): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
             "name" to device.name,
@@ -267,95 +313,156 @@ class  FirebaseApi(
             // "inspections" to device.inspections,
             // "repairs" to device.repairs
         )
-        firebaseFirestore.collection("devicess")
-            .document(device.deviceId)
-            .update(map)
-            .addOnSuccessListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, "Device record updated")
-            }
-            .addOnFailureListener{
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
+        val documentReference = firebaseFirestore.collection("repairs").document(device.deviceId)
+        val result = documentReference.update(map)
+        result.await()
+        if (result.isSuccessful) {
+            emit(Resource(ResourceState.SUCCESS, true))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device record updated")
+        } else {
+            emit(Resource(ResourceState.ERROR, false))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Device record update error")
+        }
+
     }
 
+
+    /* ********************************* SIGNATURES ********************************************* */
+
+    private lateinit var signatureURL: String
+    private lateinit var signature: ByteArray
+
+    fun uploadSignature(signatureBytes: ByteArray, signatureId: String): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseStorage.getReference("signatures")
+            .child("${signatureId}.jpg")
+            val result = documentReference.putBytes(signatureBytes)
+            result.await()
+                    if (result.isSuccessful) {
+                        emit(Resource(ResourceState.SUCCESS, true))
+                        Log.d(TIEMED_REPOSITORY_DEBUG, "Signature uploaded")
+
+                    } else {
+                        emit(Resource(ResourceState.ERROR, false))
+                        Log.d(TIEMED_REPOSITORY_DEBUG, "Signature upload error")
+                    }
+
+    }
+    fun getSignature(signatureId: String): Flow<Resource<ByteArray>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseStorage.getReference("signatures")
+            .child("${signatureId}.jpg")
+            val result = documentReference.getBytes(10000000) //  10MB
+            result.await()
+                    if (result.isSuccessful){
+                        val data =  result.result
+                        emit(Resource(ResourceState.SUCCESS, data))
+                    } else {
+                        emit(Resource(ResourceState.LOADING, null))
+                        Log.d(TIEMED_REPOSITORY_DEBUG, "Signature fetch error")
+                    }
+    }
 
     /* ********************************* HOSPITALS ********************************************** */
 
     private lateinit var hospitalList: List<HospitalDto>
 
-    fun getHospitalList(): List<HospitalDto>{
-        firebaseFirestore.collection("hospitals")
-            .get()
-            .addOnSuccessListener {
-                val hospitalList = it.toObjects(HospitalDto::class.java)
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return hospitalList
+    fun getHospitalList(): Flow<Resource<List<HospitalDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("hospitals")
+        val data = documentReference.get()
+        data.await()
+        if(data.isSuccessful) {
+            val hospitalList = data.result.toObjects(HospitalDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, hospitalList))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetch error")
+        }
     }
 
     /* ********************************* TECHNICIANS ******************************************** */
 
     private lateinit var technicianList: List<TechnicianDto>
 
-    fun getTechnicianList(): List<TechnicianDto>{
-        firebaseFirestore.collection("technicians")
-            .get()
-            .addOnSuccessListener {
-                val technicianList = it.toObjects(TechnicianDto::class.java)
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return technicianList
+    fun getTechnicianList(): Flow<Resource<List<HospitalDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("hospitals")
+        val data = documentReference.get()
+        data.await()
+        if(data.isSuccessful) {
+            val hospitalList = data.result.toObjects(HospitalDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, hospitalList))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Hospital list fetch error")
+        }
     }
 
     /* ********************************* EST STATES ********************************************* */
 
-    private lateinit var estStateList: Flow<Resource<List<EstStateDto>>>
+    private lateinit var estStateList: List<EstStateDto>
 
-    fun getEstStateList(): Flow<Resource<List<EstStateDto>>>{
-        firebaseFirestore.collection("est_states")
-            .get()
-            .addOnSuccessListener {
-                estStateList = it.toObjects(EstStateDto::class.java)
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return estStateList
+    fun getEstStateList(): Flow<Resource<List<EstStateDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("hospitals")
+        val data = documentReference.get()
+        data.await()
+        if(data.isSuccessful) {
+            val hospitalList = data.result.toObjects(EstStateDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, hospitalList))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Est states list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Est states list fetch error")
+        }
     }
+
 
     /* ********************************* REPAIR STATES ****************************************** */
 
     private lateinit var repairStateList: List<RepairStateDto>
 
-    fun getRepairStateList(): List<RepairStateDto>{
-        firebaseFirestore.collection("repair_states")
-            .get()
-            .addOnSuccessListener {
-                repairStateList = it.toObjects(RepairStateDto::class.java)
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return repairStateList
+
+    fun getRepairStateList(): Flow<Resource<List<RepairStateDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repair_states")
+        val data = documentReference.get()
+        data.await()
+        if(data.isSuccessful) {
+            val repairStateList = data.result.toObjects(RepairStateDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, repairStateList))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair states list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Repair states list fetch error")
+        }
     }
+
 
     /* ********************************* INSPECTIONS STATES ************************************* */
 
     private lateinit var inspectionStateList: List<InspectionStateDto>
 
-    fun getInspectionStateList(): List<InspectionStateDto>{
-        firebaseFirestore.collection("inspection_states")
-            .get()
-            .addOnSuccessListener {
-                inspectionStateList = it.toObjects(InspectionStateDto::class.java)
-            }
-            .addOnFailureListener {
-                Log.d(TIEMED_REPOSITORY_DEBUG, it.message.toString())
-            }
-        return inspectionStateList
+    fun getInspectionStateList(): Flow<Resource<List<InspectionStateDto>>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val documentReference = firebaseFirestore.collection("repair_states")
+        val data = documentReference.get()
+        data.await()
+        if(data.isSuccessful) {
+            val inspectionStateList = data.result.toObjects(InspectionStateDto::class.java)
+            emit(Resource(ResourceState.SUCCESS, inspectionStateList))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection states list fetched")
+
+        } else {
+            emit(Resource(ResourceState.ERROR, null))
+            Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection states list fetch error")
+        }
     }
 }

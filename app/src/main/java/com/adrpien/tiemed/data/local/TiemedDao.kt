@@ -19,7 +19,7 @@ interface TiemedDao {
 
     @Transaction
     @Query("SELECT * FROM repairentity WHERE repairId LIKE :repairId")
-    suspend fun getRepair(repairId: String): List<RepairEntity>
+    suspend fun getRepair(repairId: String): RepairEntity
 
     @Transaction
     @Query("SELECT * FROM repairentity")
@@ -35,7 +35,7 @@ interface TiemedDao {
 
     @Transaction
     @Query("SELECT * FROM inspectionentity WHERE inspectionId LIKE :inspectionId")
-    suspend fun getInspection(inspectionId: String): List<InspectionEntity>
+    suspend fun getInspection(inspectionId: String): InspectionEntity
 
     @Transaction
     @Query("SELECT * FROM inspectionentity")
@@ -51,7 +51,7 @@ interface TiemedDao {
 
     @Transaction
     @Query("SELECT * FROM partentity WHERE partId LIKE :partId")
-    suspend fun getPart(partId: String): List<PartEntity>
+    suspend fun getPart(partId: String): PartEntity
 
     @Transaction
     @Query("SELECT * FROM partentity")

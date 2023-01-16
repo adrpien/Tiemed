@@ -1,5 +1,7 @@
 package com.adrpien.tiemed.domain.model
 
+import com.adrpien.tiemed.data.local.entities.InspectionEntity
+import com.adrpien.tiemed.data.remote.dto.InspectionDto
 import java.util.*
 
 data class Inspection(
@@ -14,4 +16,37 @@ data class Inspection(
     var recipientSignature: String = "",
     var inspectionStateId: String = "",
     var estStateId: String = ""
-    )
+    ) {
+
+    fun toInspectionEntity(): InspectionEntity {
+        return InspectionEntity(
+            inspectionId = inspectionId,
+            deviceId = deviceId,
+            hospitalId = hospitalId,
+            ward = ward,
+            comment = comment,
+            inspectionDate = inspectionDate,
+            technicianId = technicianId,
+            recipient = recipient,
+            recipientSignature = recipientSignature,
+            inspectionStateId = inspectionStateId,
+            estStateId = estStateId
+        )
+    }
+
+    fun toInspectionDto(): InspectionDto {
+        return InspectionDto(
+            inspectionId = inspectionId,
+            deviceId = deviceId,
+            hospitalId = hospitalId,
+            ward = ward,
+            comment = comment,
+            inspectionDate = inspectionDate,
+            technicianId = technicianId,
+            recipient = recipient,
+            recipientSignature = recipientSignature,
+            inspectionStateId = inspectionStateId,
+            estStateId = estStateId
+        )
+    }
+}

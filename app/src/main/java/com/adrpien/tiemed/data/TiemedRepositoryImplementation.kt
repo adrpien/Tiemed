@@ -1,17 +1,13 @@
 package com.adrpien.tiemed.data
 
-import androidx.lifecycle.MutableLiveData
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.data.local.TiemedDao
 import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.data.remote.dto.*
-import com.adrpien.tiemed.domain.model.Inspection
-import com.adrpien.tiemed.domain.model.Part
-import com.adrpien.tiemed.domain.model.Repair
+import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.repository.TiemedRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 
 
 class  TiemedRepositoryImplementation(
@@ -19,82 +15,112 @@ class  TiemedRepositoryImplementation(
     val firebaseApi: FirebaseApi
 ): TiemedRepository {
 
-    /*
-    *********************************
-    INSPECTIONS
-    *********************************
-     */
+    private val TIEMED_REPOSITORY_IMPLEMENTATION = "TIEMED REPOSITORY IMPLEMENTATION"
 
+    /* ********************************* INSPECTIONS ******************************************** */
 
-    override fun getInspectionList(): Flow<Resource<List<Inspection>>> = flow {
-        emit(Resource(ResourceState.LOADING))
-        val inspectionList = tiemedDao.getInspectionList().map { it.toInspection() }
-        emit(Resource(ResourceState.LOADING, inspectionList))
-        val inspectionListEntity = firebaseApi.getInspectionList()
-            .map {
-                it.toInspectionEntity()
-            }
-            .forEach {
-            tiemedDao.deleteInspection(it.inspectionId)
-            tiemedDao.insertInspection(it)
-            }
-        emit(Resource(ResourceState.SUCCESS, tiemedDao.getInspectionList().map { it.toInspection() }))
-
+    private fun inspectionListFlow(): Flow<Resource<List<Inspection>>>{
+        return firebaseApi.getInspectionList()
+    }
+    override suspend fun getInspectionList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val inspectionList = tiemedDao.getInspectionList()
+        emit(Resource(ResourceState.LOADING, inspectionList.map { it.toInspection() }))
+    }.flatMapLatest {
+        inspectionListFlow()
+    }
+    override fun getInspection(repairId: String): Flow<Resource<Inspection>>  = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val repair = tiemedDao.getInspection(repairId).toInspection()
+        emit(Resource(ResourceState.SUCCESS, repair))
+    }
+    override fun insertInspection(repair: Inspection): Flow<Resource<Boolean>> = flow {
+        emit(Resource((ResourceState.LOADING), false))
+        firebaseApi.createNewInspection(repair.toInspectionDto())
+        emit(Resource(ResourceState.SUCCESS, true))
 
     }
 
+    /* ********************************* REPAIRS ******************************************** */
+
+    private fun repairListFlow(): Flow<Resource<List<Repair>>>{
+        return firebaseApi.getRepairList()
+    }
+    override suspend fun getRepairList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val repairList = tiemedDao.getRepairList()
+        emit(Resource(ResourceState.LOADING, repairList.map { it.toRepair() }))
+    }.flatMapLatest {
+        repairListFlow()
+    }
+    override fun getRepair(repairId: String): Flow<Resource<Repair>>  = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val repair = tiemedDao.getRepair(repairId).toRepair()
+        emit(Resource(ResourceState.SUCCESS, repair))
+    }
+    override fun insertRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
+        emit(Resource((ResourceState.LOADING), false))
+        firebaseApi.createNewRepair(repair.toRepairDto())
+        emit(Resource(ResourceState.SUCCESS, true))
+
+    }
+
+    /* ********************************* PARTS ******************************************** */
+
+    private fun partListFlow(): Flow<Resource<List<Part>>>{
+        return firebaseApi.getPartList()
+    }
+    override suspend fun getPartList() = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val partList = tiemedDao.getPartList()
+        emit(Resource(ResourceState.LOADING, partList.map { it.toPart() }))
+    }.flatMapLatest {
+        partListFlow()
+    }
+    override fun getPart(partId: String): Flow<Resource<Part>>  = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        val part = tiemedDao.getPart(partId).toPart()
+        emit(Resource(ResourceState.SUCCESS, part))
+    }
+    override fun insertPart(part: Part): Flow<Resource<Boolean>> = flow {
+        emit(Resource((ResourceState.LOADING), false))
+        firebaseApi.createNewPart(part.toPartDto())
+        emit(Resource(ResourceState.SUCCESS, true))
+    }
+
+    /* ********************************* HOSPITALS ******************************************** */
 
 
-
-    override fun getInspection(): MutableLiveData<InspectionDto> {
+    override fun getHospitalList(): Flow<Resource<List<Hospital>>> {
         TODO("Not yet implemented")
     }
 
-    override fun insertInspection(inspection: Inspection) {
+    /* ********************************* TECHNICIANS ******************************************** */
+
+
+    override fun getTechnicianList(): Flow<Resource<List<Technician>>> {
         TODO("Not yet implemented")
     }
 
-    override fun getRepair(repairId: String): MutableLiveData<RepairDto> {
+    /* ********************************* HOSPITALS ******************************************** */
+
+    override fun getEstStateList(): Flow<Resource<List<EstState>>> {
         TODO("Not yet implemented")
     }
 
-    override fun getRepairList(): MutableLiveData<List<RepairDto>> {
+    /* ********************************* INSPECTION STATES ******************************************** */
+
+
+        override fun getInspectionStateList(): Flow<Resource<List<InspectionState>>> {
         TODO("Not yet implemented")
     }
 
-    override fun insertRepair(repair: Repair) {
+    /* ********************************* REPAIR STATES ******************************************** */
+
+
+        override fun getRepairStateList(): Flow<Resource<List<RepairState>>> {
         TODO("Not yet implemented")
     }
 
-    override fun getPart(partId: String): MutableLiveData<PartDto> {
-        TODO("Not yet implemented")
-    }
 
-    override fun getPartList(): MutableLiveData<List<PartDto>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun insertPart(part: Part) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getHospitalList(): MutableLiveData<List<HospitalDto>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getTechnicianList(): MutableLiveData<List<TechnicianDto>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getEstStateList(): MutableLiveData<List<EstStateDto>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getInspectionStateList(): MutableLiveData<List<InspectionStateDto>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getRepairStateList(): MutableLiveData<List<RepairStateDto>> {
-        TODO("Not yet implemented")
-    }
 }

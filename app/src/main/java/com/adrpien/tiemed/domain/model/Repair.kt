@@ -1,5 +1,8 @@
 package com.adrpien.tiemed.domain.model
 
+import com.adrpien.tiemed.data.local.entities.RepairEntity
+import com.adrpien.tiemed.data.remote.dto.RepairDto
+
 
 data class Repair(
     val repairId: String,
@@ -23,5 +26,57 @@ data class Repair(
     var rate: String = "",
     var recipient: String = "",
     var recipientSignatureId: String = "",
-    )
+    ) {
+    fun toRepairEntity(): RepairEntity {
+        return RepairEntity(
+            repairId = repairId,
+            repairStateId = repairStateId,
+            deviceId = deviceId,
+            hospitalId = hospitalId,
+            ward = ward,
+            //photoList = photoList,
+            defectDescription = defectDescription,
+            repairDescription = repairDescription,
+            // partList = partList,
+            partDescription = partDescription,
+            comment = comment,
+            estTestId = estTestId,
+            closingDate = closingDate,
+            openingDate = openingDate,
+            repairingDate = repairingDate,
+            pickupTechnicianId = pickupTechnicianId,
+            repairTechnicianId = repairTechnicianId,
+            returnTechnicianId = returnTechnicianId,
+            rate = rate,
+            recipient = recipient,
+            recipientSignatureId = recipientSignatureId
+        )
+    }
+
+    fun toRepairDto(): RepairDto {
+        return RepairDto(
+            repairId = repairId,
+            repairStateId = repairStateId,
+            deviceId = deviceId,
+            hospitalId = hospitalId,
+            ward = ward,
+            //photoList = photoList,
+            defectDescription = defectDescription,
+            repairDescription = repairDescription,
+            // partList = partList,
+            partDescription = partDescription,
+            comment = comment,
+            estTestId = estTestId,
+            closingDate = closingDate,
+            openingDate = openingDate,
+            repairingDate = repairingDate,
+            pickupTechnicianId = pickupTechnicianId,
+            repairTechnicianId = repairTechnicianId,
+            returnTechnicianId = returnTechnicianId,
+            rate = rate,
+            recipient = recipient,
+            recipientSignatureId = recipientSignatureId
+        )
+    }
+}
 

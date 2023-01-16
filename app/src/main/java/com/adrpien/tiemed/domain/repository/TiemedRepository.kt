@@ -1,29 +1,27 @@
 package com.adrpien.tiemed.domain.repository
 
-import androidx.lifecycle.MutableLiveData
-import com.adrpien.dictionaryapp.core.util.Event
 import com.adrpien.dictionaryapp.core.util.Resource
-import com.adrpien.tiemed.data.remote.dto.*
+import com.adrpien.tiemed.data.remote.dto.InspectionDto
 import com.adrpien.tiemed.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface TiemedRepository {
 
     /* ***** Inspections ************************************************************************ */
-    fun getInspection(inspectionId: String): Flow<Resource<List<Inspection>>>
-    fun getInspectionList(): Flow<Resource<List<Inspection>>>
-    fun insertInspection (inspection: Inspection)
+    fun getInspection(inspectionId: String): Flow<Resource<Inspection>>
+    suspend fun getInspectionList() : Flow<Resource<List<Inspection>>>
+    fun insertInspection (inspection: Inspection): Flow<Resource<Boolean>>
 
 
     /* ***** Repairs **************************************************************************** */
-    fun getRepair(repairId: String): Flow<Resource<List<Repair>>>
+    fun getRepair(repairId: String): Flow<Resource<Repair>>
     fun getRepairList(): Flow<Resource<List<Repair>>>
-    fun insertRepair (repair: Repair)
+    fun insertRepair (repair: Repair): Flow<Resource<Boolean>>
 
     /* ***** Parts ****************************************************************************** */
-    fun getPart(partId: String): Flow<Resource<List<Part>>>
+    fun getPart(partId: String): Flow<Resource<Part>>
     fun getPartList(): Flow<Resource<List<Part>>>
-    fun insertPart (part: Part)
+    fun insertPart (part: Part): Flow<Resource<Boolean>>
 
     /* ***** Hospitals ************************************************************************** */
     fun getHospitalList(): Flow<Resource<List<Hospital>>>
