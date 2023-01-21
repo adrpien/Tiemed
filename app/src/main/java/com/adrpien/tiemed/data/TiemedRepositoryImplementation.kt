@@ -22,7 +22,7 @@ class  TiemedRepositoryImplementation(
     private fun inspectionListFlow(): Flow<Resource<List<Inspection>>> {
         return firebaseApi.getInspectionList()
     }
-    override suspend fun getInspectionList() = flow {
+    override fun getInspectionList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val inspectionList = tiemedDao.getInspectionList()
         emit(Resource(ResourceState.LOADING, inspectionList.map { it.toInspection() }))
@@ -46,7 +46,7 @@ class  TiemedRepositoryImplementation(
     private fun repairListFlow(): Flow<Resource<List<Repair>>> {
         return firebaseApi.getRepairList()
     }
-    override suspend fun getRepairList() = flow {
+    override fun getRepairList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val repairList = tiemedDao.getRepairList()
         emit(Resource(ResourceState.LOADING, repairList.map { it.toRepair() }))
@@ -70,7 +70,7 @@ class  TiemedRepositoryImplementation(
     private fun deviceListFlow(): Flow<Resource<List<Device>>> {
         return firebaseApi.getDeviceList()
     }
-    override suspend fun getDeviceList() = flow {
+    override fun getDeviceList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val deviceList = tiemedDao.getDeviceList()
         emit(Resource(ResourceState.LOADING, deviceList.map { it.toDevice() }))
@@ -94,7 +94,7 @@ class  TiemedRepositoryImplementation(
     private fun partListFlow(): Flow<Resource<List<Part>>>{
         return firebaseApi.getPartList()
     }
-    override suspend fun getPartList() = flow {
+    override fun getPartList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val partList = tiemedDao.getPartList()
         emit(Resource(ResourceState.LOADING, partList.map { it.toPart() }))
@@ -117,7 +117,7 @@ class  TiemedRepositoryImplementation(
     private fun hospitalListFlow(): Flow<Resource<List<Hospital>>>{
         return firebaseApi.getHospitalList()
     }
-    override suspend fun getHospitalList() = flow {
+    override fun getHospitalList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val hospitalList = tiemedDao.getHospitalList()
         emit(Resource(ResourceState.LOADING, hospitalList.map { it.toHospital() }))
@@ -131,7 +131,7 @@ class  TiemedRepositoryImplementation(
     private fun technicianListFlow(): Flow<Resource<List<Technician>>>{
         return firebaseApi.getTechnicianList()
     }
-    override suspend fun getTechnicianList() = flow {
+    override fun getTechnicianList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val technicianList = tiemedDao.getTechnicianList()
         emit(Resource(ResourceState.LOADING, technicianList.map { it.toTechnician() }))
@@ -144,7 +144,7 @@ class  TiemedRepositoryImplementation(
     private fun inspectionStateListFlow(): Flow<Resource<List<InspectionState>>>{
         return firebaseApi.getInspectionStateList()
     }
-    override suspend fun getInspectionStateList() = flow {
+    override fun getInspectionStateList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val inspectionStateList = tiemedDao.getInspectionStateList()
         emit(Resource(ResourceState.LOADING, inspectionStateList.map { it.toInspectionState()}))
@@ -157,7 +157,7 @@ class  TiemedRepositoryImplementation(
     private fun repairStateListFlow(): Flow<Resource<List<RepairState>>>{
         return firebaseApi.getRepairStateList()
     }
-    override suspend fun getRepairStateList() = flow {
+    override fun getRepairStateList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val repairStateList = tiemedDao.getRepairStateList()
         emit(Resource(ResourceState.LOADING, repairStateList.map { it.toRepairState()}))
@@ -170,7 +170,7 @@ class  TiemedRepositoryImplementation(
     private fun estStateListFlow(): Flow<Resource<List<EstState>>>{
         return firebaseApi.getEstStateList()
     }
-    override suspend fun getEstStateList() = flow {
+    override fun getEstStateList() = flow {
         emit(Resource(ResourceState.LOADING, null))
         val estStateList = tiemedDao.getEstStateList()
         emit(Resource(ResourceState.LOADING, estStateList.map { it.toEstState()}))

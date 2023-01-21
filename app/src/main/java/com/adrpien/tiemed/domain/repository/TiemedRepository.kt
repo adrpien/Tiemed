@@ -9,38 +9,38 @@ interface TiemedRepository {
 
     /* ***** Inspections ************************************************************************ */
     fun getInspection(inspectionId: String): Flow<Resource<Inspection>>
-    suspend fun getInspectionList() : Flow<Resource<List<Inspection>>>
+    fun getInspectionList() : Flow<Resource<List<Inspection>>>
     fun insertInspection (inspection: Inspection): Flow<Resource<Boolean>>
 
     /* ***** Repairs **************************************************************************** */
     fun getRepair(repairId: String): Flow<Resource<Repair>>
-    suspend fun getRepairList(): Flow<Resource<List<Repair>>>
+    fun getRepairList(): Flow<Resource<List<Repair>>>
     fun insertRepair (repair: Repair): Flow<Resource<Boolean>>
 
     /* ***** Devices **************************************************************************** */
 
     fun getDevice(deviceId: String): Flow<Resource<Device>>
-    suspend fun getDeviceList(): Flow<Resource<List<Device>>>
+    fun getDeviceList(): Flow<Resource<List<Device>>>
     fun insertDevice (device: Device): Flow<Resource<Boolean>>
 
     /* ***** Parts ****************************************************************************** */
     fun getPart(partId: String): Flow<Resource<Part>>
-    suspend fun getPartList(): Flow<Resource<List<Part>>>
+    fun getPartList(): Flow<Resource<List<Part>>>
     fun insertPart (part: Part): Flow<Resource<Boolean>>
 
     /* ***** Hospitals ************************************************************************** */
-    suspend fun getHospitalList(): Flow<Resource<List<Hospital>>>
+    fun getHospitalList(): Flow<Resource<List<Hospital>>>
 
     /* ***** Technicians ************************************************************************ */
-    suspend fun getTechnicianList(): Flow<Resource<List<Technician>>>
+    fun getTechnicianList(): Flow<Resource<List<Technician>>>
 
     /* ***** EstStates ************************************************************************** */
-    suspend fun getEstStateList(): Flow<Resource<List<EstState>>>
+    fun getEstStateList(): Flow<Resource<List<EstState>>>
 
     /* ***** InspectionState ******************************************************************** */
-    suspend fun getInspectionStateList(): Flow<Resource<List<InspectionState>>>
+    fun getInspectionStateList(): Flow<Resource<List<InspectionState>>>
 
     /* ***** RepairStates *********************************************************************** */
-    suspend fun getRepairStateList(): Flow<Resource<List<RepairState>>>
+    fun getRepairStateList(): Flow<Resource<List<RepairState>>>
 
 }
