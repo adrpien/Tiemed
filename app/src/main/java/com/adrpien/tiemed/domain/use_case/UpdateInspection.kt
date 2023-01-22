@@ -10,6 +10,6 @@ class UpdateInspection(
 ) {
 
     operator fun invoke(inspection:Inspection): Flow<Resource<Boolean>> {
-        return repository.insertInspection(inspection)
+        return repository.updateInspection(inspection)
     }
 }

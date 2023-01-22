@@ -10,7 +10,7 @@ class UpdatePart(
 ) {
 
     operator fun invoke(part: Part): Flow<Resource<Boolean>> {
-        return repository.insertPart(part)
+        return repository.updatePart(part)
     }
 
 }

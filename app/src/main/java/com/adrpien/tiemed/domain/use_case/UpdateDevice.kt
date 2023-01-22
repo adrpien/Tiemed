@@ -10,7 +10,7 @@ class UpdateDevice(
     ) {
 
     operator fun invoke(device: Device): Flow<Resource<Boolean>> {
-        return repository.insertDevice(device)
+        return repository.updateDevice(device)
     }
 
 }

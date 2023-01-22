@@ -10,7 +10,7 @@ class UpdateRepair(
 ) {
 
     operator fun invoke(repair: Repair): Flow<Resource<Boolean>> {
-        return repository.updateRepair(repair.repairId, repair)
+        return repository.updateRepair(repair)
     }
 
 }
