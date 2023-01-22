@@ -2,12 +2,10 @@ package com.adrpien.tiemed.depency_injection
 
 import android.app.Application
 import androidx.room.Room
-import com.adrpien.tiemed.data.TiemedRepositoryImplementation
-import com.adrpien.tiemed.data.local.TiemedDao
+import com.adrpien.tiemed.data.repository.TiemedRepositoryImplementation
 import com.adrpien.tiemed.data.local.TiemedDatabase
 import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.domain.repository.TiemedRepository
-import com.bumptech.glide.annotation.GlideModule
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -41,8 +39,12 @@ interface AppModule {
 
     @Provides
     @Singleton
-    fun ProvideFirebaseApi(): FirebaseApi {
-        return FirebaseApi()
+    fun ProvideFirebaseApi(firebaseAuth: FirebaseAuth, firebaseFirestore: FirebaseFirestore, firebaseStorage: FirebaseStorage): FirebaseApi {
+        return FirebaseApi(
+            firebaseAuth = firebaseAuth,
+            firebaseFirestore = firebaseFirestore,
+            firebaseStorage = firebaseStorage
+        )
     }
 
     @Provides

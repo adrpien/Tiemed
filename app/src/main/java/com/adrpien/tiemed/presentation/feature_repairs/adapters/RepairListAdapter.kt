@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.data.local.entities.Repair
+import com.adrpien.tiemed.domain.model.Repair
 
 class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItemClickListener)
     : RecyclerView.Adapter<RepairListAdapter.RepairViewHolder>() {
@@ -36,28 +36,28 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         // Filling TextViews with values
 
         // Setting id
-        holder.repairRowIdRepairTextView.setText(repairList[position].repairUid)
+        holder.repairRowIdRepairTextView.setText(repairList[position].repairId)
 
         // Setting name
-        holder.repairRowNameRepairTextView.setText(repairList[position].name)
+        // holder.repairRowNameRepairTextView.setText(repairList[position].name)
 
         // Setting manufacturer
-        holder.repairRowManufacturerTextView.setText(repairList[position].manufacturer)
+        // holder.repairRowManufacturerTextView.setText(repairList[position].manufacturer)
 
         // Setting model
-        holder.repairRowModelTextView.setText(repairList[position].model)
+        // holder.repairRowModelTextView.setText(repairList[position].model)
 
         // Setting serial number
-        holder.repairRowSnNumberTextView.setText(repairList[position].serialNumber)
+        // holder.repairRowSnNumberTextView.setText(repairList[position].serialNumber)
 
         // Setting inventory number
-        holder.repairInNumberTextView.setText(repairList[position].inventoryNumber)
+        // holder.repairInNumberTextView.setText(repairList[position].inventoryNumber)
 
         // Setting  hospital
-        holder.repairRowHospitalTextView.setText(repairList[position].hospitalString)
+        // holder.repairRowHospitalTextView.setText(repairList[position].hospitalString)
 
         // Setting ward
-        holder.repairRowWardTextView.setText(repairList[position].ward)
+        // holder.repairRowWardTextView.setText(repairList[position].ward)
 
         // TODO State Marker implementation
         /*if(repairList[position].repairStateString == RepairState.FIXED.toString()){ holder.stateMarker.setBackgroundColor(Color.GREEN) }

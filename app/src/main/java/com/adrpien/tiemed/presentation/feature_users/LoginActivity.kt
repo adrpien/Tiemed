@@ -25,7 +25,8 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    override fun onStart() { super.onStart()
+    override fun onStart() {
+        super.onStart()
         // Go to MainActivity, if user is already logged
         isCurrentUser()
     }

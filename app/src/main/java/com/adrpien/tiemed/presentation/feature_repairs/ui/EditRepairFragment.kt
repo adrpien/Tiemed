@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.presentation.feature_repairs
+package com.adrpien.tiemed.presentation.feature_repairs.ui
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -21,11 +21,12 @@ import com.adrpien.tiemed.R
 import com.adrpien.tiemed.presentation.feature_users.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.datamodels.ESTState
-import com.adrpien.tiemed.datamodels.Hospital
-import com.adrpien.tiemed.data.local.entities.Repair
 import com.adrpien.tiemed.core.date_picker_dialog.RepairDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.domain.model.Hospital
+import com.adrpien.tiemed.domain.model.Repair
+import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -41,7 +42,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
         get() = _binding!!
 
     // ViewModel
-    val viewModelProvider by viewModels<EditRepairViewModel>()
+    val viewModelProvider by viewModels<RepairViewModel>()
 
     // UID
     private var uid: String? = null

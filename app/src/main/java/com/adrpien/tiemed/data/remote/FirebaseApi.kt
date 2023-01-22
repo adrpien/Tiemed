@@ -1,7 +1,6 @@
 package com.adrpien.tiemed.data.remote
 
 import android.util.Log
-import androidx.annotation.RequiresFeature
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.data.remote.dto.*
@@ -24,12 +23,7 @@ class  FirebaseApi(
 
     private val TIEMED_REPOSITORY_DEBUG = "INSPECTION_REPOSITORY_DEBUG"
 
-
     /* ********************************* INSPECTIONS ********************************* */
-
-    private lateinit var inspection: InspectionDto
-    private lateinit var inspectionList: List<InspectionDto>
-
     fun getInspectionList(): Flow<Resource<List<Inspection>>> = flow {
         // emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("inspections")
@@ -62,7 +56,7 @@ class  FirebaseApi(
             }
     }
     // TODO Need to implement caching mechanism
-    fun createNewInspection(inspection: InspectionDto): Flow<Resource<Boolean>> = flow {
+    fun createInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
@@ -92,7 +86,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun updateInspection(inspection: InspectionDto): Flow<Resource<Boolean>> = flow {
+    fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "inspectionId" to inspection.inspectionId,
@@ -121,10 +115,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* REPAIRS ************************************************ */
-
-    private lateinit var repair: RepairDto
-    private lateinit var repairList: List<RepairDto>
-
     fun getRepairList(): Flow<Resource<List<Repair>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
@@ -157,7 +147,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createNewRepair(repair: RepairDto): Flow<Resource<Boolean>> = flow {
+    fun createRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -197,7 +187,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism§
-    fun updateRepair(repair: RepairDto): Flow<Resource<Boolean>> = flow {
+    fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "repairId" to repair.repairId,
@@ -236,10 +226,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* DEVICES ************************************************ */
-
-    private lateinit var device: DeviceDto
-    private lateinit var deviceList: List<DeviceDto>
-
     fun getDeviceList(): Flow<Resource<List<Device>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
@@ -272,7 +258,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createNewDevice(device: DeviceDto): Flow<Resource<Boolean>> = flow {
+    fun createDevice(device: Device): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -299,7 +285,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun updateDevice(device: DeviceDto): Flow<Resource<Boolean>> = flow {
+    fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
@@ -326,11 +312,7 @@ class  FirebaseApi(
 
 
     /* ********************************* SIGNATURES ********************************************* */
-
-    private lateinit var signatureURL: String
-    private lateinit var signature: ByteArray
-
-    fun uploadSignature(signatureBytes: ByteArray, signatureId: String): Flow<Resource<Boolean>> = flow {
+    fun uploadSignature(signatureId: String, signatureBytes: ByteArray): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseStorage.getReference("signatures")
             .child("${signatureId}.jpg")
@@ -362,10 +344,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* PARTS ************************************************** */
-
-    private lateinit var part: PartDto
-    private lateinit var partList: List<PartDto>
-
     fun getPartList(): Flow<Resource<List<Part>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repairs")
@@ -398,7 +376,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createNewPart(part: PartDto): Flow<Resource<Boolean>> = flow {
+    fun createPart(part: Part): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -420,7 +398,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun updatePart(part: PartDto): Flow<Resource<Boolean>> = flow {
+    fun updatePart(part: Part): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "partId" to part.partId,
@@ -441,9 +419,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* HOSPITALS ********************************************** */
-
-    private lateinit var hospitalList: List<HospitalDto>
-
     fun getHospitalList(): Flow<Resource<List<Hospital>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
@@ -461,9 +436,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* TECHNICIANS ******************************************** */
-
-    private lateinit var technicianList: List<TechnicianDto>
-
     fun getTechnicianList(): Flow<Resource<List<Technician>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
@@ -481,9 +453,6 @@ class  FirebaseApi(
     }
 
     /* ********************************* EST STATES ********************************************* */
-
-    private lateinit var estStateList: List<EstStateDto>
-
     fun getEstStateList(): Flow<Resource<List<EstState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("hospitals")
@@ -500,12 +469,7 @@ class  FirebaseApi(
         }
     }
 
-
     /* ********************************* REPAIR STATES ****************************************** */
-
-    private lateinit var repairStateList: List<RepairStateDto>
-
-
     fun getRepairStateList(): Flow<Resource<List<RepairState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repair_states")
@@ -522,11 +486,7 @@ class  FirebaseApi(
         }
     }
 
-
     /* ********************************* INSPECTIONS STATES ************************************* */
-
-    private lateinit var inspectionStateList: List<InspectionStateDto>
-
     fun getInspectionStateList(): Flow<Resource<List<InspectionState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("repair_states")
