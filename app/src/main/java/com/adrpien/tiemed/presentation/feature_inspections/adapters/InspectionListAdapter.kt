@@ -9,16 +9,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.datamodels.Inspection
+import com.adrpien.tiemed.domain.model.Inspection
 
-class InspectionListAdapter(val inspectionList: ArrayList<Inspection> = ArrayList<Inspection>(), val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
+class InspectionListAdapter(val inspectionList: List<Inspection> = ArrayList<Inspection>(), val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
 
 
 
     // SubmitInspectionList
     fun refreshInspectionList(list: List<Inspection>){
-        inspectionList.clear()
-        inspectionList.addAll(list)
-        notifyDataSetChanged()
+        //inspectionList.clear()
+        //inspectionList.addAll(list)
+        //notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InspectionViewHolder {
@@ -49,7 +50,7 @@ class InspectionListAdapter(val inspectionList: ArrayList<Inspection> = ArrayLis
         // Filling TextViews with values
 
         // Set inspectionRowIdTextView
-        holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionUid)
+        holder.inspectionRowIdTextView.setText(inspectionList[position].inspectionId)
 
         // Setting inspectionRowDateTextView
         holder.inspectionRowDateTextView.append(getDateString(inspectionList[position].inspectionDate.toLong()))

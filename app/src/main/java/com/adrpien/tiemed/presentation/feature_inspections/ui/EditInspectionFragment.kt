@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.presentation.feature_inspections
+package com.adrpien.tiemed.presentation.feature_inspections.ui
 
 
 import android.app.DatePickerDialog
@@ -24,6 +24,7 @@ import com.adrpien.tiemed.core.defect_description_dialog.DefectDescriptionDialog
 import com.adrpien.tiemed.core.date_picker_dialog.InspectionDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 import java.util.*
 
 
@@ -35,7 +36,7 @@ class   EditInspectionFragment : BaseFragment(), DatePickerDialog.OnDateSetListe
         get() = _binding!!
 
     // ViewModel
-    val viewModelProvider by viewModels<EditInspectionViewModel>()
+    val viewModelProvider by viewModels<InspectionViewModel>()
 
     private val INSPECTION_UPDATE_TAG = "INSPECTION UPDATE TAG"
     private  val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"

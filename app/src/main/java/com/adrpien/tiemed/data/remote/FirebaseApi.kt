@@ -3,7 +3,6 @@ package com.adrpien.tiemed.data.remote
 import android.util.Log
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
-import com.adrpien.tiemed.data.remote.dto.*
 import com.adrpien.tiemed.domain.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -163,7 +162,7 @@ class  FirebaseApi(
             // "partList" to repair.partList,
             "partDescription" to repair.partDescription,
             "comment" to repair.comment,
-            "estTestId" to repair.estTestId,
+            "estTestId" to repair.estStateId,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
             "repairingDate" to repair.repairingDate,
@@ -201,7 +200,7 @@ class  FirebaseApi(
             // "partList" to repair.partList,
             "partDescription" to repair.partDescription,
             "comment" to repair.comment,
-            "estTestId" to repair.estTestId,
+            "estTestId" to repair.estStateId,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
             "repairingDate" to repair.repairingDate,

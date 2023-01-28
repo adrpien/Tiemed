@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.presentation.feature_inspections
+package com.adrpien.tiemed.presentation.feature_inspections.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

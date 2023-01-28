@@ -44,7 +44,7 @@ data class RepairEntity(
             // partList = partList,
             partDescription = partDescription,
             comment = comment,
-            estTestId = estTestId,
+            estStateId = estTestId,
             closingDate = closingDate,
             openingDate = openingDate,
             repairingDate = repairingDate,

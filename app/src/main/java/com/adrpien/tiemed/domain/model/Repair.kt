@@ -5,7 +5,7 @@ import com.adrpien.tiemed.data.remote.dto.RepairDto
 
 
 data class Repair(
-    val repairId: String,
+    val repairId: String = "",
     var repairStateId: String = "",
     val deviceId: String = "",
     var hospitalId: String = "",
@@ -16,7 +16,7 @@ data class Repair(
     //var partList: List<String> = emptyList(),
     var partDescription: String = "",
     var comment: String = "",
-    var estTestId: String = "",
+    var estStateId: String = "",
     var closingDate: String = "",
     var openingDate: String = "",
     var repairingDate: String = "",
@@ -40,7 +40,7 @@ data class Repair(
             // partList = partList,
             partDescription = partDescription,
             comment = comment,
-            estTestId = estTestId,
+            estTestId = estStateId,
             closingDate = closingDate,
             openingDate = openingDate,
             repairingDate = repairingDate,
@@ -66,7 +66,7 @@ data class Repair(
             // partList = partList,
             partDescription = partDescription,
             comment = comment,
-            estTestId = estTestId,
+            estTestId = estStateId,
             closingDate = closingDate,
             openingDate = openingDate,
             repairingDate = repairingDate,

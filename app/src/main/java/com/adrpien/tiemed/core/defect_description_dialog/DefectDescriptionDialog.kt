@@ -11,12 +11,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.data.local.entities.Repair
-import com.adrpien.tiemed.presentation.feature_inspections.EditInspectionViewModel
+import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 
 
 class DefectDescriptionDialog: DialogFragment() {
 
-    val viewModelProvider by viewModels<EditInspectionViewModel>()
+    val viewModelProvider by viewModels<InspectionViewModel>()
 
     val DEFECT_DESCRIPTION_DIALOG_TAG = "DefectPickerDialog log"
 

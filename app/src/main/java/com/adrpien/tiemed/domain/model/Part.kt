@@ -7,7 +7,7 @@ import com.adrpien.tiemed.data.local.entities.PartEntity
 import com.adrpien.tiemed.data.remote.dto.PartDto
 
 data class Part(
-    val partId: String,
+    val partId: String = "",
     var name: String = "",
     var quantity: String = "0"
     ) {

@@ -53,6 +53,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
 
     private var spinnerHospitalList = mutableListOf<String>()
     private var spinnerRepairStateList = mutableListOf<String>()
+    private var spinnerEstStateList = mutableListOf<String>()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -105,7 +106,6 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
                             tempRepair = repair
                         }
                     }
-                    bindRepairData(repair)
                 }
                 repairViewModel.getHospitalListFlow().collect { result ->
                     when(result.resourceState) {
@@ -184,22 +184,37 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
                             Toast.makeText(context, "Fetching repair state list error", Toast.LENGTH_SHORT)
                         }
                     }
-                    for (item in hospitalList){
-                        item.name.let {
-                            spinnerRepairStateList.add(item.name)
+                    bindRepairData(tempRepair, tempDevice )
+                }
+                repairViewModel.getEstStateListFlow().collect{ result ->
+                    when(result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            estStateList = result.data ?: emptyList()
+                        }
+                        ResourceState.LOADING -> {
+                            estStateList = result.data ?: emptyList()
+                        }
+                        ResourceState.ERROR -> {
+                            estStateList = emptyList()
+                            Toast.makeText(context, "Fetching est state list error", Toast.LENGTH_SHORT)
+
                         }
                     }
-                    val repairStateListArrayAdapter = activity?.baseContext?.let { it ->
+                    for (item in hospitalList){
+                        item.name.let {
+                            spinnerEstStateList.add(item.name)
+                        }
+                    }
+                    val estStateListArrayAdapter = activity?.baseContext?.let { it ->
                         ArrayAdapter(
                             it,
                             android.R.layout.simple_spinner_item,
-                            spinnerRepairStateList
+                            spinnerEstStateList
                         )
                     }
-                    binding.editRepairHospitalSpinner.adapter = repairStateListArrayAdapter
+                    binding.editRepairHospitalSpinner.adapter = estStateListArrayAdapter
 
                 }
-
             }
         }
 
@@ -245,7 +260,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
 
         // EST spinner implementation
         binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            tempRepair.estTestId= group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
+            tempRepair.estStateId= group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
                 .uppercase()
                 .replace(" ", "_")
 
@@ -340,25 +355,22 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
 
     /* ************************** extracted functions ******************************************* */
     // Bind all textviews, spinners, dates and radiogroups
-    private fun bindRepairData(repair: Repair) {
-
-        tempRepair = repair
-
-        binding.editRepairIdInputEditText.setText(tempRepair.repairUid)
-        binding.editRepairNameEditText.setText(tempRepair.name)
-        binding.editRepairManufacturerEditText.setText(tempRepair.manufacturer)
-        binding.editRepairModelEditText.setText(tempRepair.model)
-        binding.editRepairInventoryNumberEditText.setText(tempRepair.inventoryNumber)
-        binding.editRepairSerialNumberEditText.setText(tempRepair.serialNumber)
+    private fun bindRepairData(repair: Repair, device:Device) {
+        binding.editRepairIdInputEditText.setText(tempRepair.repairId)
+        binding.editRepairNameEditText.setText(device.name)
+        binding.editRepairManufacturerEditText.setText(device.manufacturer)
+        binding.editRepairModelEditText.setText(device.model)
+        binding.editRepairInventoryNumberEditText.setText(device.inventoryNumber)
+        binding.editRepairSerialNumberEditText.setText(device.serialNumber)
         binding.editRepairWardTextInputEditText.setText(tempRepair.ward)
         binding.editRepairDefectDescriptionTextInputEditText.setText(tempRepair.defectDescription)
         binding.editRepairRepairDescriptionTextInputEditText.setText(tempRepair.repairDescription)
-        binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate))
+        binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
+        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
 
-        bindEstRadioButton(repair)
+        bindEstRadioButton(tempRepair)
         bindHospitalSpinner(tempRepair)
 
-        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate))
 
 
     }
@@ -434,8 +446,8 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
     private fun bindEstRadioButton(repair: Repair) {
         var position = 0
         var selection = 0
-        for (item in estState.values()) {
-            if (repair.electricalSafetyTestString == item.toString()) {
+        for (item in estStateList) {
+            if (repair.estStateId == item.toString()) {
                 position = selection
             }
             selection += 1

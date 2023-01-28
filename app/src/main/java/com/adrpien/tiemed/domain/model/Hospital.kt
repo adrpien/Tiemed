@@ -6,7 +6,7 @@ import com.adrpien.tiemed.data.local.entities.HospitalEntity
 import com.adrpien.tiemed.data.remote.dto.HospitalDto
 
 data class Hospital(
-    val hospitalId: String,
+    val hospitalId: String = "",
     val name: String = ""
 ){
     fun toHospitalEntity(): HospitalEntity {

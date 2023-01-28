@@ -21,6 +21,7 @@ import com.adrpien.tiemed.presentation.feature_users.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 import com.adrpien.tiemed.domain.model.Repair
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -91,7 +92,7 @@ class RepairListFragment : BaseFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 RepairListViewModel
                     .repairListStateFlow
-                    .collectLatest { flow ->
+                    .collect { result ->
                         val listener: onRepairItemClickListener = object: onRepairItemClickListener {
                             // onRepairItemClickListener interface implementation
                             override fun setOnRepairItemClick(itemView: View) {
@@ -109,10 +110,10 @@ class RepairListFragment : BaseFragment() {
                             }
                         }
 
-                        when(flow.resourceState) {
+                        when(result.resourceState) {
                             ResourceState.LOADING -> {
-                                if (flow.data != null) {
-                                    repairList = flow.data
+                                if (result.data != null) {
+                                    repairList = result.data
                                     binding.repairRecyclerView.adapter =
                                         RepairListAdapter(repairList, listener)
                                 } else {
@@ -120,8 +121,8 @@ class RepairListFragment : BaseFragment() {
                                 }
                             }
                             ResourceState.SUCCESS -> {
-                                if (flow.data != null) {
-                                    repairList = flow.data
+                                if (result.data != null) {
+                                    repairList = result.data
                                     binding.repairRecyclerView.adapter =
                                         RepairListAdapter(repairList, listener)
                                 } else {

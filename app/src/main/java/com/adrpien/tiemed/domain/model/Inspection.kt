@@ -5,7 +5,7 @@ import com.adrpien.tiemed.data.remote.dto.InspectionDto
 import java.util.*
 
 data class Inspection(
-    val inspectionId: String,
+    val inspectionId: String = "",
     var deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
