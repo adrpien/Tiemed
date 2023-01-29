@@ -292,7 +292,7 @@
                 android:id="@+id/editRepairPartListRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/part_list_row"/>
+                tools:listitem="@layout/list_row_part"/>
 
 
 <!--            Electrical safety test divider-->

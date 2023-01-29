@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.core.signature_dialog
+package com.adrpien.tiemed.core.dialogs.signature_dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -22,7 +22,7 @@ class SignatureDialog(): DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // Inflating signatureLayout View with custom SignatureView layout
-        val signatureLayout = layoutInflater.inflate(R.layout.signature_view, null)
+        val signatureLayout = layoutInflater.inflate(R.layout.view_signature, null)
 
         // Receive result form DialogFragment
         return activity?.let {

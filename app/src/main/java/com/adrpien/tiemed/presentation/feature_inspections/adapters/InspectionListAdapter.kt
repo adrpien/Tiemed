@@ -8,7 +8,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.domain.model.Inspection
 
 class InspectionListAdapter(val inspectionList: List<Inspection> = ArrayList<Inspection>(), val listener: OnInspectionClickListener): RecyclerView.Adapter<InspectionListAdapter.InspectionViewHolder>() {
@@ -25,7 +24,7 @@ class InspectionListAdapter(val inspectionList: List<Inspection> = ArrayList<Ins
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InspectionViewHolder {
 
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.inspection_list_row, parent, false)
+        val view = inflater.inflate(R.layout.list_row_inspection, parent, false)
         return InspectionViewHolder(view)
 
     }

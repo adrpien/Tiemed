@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.core.defect_description_dialog
+package com.adrpien.tiemed.core.dialogs.defect_description
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -10,7 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.data.local.entities.Repair
+import com.adrpien.tiemed.domain.model.Repair
+
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 
 

@@ -20,10 +20,10 @@ import com.adrpien.tiemed.datamodels.ESTState
 import com.adrpien.tiemed.datamodels.Hospital
 import com.adrpien.tiemed.datamodels.Inspection
 import com.adrpien.tiemed.datamodels.InspectionState
-import com.adrpien.tiemed.core.defect_description_dialog.DefectDescriptionDialog
-import com.adrpien.tiemed.core.date_picker_dialog.InspectionDatePickerDialog
+import com.adrpien.tiemed.core.dialogs.defect_description.DefectDescriptionDialog
+import com.adrpien.tiemed.core.dialogs.date.InspectionDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
-import com.adrpien.tiemed.core.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 import java.util.*
 

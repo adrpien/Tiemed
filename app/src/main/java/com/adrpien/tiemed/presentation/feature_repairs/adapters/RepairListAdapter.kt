@@ -16,7 +16,7 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
     // onCreateViewHolder implementation
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepairViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.repair_list_row, parent, false)
+        val view = inflater.inflate(R.layout.list_row_repair, parent, false)
         return RepairViewHolder(view)
     }
 

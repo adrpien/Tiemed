@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.core.signature_dialog
+package com.adrpien.tiemed.core.dialogs.signature_dialog
 
 import android.content.Context
 import android.graphics.*

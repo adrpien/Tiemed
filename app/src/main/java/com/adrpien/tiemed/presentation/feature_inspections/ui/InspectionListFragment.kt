@@ -23,7 +23,7 @@ import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
 import com.adrpien.tiemed.datamodels.InspectionState
-import com.adrpien.tiemed.core.date_picker_dialog.InspectionDatePickerDialog
+import com.adrpien.tiemed.core.dialogs.date.InspectionDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.domain.model.Inspection
 import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
@@ -296,7 +296,7 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         val filterDateYear = filterDate.get(Calendar.YEAR)
         val filterDateMonth = filterDate.get(Calendar.MONTH)
         val filterDateDay = filterDate.get(Calendar.DAY_OF_MONTH)
-        filterAlertDialogView = layoutInflater.inflate(R.layout.filter_view, null)
+        filterAlertDialogView = layoutInflater.inflate(R.layout.view_filtering, null)
         val filterButton = filterAlertDialogView.findViewById<Button>(R.id.inspectionListFilterDateButton)
         filterButton.setText(getDateString(filterDate.timeInMillis))
         filterButton.setOnClickListener {

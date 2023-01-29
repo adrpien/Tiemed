@@ -17,4 +17,10 @@
         android:title="@string/filterItem"
         app:showAsAction="always"
         android:icon="@drawable/filter_icon"/>
+
+
+    <item
+        android:title="@string/repair_hospital_spinner"
+        android:id="@+id/repairListHospitalSpinner"
+        app:showAsAction="always" />
 </menu>

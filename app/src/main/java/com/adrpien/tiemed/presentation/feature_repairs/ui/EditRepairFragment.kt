@@ -24,9 +24,9 @@ import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.presentation.feature_users.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
-import com.adrpien.tiemed.core.date_picker_dialog.RepairDatePickerDialog
+import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
-import com.adrpien.tiemed.core.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import kotlinx.coroutines.flow.collect
