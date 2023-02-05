@@ -14,7 +14,7 @@ data class EstStateEntity (
     fun toEstState(): EstState {
         return EstState(
             estStateId = estStateId,
-            state = state
+            estState = state
         )
     }
 }

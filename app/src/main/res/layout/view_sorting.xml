@@ -8,16 +8,16 @@
 
 
     <Button
-        android:id="@+id/filteringAlertDialogDateButton"
+        android:id="@+id/sortingAlertDialogDateButton"
         android:layout_width="180dp"
         android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alertDialogFilteringConstraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/alertDialogSortingConstraintLayout"
         android:background="@drawable/switch_button_bottom"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/alertDialogFilteringConstraintLayout"
+        android:id="@+id/alertDialogSortingConstraintLayout"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -32,13 +32,13 @@
             android:layout_weight="1"
             android:background="@drawable/switch_button_left"
             android:gravity="end|center_vertical"
-            android:text="Before"
+            android:text="Oldest"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
-            android:id="@+id/alertDialogFilteringSwitch"
+            android:id="@+id/alertDialogSortingSwitch"
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:background="@color/mint_grey"
@@ -53,9 +53,9 @@
             android:layout_weight="1"
             android:background="@drawable/switch_button_right"
             android:gravity="start|center_vertical"
-            android:text="After"
+            android:text="Newest"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/alertDialogFilteringSwitch"
+            app:layout_constraintStart_toEndOf="@+id/alertDialogSortingSwitch"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

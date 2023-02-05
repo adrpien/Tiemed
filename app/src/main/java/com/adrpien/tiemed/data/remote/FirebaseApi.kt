@@ -1,6 +1,7 @@
 package com.adrpien.tiemed.data.remote
 
 import android.util.Log
+import android.widget.Toast
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.domain.model.*
@@ -146,12 +147,12 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
+    fun createRepair(repair: Repair): Flow<Resource<String?>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
-            "repairId" to repair.repairId,
+            "repairId" to documentReference.id,
             "repairStateId" to repair.repairStateId,
             "deviceId" to repair.deviceId,
             "hospitalId" to repair.hospitalId,
@@ -176,11 +177,11 @@ class  FirebaseApi(
         val result = documentReference.set(map)
         result.await()
         if (result.isSuccessful) {
-            emit(Resource(ResourceState.SUCCESS, true))
+            emit(Resource(ResourceState.SUCCESS, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, false))
+            emit(Resource(ResourceState.ERROR, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record creation error")
 
         }
@@ -216,6 +217,7 @@ class  FirebaseApi(
         result.await()
         if (result.isSuccessful) {
             emit(Resource(ResourceState.SUCCESS, true))
+
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record updated")
         } else {
             emit(Resource(ResourceState.ERROR, false))
@@ -257,12 +259,12 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createDevice(device: Device): Flow<Resource<Boolean>> = flow {
+    fun createDevice(device: Device): Flow<Resource<String?>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
-            "deviceId" to device.deviceId,
+            "deviceId" to documentReference.id,
             "name" to device.name,
             "manufacturer" to device.manufacturer,
             "model" to device.model,
@@ -274,11 +276,11 @@ class  FirebaseApi(
         val result = documentReference.set(map)
         result.await()
         if (result.isSuccessful) {
-            emit(Resource(ResourceState.SUCCESS, true))
+            emit(Resource(ResourceState.SUCCESS, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, false))
+            emit(Resource(ResourceState.ERROR, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device record creation error")
 
         }

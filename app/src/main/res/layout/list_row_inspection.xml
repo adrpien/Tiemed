@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cell_height"
@@ -15,126 +15,89 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+<!--        State marker -->
         <View
             android:id="@+id/inspectionRowStateMarker"
             android:layout_width="@dimen/state_marker_width"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="5dp" />
-
-        <ImageButton
-            android:id="@+id/inspectionRowStateButton"
-            style="@android:style/Widget.Holo.Light.ImageButton"
+<!--        Id -->
+        <TextView
+            android:id="@+id/repairRowIdTextView"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:adjustViewBounds="true"
-            android:padding="5dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/executor_icon" />
-
-        <ImageButton
-            android:id="@+id/inspectionRowDateButton"
-            style="@android:style/Widget.Holo.Light.ImageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:adjustViewBounds="true"
-            android:padding="5dp"
-            android:scaleType="centerInside"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/awaiting_icon" />
-
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="ID"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
+            app:layout_constraintTop_toTopOf="parent" />
+<!--        Inspection date-->
         <TextView
             android:id="@+id/inspectionRowDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:text="Inspection date: "
-            app:layout_constraintStart_toEndOf="@id/inspectionRowStateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/inspectionRowHospitalTextView" />
-
-        <TextView
-            android:id="@+id/inspectionRowIdTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:gravity="right"
-            android:maxLines="1"
-            android:text="ID"
-            app:layout_constraintEnd_toStartOf="@id/inspectionRowDateButton"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"/>
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+<!--        Name -->
         <TextView
             android:id="@+id/inspectionRowNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:text="Name"
-            app:layout_constraintStart_toEndOf="@id/inspectionRowStateMarker"
+            app:layout_constraintStart_toEndOf="@id/repairRowIdTextView"
             app:layout_constraintTop_toTopOf="parent" />
-
+<!--        Manufacturer -->
         <TextView
             android:id="@+id/inspectionRowManufacturerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:maxLines="1"
             android:text="Manufacturer"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowNameTextView" />
-
+<!--        Model-->
         <TextView
             android:id="@+id/inspectionRowModelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:text="Model"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowManufacturerTextView"
-            app:layout_constraintTop_toBottomOf="@+id/inspectionRowIdTextView" />
-
+            app:layout_constraintTop_toBottomOf="@id/inspectionRowNameTextView" />
+<!--        Serial number -->
         <TextView
             android:id="@+id/inspectionRowSNTextView"
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:text="SN: "
             android:maxLines="1"
             app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
-
+<!--        Incentory number-->
         <TextView
             android:id="@+id/inspectionRowINTextView"
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:text="IN: "
             app:layout_constraintStart_toEndOf="@+id/inspectionRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
-
-        <TextView
-            android:id="@+id/inspectionRowHospitalTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Hospital"
-            app:layout_constraintStart_toEndOf="@+id/inspectionRowStateMarker"
-            app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView" />
-
+<!--        Ward --> 
         <TextView
             android:id="@+id/inspectionRowWardTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:text="Ward"
-            app:layout_constraintStart_toEndOf="@+id/inspectionRowHospitalTextView"
-            app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView" />
+            app:layout_constraintStart_toEndOf="@id/inspectionRowStateMarker"
+            app:layout_constraintTop_toBottomOf="@+id/inspectionRowSNTextView"
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

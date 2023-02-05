@@ -14,7 +14,7 @@ data class RepairStateEntity (
     fun toRepairState(): RepairState {
         return RepairState(
             repairStateId = repairStateId,
-            state = state
+            repairState = state
         )
     }
 }

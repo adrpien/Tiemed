@@ -14,13 +14,22 @@
     <color name="black">#000000</color>
 
     <!--
-    States colors
+    Inspection states colors
     -->
-    <color name="Zgloszony">#7E1A1A</color>
+    <color name="reported">#B71C1C</color>
+    <color name="diagnosed">#01579B</color>
+    <color name="to_diagnose">#1A237E</color>
+    <color name="repaired">#33691E</color>
+    <color name="finished">#004D40</color>
+    <color name="waiting_for_parts">#FFF176</color>
+    <color name="cancelled">#880E4F</color>
+    <color name="waiting">#311B92</color>
+    <color name="sent_to_external_service">#4A148C</color>
 
     <!--
     Signature View Color
     -->
     <color name="signature_view_background_color">#FFFFFF</color>
     <color name="signature_view_color">#000000</color>
+
 </resources>

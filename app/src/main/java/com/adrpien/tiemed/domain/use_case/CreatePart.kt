@@ -9,7 +9,7 @@ class CreatePart(
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(part: Part): Flow<Resource<Boolean>> {
+    operator fun invoke(part: Part): Flow<Resource<String?>> {
         return repository.insertPart(part)
     }
 

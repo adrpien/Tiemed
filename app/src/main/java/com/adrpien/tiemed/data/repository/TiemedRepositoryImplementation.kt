@@ -93,10 +93,10 @@ class  TiemedRepositoryImplementation(
         val device = tiemedDao.getDevice(deviceId).toDevice()
         emit(Resource(ResourceState.SUCCESS, device))
     }
-    override fun insertDevice(device: Device): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
+    override fun insertDevice(device: Device): Flow<Resource<String?>> = flow {
+        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createDevice(device)
-        emit(Resource(ResourceState.SUCCESS, true))
+        emit(Resource(ResourceState.SUCCESS, null))
 
     }
     override fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {

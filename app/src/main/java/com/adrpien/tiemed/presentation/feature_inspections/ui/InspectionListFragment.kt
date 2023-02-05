@@ -22,10 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.datamodels.InspectionState
 import com.adrpien.tiemed.core.dialogs.date.InspectionDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
-import com.adrpien.tiemed.domain.model.Inspection
+import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
 import com.adrpien.tiemed.presentation.feature_inspections.OnInspectionClickListener
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
@@ -36,48 +35,32 @@ import kotlinx.coroutines.launch
 
 class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
 
-    private lateinit var filteredInspectionList: List<Inspection>
-
-    private var groupSelection: Int = 0
-    private var groupSelectionString: String = ""
-    private var sortSelection: Int = 0
-    private var sortSelectionString: String = ""
-
-    private var tempStateSelection: Int = 0
-
     // ViewBinding
     private var _binding: FragmentInspectionListBinding? = null
     private val binding
         get() = _binding!!
 
-    private lateinit var inspectionId: String
-    private lateinit var inspectionList: List<Inspection>
-
     private val ACTION_BAR_TITLE: String = "Inspection List"
+
+    private var deviceList: List<Device> = listOf()
+    private var inspectionList: List<Inspection> = listOf()
+    private var hospitalList: List<Hospital> = listOf()
+    private var preparedInspectionList: List<Inspection> = listOf()
+    private var inspectionStateList: List<InspectionState> = listOf()
+
+    // Filtering, sorting and grouping
+    private var filteringCondition: Bundle = bundleOf()
+    private var sortingConditions: Bundle = bundleOf()
+    private var groupingCondition: Bundle = bundleOf()
 
     val InspectionViewModel by viewModels<InspectionViewModel>()
 
-    private var tempInspection = Inspection()
-
-    private lateinit var inspectionStates: MutableList<String>
-
-    private lateinit var filterDate: Calendar
-
-    private lateinit var filterAlertDialogView: View
-
-    var adapter = InspectionListAdapter(listener = this)
-
     init {
-
         // Options Menu configuration
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentInspectionListBinding.inflate(layoutInflater)
-        binding.lifecycleOwner = this.viewLifecycleOwner
-        return binding.root
-    }
+    /* ***************************** MENU ******************************************************* */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val menuInflater: MenuInflater = inflater
         menuInflater.inflate(R.menu.inspection_list_options, menu)
@@ -88,20 +71,33 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.inspectionSortItem -> {
+            R.id.inspectionSortItemClick -> {
                 sortInspectionList()
                 true
             }
-            R.id.inspectionFilterItem -> {
+            R.id.inspectionFilterItemClick -> {
                 filterInspectionList()
                 true
             }
-            R.id.inspectionGroupItem -> {
+            R.id.inspectionGroupItemClick -> {
                 groupInspectionList()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+
+    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentInspectionListBinding.inflate(layoutInflater)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -110,100 +106,74 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         binding.inspectionRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.inspectionRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL))
 
-        // View model state flows
+        /* ********************** COLLECT STATE FLOW ******************************************** */
+        // inspectionList
         lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                InspectionViewModel.inspectionListStateFlow.collect { result ->
-                    val listener = object: OnInspectionClickListener {
-                        override fun setOnInspectionItemClickListener(itemView: View, position: Int) {
-
-                            // updateInspectionUid
-                            updateTempInspectionId(position)
-
-                            if(inspectionId != null) {
-                                findNavController().navigate(
-                                    InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
-                                    bundleOf("uid" to inspectionId))
-                            } else {
-                                findNavController().navigate(
-                                    InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId,
-                                    bundleOf("uid" to null))
-                            }
-
-                        }
-                        override fun setOnDateButtonClickListener(itemview: View, position: Int) {
-
-                            // update InspectionUid
-                            updateTempInspectionId(position)
-
-                            // getSelectedInspection
-                            updateTempInspection(position)
-
-                            val millis = inspectionList[position].inspectionDate.toLong()
-
-                            // Create TimePicker
-                            val dialog = InspectionDatePickerDialog(millis)
-
-                            // show MyTimePicker
-                            dialog.show(childFragmentManager, "inspection_time_picker")
-                        }
-                        override fun setOnStateButtonClickListener(itemview: View, position: Int) {
-
-                            // UpdateTempInspectionUid
-                            updateTempInspectionId(position)
-
-                            // getTempSelectedInspection
-                            updateTempInspection(position)
-
-                            // updateTempStateSelection
-                            updateTempInspectionStateSelection(position)
-
-                            // Creating inspection state selection dialog
-                            createInspectionStateSelectionDialog(tempStateSelection)
-
-                        }
-
-                    }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                InspectionViewModel.inspectionListStateFlow.collect() { result ->
                     when(result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if(result.data != null) {
                                 inspectionList = result.data
+                                preparedInspectionList = inspectionList
+                                // preparedInspectionList()
+                                // TODO Correct when adapter will be ready
+                                //binding.inspectionRecyclerView.adapter = InspectionListAdapter()
                             }
-                            binding.inspectionRecyclerView.adapter = InspectionListAdapter(inspectionList, listener)
                         }
                         ResourceState.LOADING -> {
                             if(result.data != null) {
                                 inspectionList = result.data
+                                preparedInspectionList = inspectionList
+                                // preparedInspectionList()
+                                // TODO Correct when adapter will be ready
+
+                                // binding.inspectionRecyclerView.adapter = InspectionListAdapter()
                             }
-                            binding.inspectionRecyclerView.adapter = InspectionListAdapter(inspectionList, listener)
                         }
                         ResourceState.ERROR -> {
-                            inspectionList = emptyList()
-                            binding.inspectionRecyclerView.adapter = InspectionListAdapter(inspectionList, listener)
+                            // TODO Some inspectionList loading error handlig
                         }
                     }
 
-
+                }
+            }
+        }
+        // hospitalList
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                InspectionViewModel.hospitalListStateFlow.collect(){ result ->
+                    when(result.resourceState) {
+                        ResourceState.ERROR -> {
+                            // TODO Some hospital list loading error handling
+                        }
+                        ResourceState.LOADING -> {
+                            if(result.data != null) {
+                                hospitalList = result.data
+                            }
+                        }
+                        ResourceState.SUCCESS -> {
+                            if(result.data != null) {
+                                hospitalList = result.data
+                            }
+                        }
+                    }
 
                 }
-
             }
         }
 
         // FAB Button implementation
         binding.addInspectionFABButton.setOnClickListener {  view ->
-            findNavController().navigate(com.adrpien.tiemed.inspectionlist.InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment())
+            findNavController().navigate(InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment())
         }
-
-        // inspectionListFilterDateButton implementation
-        setFilterDateButton()
-
     }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
+    /* *************************** INTERFACES *************************************************** */
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val date = Calendar.getInstance()
         date.set(year, month, dayOfMonth)
@@ -215,7 +185,20 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // updateInspectionState
         updateInspectionDate()
     }
+    override fun onClick(dialog: DialogInterface?, which: Int) {
+        // Getting single choice AlertDialog selection
+        val listView: ListView = (dialog as AlertDialog).listView
+        val state= listView.getItemAtPosition(listView.checkedItemPosition).toString()
 
+        //  updateTempStateSelection
+        updateTempInspectionStateSelection(state)
+
+        updateInspectionStateString()
+
+    }
+
+
+    /* ***************************** FUNCTIONS ************************************************** */
     private fun updateTempInspectionStateSelection(position: Int) {
         tempStateSelection = 0
         var selection = 0
@@ -276,7 +259,7 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         builder.setView(filterAlertDialogView)
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             filteredInspectionList = inspectionList.filter {
-                val filterSwitch = filterAlertDialogView.findViewById<Switch>(R.id.inspectionListFilterSwitch)
+                val filterSwitch = filterAlertDialogView.findViewById<Switch>(R.id.alertDialogSortingSwitch)
                 if(filterSwitch.isChecked) {
                     it.inspectionDate.toLong() >= filterDate.timeInMillis
                 } else {
@@ -297,7 +280,7 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         val filterDateMonth = filterDate.get(Calendar.MONTH)
         val filterDateDay = filterDate.get(Calendar.DAY_OF_MONTH)
         filterAlertDialogView = layoutInflater.inflate(R.layout.view_filtering, null)
-        val filterButton = filterAlertDialogView.findViewById<Button>(R.id.inspectionListFilterDateButton)
+        val filterButton = filterAlertDialogView.findViewById<Button>(R.id.filteringAlertDialogDateButton)
         filterButton.setText(getDateString(filterDate.timeInMillis))
         filterButton.setOnClickListener {
             val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -335,20 +318,10 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         dialog.show()
 
     }
-    override fun onClick(dialog: DialogInterface?, which: Int) {
-        // Getting single choice AlertDialog selection
-        val listView: ListView = (dialog as AlertDialog).listView
-        val state= listView.getItemAtPosition(listView.checkedItemPosition).toString()
-
-        //  updateTempStateSelection
-        updateTempInspectionStateSelection(state)
-
-        updateInspectionStateString()
-
-    }
     private fun updateInspectionStateString() {
         val map: Map<String, String> = createInspectionMap(tempInspection)
         viewModelProvider.updateInspection(map, inspectionId)
     }
+
 }
 

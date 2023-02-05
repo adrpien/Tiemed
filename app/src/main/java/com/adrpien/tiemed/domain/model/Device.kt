@@ -4,7 +4,7 @@ import com.adrpien.tiemed.data.local.entities.DeviceEntity
 import com.adrpien.tiemed.data.remote.dto.DeviceDto
 
 data class Device(
-    val deviceId: String = "",
+    var deviceId: String = "",
     var name: String = "",
     var manufacturer: String = "",
     var model: String = "",

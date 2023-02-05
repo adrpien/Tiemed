@@ -5,9 +5,9 @@ import com.adrpien.tiemed.data.remote.dto.RepairDto
 
 
 data class Repair(
-    val repairId: String = "",
+    var repairId: String = "",
     var repairStateId: String = "",
-    val deviceId: String = "",
+    var deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
     // var photoList: List<String> = emptyList<String>(),
@@ -26,6 +26,8 @@ data class Repair(
     var rate: String = "",
     var recipient: String = "",
     var recipientSignatureId: String = "",
+
+    val device: Device = Device()
     ) {
     fun toRepairEntity(): RepairEntity {
         return RepairEntity(

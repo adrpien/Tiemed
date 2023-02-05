@@ -9,7 +9,7 @@ class CreateSignature(
     private val repository: TiemedRepository
     ) {
 
-    operator fun invoke(signatureId: String, byteArray: ByteArray): Flow<Resource<Boolean>> {
+    operator fun invoke(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
         return repository.createSignature(signatureId, byteArray)
     }
 

@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/inspectionSortItem"
+        android:id="@+id/inspectionSortItemClick"
         android:icon="@drawable/sort_icon"
         android:title="@string/sort"
         app:showAsAction="always" />
     <item
-        android:id="@+id/inspectionGroupItem"
+        android:id="@+id/inspectionGroupItemClick"
         android:icon="@drawable/group_icon"
         android:title="@string/groupitem"
         app:showAsAction="always" />
     <item
-        android:id="@+id/inspectionFilterItem"
+        android:id="@+id/inspectionFilterItemClick"
         android:icon="@drawable/filter_icon"
         android:title="@string/filterItem"
         app:showAsAction="always" />

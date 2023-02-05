@@ -4,13 +4,15 @@ import android.icu.util.Calendar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
+import com.adrpien.tiemed.domain.model.Device
+import com.adrpien.tiemed.domain.model.Hospital
 import com.adrpien.tiemed.domain.model.Repair
+import com.adrpien.tiemed.domain.model.RepairState
 
-class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItemClickListener)
+class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hospital>, val deviceList: List<Device>, val repairStateList: List<RepairState>, val listener: onRepairItemClickListener)
     : RecyclerView.Adapter<RepairListAdapter.RepairViewHolder>() {
 
     // onCreateViewHolder implementation
@@ -22,49 +24,63 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
 
     override fun onBindViewHolder(holder: RepairViewHolder, position: Int) {
 
-        // View Button on Click listener
-        holder.repairRowViewRepairButton.setOnClickListener {
-            listener.setOnRepairItemClick(holder.itemView)
+        // Sets colour of StateMarker
+        // TODO This implementation works terrible, because order of documents in Firestore Database changes when you add new document, but leave this as it is to focus on other problems to solve
+        fun setMarkerColour(repair: Repair) {
+            when(repair.repairStateId){
+                repairStateList[0].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.repaired)
+                }
+                repairStateList[1].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.diagnosed)
+                }
+                repairStateList[2].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.cancelled)
+                }
+                repairStateList[3].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.to_diagnose)
+                }
+                repairStateList[4].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.waiting_for_parts)
+                }
+                repairStateList[5].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.waiting)
+                }
+                repairStateList[6].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.sent_to_external_service)
+                }
+                repairStateList[7].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.finished)
+                }
+                repairStateList[8].repairStateId -> {
+                    holder.stateMarker.setBackgroundResource(R.color.reported)
+                }
+            }
         }
 
-        // Edit Button on Click listener
-        holder.repairRowEditRepairButton.setOnClickListener {
+        /* ******************** Click listeners ************************************************* */
+        holder.itemView.setOnClickListener {
             listener.setOnRepairItemClick(holder.itemView)
         }
+        holder.itemView.setOnLongClickListener {
+            listener.setOnRepairItemLongClick(holder.itemView)
+            true
+        }
 
-
-        // Filling TextViews with values
-
-        // Setting id
+        /* ********** Filling TextViews with values ********************************************* */
         holder.repairRowIdRepairTextView.setText(repairList[position].repairId)
+        holder.repairRowNameRepairTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].name)
+        holder.repairRowManufacturerTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].manufacturer)
+        holder.repairRowModelTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].model)
+        holder.repairRowSnNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].serialNumber)
+        holder.repairInNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].inventoryNumber)
+        holder.repairRowWardTextView.setText(repairList[position].ward)
+        setMarkerColour(repairList[position])
 
-        // Setting name
-        // holder.repairRowNameRepairTextView.setText(repairList[position].name)
 
-        // Setting manufacturer
-        // holder.repairRowManufacturerTextView.setText(repairList[position].manufacturer)
-
-        // Setting model
-        // holder.repairRowModelTextView.setText(repairList[position].model)
-
-        // Setting serial number
-        // holder.repairRowSnNumberTextView.setText(repairList[position].serialNumber)
-
-        // Setting inventory number
-        // holder.repairInNumberTextView.setText(repairList[position].inventoryNumber)
-
-        // Setting  hospital
-        // holder.repairRowHospitalTextView.setText(repairList[position].hospitalString)
-
-        // Setting ward
-        // holder.repairRowWardTextView.setText(repairList[position].ward)
-
-        // TODO State Marker implementation
-        /*if(repairList[position].repairStateString == RepairState.FIXED.toString()){ holder.stateMarker.setBackgroundColor(Color.GREEN) }
-        if(repairList[position].repairStateString == RepairState.SUBMITTED.toString()){ holder.stateMarker.setBackgroundColor(Color.RED) }
-        if(repairList[position].repairStateString == RepairState.SENT_TO_SERVICE.toString()){ holder.stateMarker.setBackgroundColor(Color.BLUE) }
-        */
     }
+
+
 
     // getItemCount implementation
     override fun getItemCount(): Int {
@@ -77,10 +93,6 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         // State marker
         val stateMarker = itemView.findViewById<View>(R.id.repairRowStateMarker)
 
-        // Buttons
-        val repairRowEditRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowEditButton)
-        val repairRowViewRepairButton = itemView.findViewById<ImageButton>(R.id.repairRowViewButton)
-
         // TextViews
         val repairRowIdRepairTextView = itemView.findViewById<TextView>(R.id.repairRowIdTextView)
         val repairRowNameRepairTextView = itemView.findViewById<TextView>(R.id.repairRowNameTextView)
@@ -89,7 +101,6 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
         val repairRowSnNumberTextView = itemView.findViewById<TextView>(R.id.repairRowSNTextView)
         val repairInNumberTextView = itemView.findViewById<TextView>(R.id.repairRowINTextView)
         val repairRowWardTextView = itemView.findViewById<TextView>(R.id.repairRowWardTextView)
-        val repairRowHospitalTextView = itemView.findViewById<TextView>(R.id.repairRowHospitalTextView)
 
     }
 }
@@ -97,8 +108,7 @@ class RepairListAdapter(var repairList: List<Repair>, val listener: onRepairItem
 // Creating listener implemented by fragment
 interface onRepairItemClickListener{
     fun setOnRepairItemClick(itemView: View)
-    fun setOnEditRepairButtonClick(itemView: View)
-    fun setOnViewRepairButtonClick(itemView: View)
+    fun setOnRepairItemLongClick(itemView: View)
 }
 
 // Returns date in format YYYY/MM/DD String representation using date in millis
@@ -133,3 +143,5 @@ fun getDateString(date: String): String {
 
     return text
 }
+
+

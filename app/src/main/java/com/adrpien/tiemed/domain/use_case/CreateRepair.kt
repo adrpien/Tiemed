@@ -1,15 +1,18 @@
 package com.adrpien.tiemed.domain.use_case
 
 import com.adrpien.dictionaryapp.core.util.Resource
+import com.adrpien.tiemed.domain.model.Device
 import com.adrpien.tiemed.domain.model.Repair
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapConcat
 
 class CreateRepair(
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(repair: Repair): Flow<Resource<Boolean>> {
+    operator fun invoke(repair: Repair, device: Device): Flow<Resource<String?>> {
         return repository.insertRepair(repair)
     }
 

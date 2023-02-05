@@ -22,28 +22,6 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-<!--        View repair button-->
-        <ImageButton
-            android:id="@+id/repairRowViewButton"
-            style="@android:style/Widget.Holo.Light.ImageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_search" />
-
-<!--        Edit repair button-->
-        <ImageButton
-            android:id="@+id/repairRowEditButton"
-            style="@android:style/Widget.Holo.Light.ImageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
-
 <!--        Id-->
         <TextView
             android:id="@+id/repairRowIdTextView"
@@ -65,14 +43,14 @@
             app:layout_constraintStart_toEndOf="@+id/repairRowIdTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        Opening day-->
+<!--        Opening date -->
         <TextView
             android:id="@+id/repairRowOpeningDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Opening day:"
-            app:layout_constraintEnd_toStartOf="@+id/repairRowViewButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 <!--        Manufactuer-->
@@ -87,13 +65,13 @@
 
 <!--        Model-->
             <TextView
-                android:id="@+id/repairRowModelTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/model"
-                app:layout_constraintStart_toEndOf="@+id/repairRowManufacturerTextView"
-                app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
+            android:id="@+id/repairRowModelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/model"
+            app:layout_constraintStart_toEndOf="@+id/repairRowManufacturerTextView"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
 
 <!--        Serial number-->
             <TextView
@@ -115,25 +93,15 @@
             app:layout_constraintStart_toEndOf="@+id/repairRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
 
-<!--        Hospital -->
-            <TextView
-                android:id="@+id/repairRowHospitalTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/hospital"
-                app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
-                app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
-
-<!--            Ward-->
-            <TextView
-                android:id="@+id/repairRowWardTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/ward"
-                app:layout_constraintStart_toEndOf="@+id/repairRowHospitalTextView"
-                app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView" />
+        <!--            Ward-->
+        <TextView
+            android:id="@+id/repairRowWardTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/ward"
+            app:layout_constraintTop_toBottomOf="@+id/repairRowSNTextView"
+            app:layout_constraintStart_toEndOf="@id/repairRowStateMarker" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

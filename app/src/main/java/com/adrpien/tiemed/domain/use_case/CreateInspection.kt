@@ -9,7 +9,7 @@ class CreateInspection(
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(inspection:Inspection): Flow<Resource<Boolean>> {
+    operator fun invoke(inspection:Inspection): Flow<Resource<String?>> {
         return repository.insertInspection(inspection)
     }
 }

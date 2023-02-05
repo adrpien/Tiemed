@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.core.dialogs.filtering_dialog
+package com.adrpien.tiemed.core.dialogs.grouping_dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -16,7 +16,7 @@ import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewMode
 import java.util.Calendar
 
 
-class FilteringDialog: DialogFragment(),OnDateSetListener {
+class GroupingDialog: DialogFragment(), OnDateSetListener {
 
     // Lazy instance of ViewModelProvider
     val RepairListViewModel by viewModels<RepairViewModel>()
@@ -47,7 +47,7 @@ class FilteringDialog: DialogFragment(),OnDateSetListener {
                     "value" to milliseconds
                 )
                 requireActivity().supportFragmentManager.setFragmentResult(
-                    "FILTERING_REQUEST_KEY",
+                    "request_key",
                     bundle
                 )
 

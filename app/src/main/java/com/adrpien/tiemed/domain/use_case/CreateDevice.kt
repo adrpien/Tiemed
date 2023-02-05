@@ -9,7 +9,7 @@ class CreateDevice(
     private val repository: TiemedRepository
     ) {
 
-    operator fun invoke(device: Device): Flow<Resource<Boolean>> {
+    operator fun invoke(device: Device): Flow<Resource<String?>> {
         return repository.insertDevice(device)
     }
 
