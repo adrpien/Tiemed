@@ -14,9 +14,10 @@ import com.adrpien.tiemed.databinding.ActivityMainBinding
 import com.adrpien.tiemed.presentation.feature_settings.SettingsActivity
 import com.adrpien.tiemed.presentation.feature_users.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     // ViewBinding

@@ -7,6 +7,7 @@ import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 
 class  TiemedRepositoryImplementation(
@@ -32,10 +33,10 @@ class  TiemedRepositoryImplementation(
         val repair = tiemedDao.getInspection(repairId).toInspection()
         emit(Resource(ResourceState.SUCCESS, repair))
     }
-    override fun insertInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
+    override fun insertInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
+        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createInspection(inspection)
-        emit(Resource(ResourceState.SUCCESS, true))
+        emit(Resource(ResourceState.SUCCESS, null))
 
     }
     override fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
@@ -66,10 +67,10 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         repairFlow(repairId)
     }
-    override fun insertRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
+    override fun insertRepair(repair: Repair): Flow<Resource<String>> = flow {
+        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createRepair(repair)
-        emit(Resource(ResourceState.SUCCESS, true))
+        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
         emit(Resource((ResourceState.LOADING), false))
@@ -123,10 +124,10 @@ class  TiemedRepositoryImplementation(
         val part = tiemedDao.getPart(partId).toPart()
         emit(Resource(ResourceState.SUCCESS, part))
     }
-    override fun insertPart(part: Part): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
+    override fun insertPart(part: Part): Flow<Resource<String>> = flow {
+        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createPart(part)
-        emit(Resource(ResourceState.SUCCESS, true))
+        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updatePart(part: Part): Flow<Resource<Boolean>> = flow {
         emit(Resource((ResourceState.LOADING), false))
@@ -199,10 +200,10 @@ class  TiemedRepositoryImplementation(
     override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> {
     return  firebaseApi.getSignature(signatureId)
     }
-    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<Boolean>> {
+    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
         return firebaseApi.uploadSignature(signatureId, byteArray)
     }
-    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<Boolean>> {
+    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
         return firebaseApi.uploadSignature(signatureId, byteArray)
     }
 

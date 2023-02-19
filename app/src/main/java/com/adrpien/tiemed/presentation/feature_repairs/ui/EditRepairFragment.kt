@@ -22,21 +22,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.presentation.feature_users.onRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-
-class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
+@AndroidEntryPoint
+class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
     AdapterView.OnItemSelectedListener {
 
     // ViewBinding
@@ -194,7 +192,7 @@ class EditRepairFragment : BaseFragment(), DatePickerDialog.OnDateSetListener,
         // repairStateList
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repairViewModel.getrepairStateListFlow().collect { result ->
+                repairViewModel.getRepairStateListFlow().collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             repairStateList = result.data ?: emptyList()

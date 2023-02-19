@@ -1,16 +1,10 @@
 package com.adrpien.tiemed.presentation.feature_inspections.ui
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.content.DialogInterface
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.ListView
-import android.widget.Switch
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,18 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.core.dialogs.date.InspectionDatePickerDialog
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
+import com.adrpien.tiemed.core.dialogs.filtering_dialog.FilteringDialog
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
-import com.adrpien.tiemed.presentation.feature_inspections.OnInspectionClickListener
+import com.adrpien.tiemed.presentation.feature_inspections.OnInspectionItemClickListener
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
+import com.adrpien.tiemed.presentation.feature_repairs.ui.EditRepairFragment
+import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
-class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
+@AndroidEntryPoint
+class InspectionListFragment() : BaseFragment(){
 
     // ViewBinding
     private var _binding: FragmentInspectionListBinding? = null
@@ -41,6 +36,8 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         get() = _binding!!
 
     private val ACTION_BAR_TITLE: String = "Inspection List"
+    private val SORTING_REQUEST_KEY: String = "SORTING_REQUEST_KEY"
+    private val FILTERING_REQUEST_KEY: String = "FILTERING_REQUEST_KEY"
 
     private var deviceList: List<Device> = listOf()
     private var inspectionList: List<Inspection> = listOf()
@@ -58,8 +55,31 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     init {
         // Options Menu configuration
         setHasOptionsMenu(true)
+
+
     }
 
+    val listener: OnInspectionItemClickListener = object : OnInspectionItemClickListener {
+        // onRepairItemClickListener interface implementation
+        // Fetching id of clicked record and startinng fragment
+        override fun setOnInspectionItemClick(itemView: View, position: Int) {
+            val fragment = EditRepairFragment()
+            fragment.arguments = bundleOf("id" to inspectionList[position].inspectionId)
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.add(R.id.detailsFragmentContainerView, fragment)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+
+        override fun setOnInspectionItemLongClick(itemView: View, position: Int) {
+            val fragment = EditRepairFragment()
+            fragment.arguments = bundleOf("id" to inspectionList[position].inspectionId)
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.add(R.id.pinnedFragmentContainerView, fragment)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+    }
     /* ***************************** MENU ******************************************************* */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val menuInflater: MenuInflater = inflater
@@ -68,19 +88,44 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         // Setting Action Bar Name according to open fragment
         (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
 
+        // Hospital spinner in action bar implementation
+        val spinnerItem = menu.findItem(R.id.inspectionListHospitalSpinner)
+        val inspectionListHospitalSpinner = spinnerItem.actionView as AppCompatSpinner
+        spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
+        val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_spinner_item,
+                hospitalList
+            )
+        }
+        inspectionListHospitalSpinner.adapter = hospitalSpinnerAdapter
+        inspectionListHospitalSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectHospital(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.inspectionSortItemClick -> {
-                sortInspectionList()
+                sortInspectionListItemClick()
                 true
             }
             R.id.inspectionFilterItemClick -> {
-                filterInspectionList()
+                filterInspectionListItemClick()
                 true
             }
             R.id.inspectionGroupItemClick -> {
-                groupInspectionList()
+                groupInspectionListItemClick()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -173,155 +218,86 @@ class InspectionListFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         _binding = null
     }
 
-    /* *************************** INTERFACES *************************************************** */
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val date = Calendar.getInstance()
-        date.set(year, month, dayOfMonth)
-        val millis: Long = date.timeInMillis
-
-        // update tempInspectionDate
-        updateTempInspectionDate(millis.toString())
-
-        // updateInspectionState
-        updateInspectionDate()
-    }
-    override fun onClick(dialog: DialogInterface?, which: Int) {
-        // Getting single choice AlertDialog selection
-        val listView: ListView = (dialog as AlertDialog).listView
-        val state= listView.getItemAtPosition(listView.checkedItemPosition).toString()
-
-        //  updateTempStateSelection
-        updateTempInspectionStateSelection(state)
-
-        updateInspectionStateString()
-
-    }
 
 
     /* ***************************** FUNCTIONS ************************************************** */
-    private fun updateTempInspectionStateSelection(position: Int) {
-        tempStateSelection = 0
-        var selection = 0
-        for (item in InspectionState.values()) {
-            if (inspectionList[position].inspectionStateString == item.toString()) {
-                tempStateSelection = selection
+
+    private fun selectHospital(position: Int) {
+        val selection = hospitalList[position].name
+        preparedInspectionList = inspectionList.filter { it.hospitalId == selection }
+        binding.inspectionRecyclerView.adapter =
+            InspectionListAdapter(preparedInspectionList, hospitalList, deviceList, inspectionStateList , listener)
+    }
+    private fun groupInspectionListItemClick() {
+        groupingCondition = getGroupingConditions()
+        groupInspectionList(groupingCondition)
+    }
+    private fun filterInspectionListItemClick() {
+        filteringCondition = getFilteringConditions()
+        filterInspectionList(filteringCondition)
+    }
+    private fun sortInspectionListItemClick() {
+        sortingConditions = getSortingConditions()
+        sortInspectionList(sortingConditions)
+    }
+    private fun groupInspectionList(bundle: Bundle) {
+        val condition = bundle.get("")
+        val condition2 = bundle.get("")
+        // TODO Inspections grouping and update adapter
+        Toast.makeText(context, getString(R.string.WAIT_FOR_IMPLEMENTATION), Toast.LENGTH_SHORT).show()
+    }
+    private fun getSortingConditions(): Bundle {
+        val dialog = FilteringDialog()
+        dialog.show(parentFragmentManager, "SORTING ALERT DIALOG")
+        childFragmentManager.setFragmentResultListener(SORTING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
+            filteringCondition = bundle
+        }
+        return  filteringCondition
+    }
+    private fun sortInspectionList(bundle: Bundle) {
+        val bundleType = bundle.get("bundle_type") as String
+        val switch = bundle.get("switch") as Boolean
+        val value = bundle.get("switch") as Long
+        preparedInspectionList = inspectionList.sortedBy { inspection ->
+            if (switch) {
+                inspection.inspectionDate.toLong() > value
+            } else {
+                inspection.inspectionDate.toLong() < value
             }
-            selection += 1
         }
-    }
-    private fun updateTempInspectionStateSelection(state: String) {
-        tempInspection.inspectionStateString = state
-    }
-    private fun updateTempInspection(position: Int) {
-        tempInspection = inspectionList[position]
-    }
-    private fun updateTempInspectionId(position: Int) {
-        inspectionId = inspectionList[position].inspectionUid
-    }
-    private fun createInspectionStateSelectionDialog(checkedItem: Int) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Device State")
-        builder.setSingleChoiceItems(inspectionStates.toTypedArray(), checkedItem, null)
-        builder.setPositiveButton("OK", this)
-        builder.setNegativeButton("Cancel", null)
-        val dialog = builder.create()
-        dialog.show()
-    }
-    private fun updateTempInspectionDate(date: String) {
-        tempInspection.inspectionDate = date
-    }
-    private fun updateInspectionDate() {
-        val map: Map<String, String> = createInspectionMap(tempInspection)
-        viewModelProvider.updateInspection(map, inspectionId)
-    }
-    private fun groupInspectionList() {
-        val groupSelectionList = mutableListOf<String>("Hospital", "State")
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Group by")
-        builder.setSingleChoiceItems(groupSelectionList.toTypedArray(), groupSelection, null)
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-            Snackbar.make(requireView(), "Wait for implementation", Snackbar.LENGTH_SHORT).show()
-            // TODO groupInspectionList to implement
-        })
-        builder.setNegativeButton("Cancel", null)
-        val dialog = builder.create()
-        dialog.show()
-    }
-    private fun filterInspectionList() {
+        binding.inspectionRecyclerView.adapter = InspectionListAdapter(preparedInspectionList, hospitalList, deviceList, inspectionStateList , listener)
 
-        // Remove view if that view have already parent
-        if (filterAlertDialogView.parent != null) {
-            (filterAlertDialogView.parent as ViewGroup).removeView(filterAlertDialogView)
-        }
-
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Filter")
-        builder.setView(filterAlertDialogView)
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-            filteredInspectionList = inspectionList.filter {
-                val filterSwitch = filterAlertDialogView.findViewById<Switch>(R.id.alertDialogSortingSwitch)
-                if(filterSwitch.isChecked) {
-                    it.inspectionDate.toLong() >= filterDate.timeInMillis
-                } else {
-                    it.inspectionDate.toLong() <= filterDate.timeInMillis
-                }
+    }
+    private fun getGroupingConditions(): Bundle {
+        // TODO Open AlertDialog and return bundle with conditions
+        val condition = bundleOf()
+        return  condition
+    }
+    private fun filterInspectionList(bundle: Bundle) {
+        val bundleType = bundle.get("bundle_type") as String
+        val switch = bundle.get("switch") as Boolean
+        val value = bundle.get("value") as Long
+        preparedInspectionList = inspectionList.filter { inspection ->
+            if (switch) {
+                inspection.inspectionDate.toLong() > value
+            } else {
+                inspection.inspectionDate.toLong() < value
             }
-            binding.inspectionRecyclerView.adapter = InspectionListAdapter(ArrayList(filteredInspectionList), this)
-        })
-
-
-        builder.setNegativeButton("Cancel", null)
-        val dialog = builder.create()
-        dialog.show()
-    }
-    private fun setFilterDateButton() {
-        filterDate = Calendar.getInstance()
-        val filterDateYear = filterDate.get(Calendar.YEAR)
-        val filterDateMonth = filterDate.get(Calendar.MONTH)
-        val filterDateDay = filterDate.get(Calendar.DAY_OF_MONTH)
-        filterAlertDialogView = layoutInflater.inflate(R.layout.view_filtering, null)
-        val filterButton = filterAlertDialogView.findViewById<Button>(R.id.filteringAlertDialogDateButton)
-        filterButton.setText(getDateString(filterDate.timeInMillis))
-        filterButton.setOnClickListener {
-            val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                filterDate.set(year, month, dayOfMonth)
-                filterButton.setText(getDateString(filterDate.timeInMillis))
-            }, filterDateYear, filterDateMonth, filterDateDay)
-            datePicker.show()
         }
+        binding.inspectionRecyclerView.adapter = InspectionListAdapter(preparedInspectionList, hospitalList, deviceList, inspectionStateList , listener)
     }
-    private fun sortInspectionList() {
-        val sortSelectionList = mutableListOf<String>("Date", "State")
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Sort by")
-        builder.setSingleChoiceItems(sortSelectionList.toTypedArray(), sortSelection, null)
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-            inspectionList.sortWith(compareBy { it ->
-                //
-                val sortListView = (dialog as AlertDialog).listView
-                sortSelectionString = sortListView.adapter.getItem(sortListView.checkedItemPosition).toString()
-                sortSelection = sortListView.checkedItemPosition
-
-                if(sortSelectionString == "Date"){
-                    it.inspectionDate
-                } else if(sortSelectionString == "State"){
-                    it.inspectionStateString
-                }
-                else {
-                    it.inspectionUid
-                }
-            })
-            binding.inspectionRecyclerView.adapter = InspectionListAdapter(inspectionList, this)
-        })
-        builder.setNegativeButton("Cancel", null)
-        val dialog = builder.create()
-        dialog.show()
-
+    private fun getFilteringConditions(): Bundle {
+        val dialog = FilteringDialog()
+        dialog.show(parentFragmentManager, "FILTERING ALERT DIALOG")
+        childFragmentManager.setFragmentResultListener(FILTERING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
+            filteringCondition = bundle
+        }
+        return  filteringCondition
     }
-    private fun updateInspectionStateString() {
-        val map: Map<String, String> = createInspectionMap(tempInspection)
-        viewModelProvider.updateInspection(map, inspectionId)
+    private fun prepareInspectionList() {
+        filterInspectionList(filteringCondition)
+        sortInspectionList(sortingConditions)
+        groupInspectionList(groupingCondition)
     }
-
 }
 

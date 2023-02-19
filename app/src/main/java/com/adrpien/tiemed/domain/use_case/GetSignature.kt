@@ -6,8 +6,9 @@ import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.security.Signature
+import javax.inject.Inject
 
-class GetSignature(
+class GetSignature @Inject constructor (
     private val repository: TiemedRepository
 ) {
 

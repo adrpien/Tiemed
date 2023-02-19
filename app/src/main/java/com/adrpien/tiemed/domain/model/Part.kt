@@ -1,5 +1,6 @@
 package com.adrpien.tiemed.domain.model
 
+import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.adrpien.tiemed.data.local.entities.InspectionEntity

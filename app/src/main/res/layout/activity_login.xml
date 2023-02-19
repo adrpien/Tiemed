@@ -7,8 +7,8 @@
     tools:context=".presentation.feature_users.LoginActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/loginFragmentContainer"
         android:name="com.adrpien.tiemed.presentation.feature_users.LoginFragment"
+        android:id="@+id/loginFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

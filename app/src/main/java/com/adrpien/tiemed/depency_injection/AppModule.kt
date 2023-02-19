@@ -9,6 +9,7 @@ import com.adrpien.tiemed.domain.repository.TiemedRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,56 +18,67 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AppModule {
+abstract class AppModule {
 
-    @Provides
-    @Singleton
-    fun ProvideFirebaseStorage(): FirebaseStorage{
-       return FirebaseStorage.getInstance()
+    companion object {
+        @Provides
+        @Singleton
+        fun ProvideFirebaseStorage(): FirebaseStorage {
+            return FirebaseStorage.getInstance()
+        }
+
+        @Provides
+        @Singleton
+        fun ProvideFirebaseAuthentication(): FirebaseAuth {
+            return FirebaseAuth.getInstance()
+        }
+
+        @Provides
+        @Singleton
+        fun ProvideFirebaseFirestore(): FirebaseFirestore {
+            return FirebaseFirestore.getInstance()
+        }
+
+        @Provides
+        @Singleton
+        fun ProvideFirebaseApi(
+            firebaseAuth: FirebaseAuth,
+            firebaseFirestore: FirebaseFirestore,
+            firebaseStorage: FirebaseStorage
+        ): FirebaseApi {
+            return FirebaseApi(
+                firebaseAuth = firebaseAuth,
+                firebaseFirestore = firebaseFirestore,
+                firebaseStorage = firebaseStorage
+            )
+        }
+
+        @Provides
+        @Singleton
+        fun ProvideTiemedDatabase(app: Application): TiemedDatabase {
+            return Room.databaseBuilder(
+                app,
+                TiemedDatabase::class.java,
+                "tiemed_db"
+            ).build()
+        }
+
+        @Provides
+        @Singleton
+        fun ProvideRepository(
+            tiemedDatabase: TiemedDatabase,
+            firebaseApi: FirebaseApi
+        ): TiemedRepository {
+            return TiemedRepositoryImplementation(
+                tiemedDatabase.tiemedDao,
+                firebaseApi
+            )
+        }
     }
 
-    @Provides
+    @Binds
     @Singleton
-    fun ProvideFirebaseAuthentication(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
-
-    @Provides
-    @Singleton
-    fun ProvideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
-
-    @Provides
-    @Singleton
-    fun ProvideFirebaseApi(firebaseAuth: FirebaseAuth, firebaseFirestore: FirebaseFirestore, firebaseStorage: FirebaseStorage): FirebaseApi {
-        return FirebaseApi(
-            firebaseAuth = firebaseAuth,
-            firebaseFirestore = firebaseFirestore,
-            firebaseStorage = firebaseStorage
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun ProvideTiemedDatabase(app: Application): TiemedDatabase {
-        return Room.databaseBuilder(
-            app,
-            TiemedDatabase::class.java,
-            "tiemed_db"
-        ).build()
-    }
-
-    @Provides
-    @Singleton
-    fun ProvideRepository(tiemedDatabase: TiemedDatabase, firebaseApi: FirebaseApi): TiemedRepository {
-        return TiemedRepositoryImplementation(
-            tiemedDatabase.tiemedDao,
-            firebaseApi
-        )
-    }
-
-
-
-
+    abstract fun ProvideRepository(
+        TiemedRepositoryImplementation: TiemedRepositoryImplementation
+    ): TiemedRepositoryImplementation
 }

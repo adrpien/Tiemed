@@ -6,7 +6,9 @@ import android.os.Bundle
 import com.adrpien.tiemed.main.MainActivity
 import com.adrpien.tiemed.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     // ViewBinding

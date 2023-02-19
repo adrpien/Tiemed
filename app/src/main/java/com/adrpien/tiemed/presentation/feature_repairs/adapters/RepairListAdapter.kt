@@ -12,7 +12,7 @@ import com.adrpien.tiemed.domain.model.Hospital
 import com.adrpien.tiemed.domain.model.Repair
 import com.adrpien.tiemed.domain.model.RepairState
 
-class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hospital>, val deviceList: List<Device>, val repairStateList: List<RepairState>, val listener: onRepairItemClickListener)
+class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hospital>, val deviceList: List<Device>, val repairStateList: List<RepairState>, val listener: OnRepairItemClickListener)
     : RecyclerView.Adapter<RepairListAdapter.RepairViewHolder>() {
 
     // onCreateViewHolder implementation
@@ -60,22 +60,27 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
 
         /* ******************** Click listeners ************************************************* */
         holder.itemView.setOnClickListener {
-            listener.setOnRepairItemClick(holder.itemView)
+            listener.setOnRepairItemClick(holder.itemView, position)
         }
         holder.itemView.setOnLongClickListener {
-            listener.setOnRepairItemLongClick(holder.itemView)
+            listener.setOnRepairItemLongClick(holder.itemView, position)
             true
         }
 
         /* ********** Filling TextViews with values ********************************************* */
         holder.repairRowIdRepairTextView.setText(repairList[position].repairId)
-        holder.repairRowNameRepairTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].name)
-        holder.repairRowManufacturerTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].manufacturer)
-        holder.repairRowModelTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].model)
-        holder.repairRowSnNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].serialNumber)
-        holder.repairInNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].inventoryNumber)
-        holder.repairRowWardTextView.setText(repairList[position].ward)
-        setMarkerColour(repairList[position])
+        //holder.repairRowNameRepairTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].name)
+        // holder.repairRowManufacturerTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].manufacturer)
+        // holder.repairRowModelTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].model)
+        // holder.repairRowSnNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].serialNumber)
+        // holder.repairInNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].inventoryNumber)
+        // holder.repairRowWardTextView.setText(repairList[position].ward)
+        // setMarkerColour(repairList[position])
+        // holder.repairRowOpeningDateTextView.append(
+        //     com.adrpien.tiemed.presentation.feature_inspections.getDateString(
+        //         repairList[position].openingDate.toLong()
+        //     )
+        // )
 
 
     }
@@ -94,6 +99,7 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
         val stateMarker = itemView.findViewById<View>(R.id.repairRowStateMarker)
 
         // TextViews
+        val repairRowOpeningDateTextView = itemView.findViewById<TextView>(R.id.repairRowOpeningDateTextView)
         val repairRowIdRepairTextView = itemView.findViewById<TextView>(R.id.repairRowIdTextView)
         val repairRowNameRepairTextView = itemView.findViewById<TextView>(R.id.repairRowNameTextView)
         val repairRowManufacturerTextView = itemView.findViewById<TextView>(R.id.repairRowManufacturerTextView)
@@ -106,9 +112,9 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
 }
 
 // Creating listener implemented by fragment
-interface onRepairItemClickListener{
-    fun setOnRepairItemClick(itemView: View)
-    fun setOnRepairItemLongClick(itemView: View)
+interface OnRepairItemClickListener{
+    fun setOnRepairItemClick(itemView: View, position: Int)
+    fun setOnRepairItemLongClick(itemView: View, position: Int)
 }
 
 // Returns date in format YYYY/MM/DD String representation using date in millis

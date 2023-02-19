@@ -5,8 +5,9 @@ import com.adrpien.tiemed.domain.model.Device
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GetDevice(
+class GetDevice @Inject constructor (
     private val repository: TiemedRepository
 ) {
 

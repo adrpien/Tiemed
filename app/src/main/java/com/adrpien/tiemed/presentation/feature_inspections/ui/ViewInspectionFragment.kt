@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.adrpien.tiemed.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ViewInspectionFragment : Fragment() {
     private val ACTION_BAR_TITLE: String = "Edit Inspection"
 

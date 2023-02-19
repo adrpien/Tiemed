@@ -56,7 +56,7 @@ class  FirebaseApi(
             }
     }
     // TODO Need to implement caching mechanism
-    fun createInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
+    fun createInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
@@ -76,11 +76,11 @@ class  FirebaseApi(
         val result = documentReference.set(map)
         result.await()
         if (result.isSuccessful) {
-            emit(Resource(ResourceState.SUCCESS, true))
+            emit(Resource(ResourceState.SUCCESS, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, false))
+            emit(Resource(ResourceState.ERROR, null))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record creation error")
 
         }
@@ -313,18 +313,19 @@ class  FirebaseApi(
 
 
     /* ********************************* SIGNATURES ********************************************* */
-    fun uploadSignature(signatureId: String, signatureBytes: ByteArray): Flow<Resource<Boolean>> = flow {
+    fun uploadSignature(signatureId: String, signatureBytes: ByteArray): Flow<Resource<String?>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseStorage.getReference("signatures")
             .child("${signatureId}.jpg")
             val result = documentReference.putBytes(signatureBytes)
             result.await()
                     if (result.isSuccessful) {
-                        emit(Resource(ResourceState.SUCCESS, true))
+                        // TODO Need to think about storing photos
+                        emit(Resource(ResourceState.SUCCESS, documentReference.downloadUrl.toString()))
                         Log.d(TIEMED_REPOSITORY_DEBUG, "Signature uploaded")
 
                     } else {
-                        emit(Resource(ResourceState.ERROR, false))
+                        emit(Resource(ResourceState.ERROR, null))
                         Log.d(TIEMED_REPOSITORY_DEBUG, "Signature upload error")
                     }
 
@@ -377,7 +378,7 @@ class  FirebaseApi(
         }
     }
     // TODO Need to implement caching mechanism
-    fun createPart(part: Part): Flow<Resource<Boolean>> = flow {
+    fun createPart(part: Part): Flow<Resource<String?>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -389,11 +390,11 @@ class  FirebaseApi(
         val result = documentReference.set(map)
         result.await()
         if (result.isSuccessful) {
-            emit(Resource(ResourceState.SUCCESS, true))
+            emit(Resource(ResourceState.SUCCESS, documentReference.id))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Part record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, false))
+            emit(Resource(ResourceState.ERROR, null))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Part record creation error")
 
         }

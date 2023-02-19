@@ -5,7 +5,7 @@ import com.adrpien.tiemed.data.remote.dto.InspectionDto
 import java.util.*
 
 data class Inspection(
-    val inspectionId: String = "",
+    var inspectionId: String = "",
     var deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
@@ -15,7 +15,9 @@ data class Inspection(
     var recipient: String = "",
     var recipientSignature: String = "",
     var inspectionStateId: String = "",
-    var estStateId: String = ""
+    var estStateId: String = "",
+
+    var device: Device = Device()
     ) {
 
     fun toInspectionEntity(): InspectionEntity {

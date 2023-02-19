@@ -4,8 +4,9 @@ import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.tiemed.domain.model.RepairState
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetRepairStateList(
+class GetRepairStateList @Inject constructor (
     private val repository: TiemedRepository
 ) {
 

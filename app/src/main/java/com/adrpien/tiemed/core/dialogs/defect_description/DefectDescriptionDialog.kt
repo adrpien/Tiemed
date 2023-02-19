@@ -38,7 +38,7 @@ class DefectDescriptionDialog: DialogFragment() {
                 val repair = Repair(
                     defectDescription = defectDescriptionEditText.text.toString()
                 )
-                viewModelProvider.createRepair(repair)
+                //viewModelProvider.c(repair)
                 Log.d(DEFECT_DESCRIPTION_DIALOG_TAG, "Confirmed")
             })
             .setNegativeButton("Cancel",

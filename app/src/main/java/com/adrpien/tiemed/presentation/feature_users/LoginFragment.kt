@@ -11,7 +11,9 @@ import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : BaseFragment() {
 
     // ViewBinding

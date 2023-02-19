@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
@@ -22,16 +20,17 @@ import com.adrpien.tiemed.R
 import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.dialogs.filtering_dialog.FilteringDialog
 import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
-import com.adrpien.tiemed.presentation.feature_users.onRepairItemClickListener
+import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 import com.adrpien.tiemed.domain.model.Device
 import com.adrpien.tiemed.domain.model.Hospital
 import com.adrpien.tiemed.domain.model.Repair
 import com.adrpien.tiemed.domain.model.RepairState
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RepairListFragment : BaseFragment() {
 
     // ViewBinding
@@ -63,20 +62,20 @@ class RepairListFragment : BaseFragment() {
         // activity?.setTitle("Repair List")
     }
 
-    val listener: onRepairItemClickListener = object: onRepairItemClickListener {
+    val listener: OnRepairItemClickListener = object: OnRepairItemClickListener {
         // onRepairItemClickListener interface implementation
         // Fetching id of clicked record and startinng fragment
-        override fun setOnRepairItemClick(itemView: View) {
+        override fun setOnRepairItemClick(itemView: View, position: Int) {
             val fragment = EditRepairFragment()
-            fragment.arguments = bundleOf("id" to itemView.findViewById<EditText>(R.id.editRepairIdInputEditText).text.toString())
+            fragment.arguments = bundleOf("id" to repairList[position].repairId)
             activity?.supportFragmentManager?.beginTransaction()
                 ?.add(R.id.detailsFragmentContainerView, fragment)
                 ?.addToBackStack(null)
                 ?.commit()
         }
-        override fun setOnRepairItemLongClick(itemView: View) {
+        override fun setOnRepairItemLongClick(itemView: View, position: Int) {
             val fragment = EditRepairFragment()
-            fragment.arguments = bundleOf("id" to itemView.findViewById<EditText>(R.id.editRepairIdInputEditText).text.toString())
+            fragment.arguments = bundleOf("id" to repairList[position].repairId)
             activity?.supportFragmentManager?.beginTransaction()
                 ?.add(R.id.pinnedFragmentContainerView, fragment)
                 ?.addToBackStack(null)
@@ -94,31 +93,31 @@ class RepairListFragment : BaseFragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
 
         // Hospital spinner in action bar implementation
-        val spinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
-        val repairListHospitalSpinner = spinnerItem.actionView as AppCompatSpinner
-        spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
-        val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
-            ArrayAdapter(
-                it,
-                android.R.layout.simple_spinner_item,
-                hospitalList
-            )
-        }
-        repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
-        repairListHospitalSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectHospital(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
+        // val spinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
+        // val repairListHospitalSpinner = spinnerItem.actionView as AppCompatSpinner
+        // spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
+        // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+        //     ArrayAdapter(
+        //         it,
+        //         android.R.layout.simple_spinner_item,
+        //         hospitalList
+        //     )
+        // }
+        // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
+        // repairListHospitalSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        //     override fun onItemSelected(
+        //         parent: AdapterView<*>?,
+        //         view: View?,
+        //         position: Int,
+        //         id: Long
+        //     ) {
+        //         selectHospital(position)
+        //     }
+//
+        //     override fun onNothingSelected(parent: AdapterView<*>?) {
+        //     }
+//
+        // }
     }
     // HandLing options menu click events
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -157,8 +156,8 @@ class RepairListFragment : BaseFragment() {
 
         /* ********************** COLLECT STATE FLOW ******************************************** */
         // repairList
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 RepairListViewModel
                     .repairListStateFlow
                     .collect { result ->
@@ -203,8 +202,8 @@ class RepairListFragment : BaseFragment() {
             }
         }
         // hospitalList
-        lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 RepairListViewModel.hospitalListStateFlow.collect { result ->
                     when(result.resourceState) {
                         ResourceState.SUCCESS -> {
@@ -273,9 +272,9 @@ class RepairListFragment : BaseFragment() {
         return  filteringCondition
     }
     private fun sortRepairList(bundle: Bundle) {
-        val bundleType = bundle.get("bundle_type") as String
-        val switch = bundle.get("switch") as Boolean
-        val value = bundle.get("switch") as Long
+        val bundleType = bundle.getString("bundle_type")
+        val switch = bundle.getBoolean("switch")
+        val value = bundle.getLong("switch")
         preparedRepairList = repairList.sortedBy { repair ->
             if (switch) {
                 repair.openingDate.toLong() > value
@@ -292,9 +291,9 @@ class RepairListFragment : BaseFragment() {
         return  condition
     }
     private fun filterRepairList(bundle: Bundle) {
-        val bundleType = bundle.get("bundle_type") as String
-        val switch = bundle.get("switch") as Boolean
-        val value = bundle.get("value") as Long
+        val bundleType = bundle.getString("bundle_type")
+        val switch = bundle.getBoolean("switch")
+        val value = bundle.getLong("value")
         preparedRepairList = repairList.filter { repair ->
             if (switch) {
                 repair.openingDate.toLong() > value

@@ -24,7 +24,7 @@
             tools:layout_editor_absoluteY="5dp" />
 <!--        Id -->
         <TextView
-            android:id="@+id/repairRowIdTextView"
+            android:id="@+id/inspectionRowIdTextView"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -88,7 +88,7 @@
             android:text="IN: "
             app:layout_constraintStart_toEndOf="@+id/inspectionRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
-<!--        Ward --> 
+<!--        Ward -->
         <TextView
             android:id="@+id/inspectionRowWardTextView"
             android:layout_width="wrap_content"

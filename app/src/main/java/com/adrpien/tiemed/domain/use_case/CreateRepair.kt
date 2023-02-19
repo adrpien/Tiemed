@@ -7,8 +7,9 @@ import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
+import javax.inject.Inject
 
-class CreateRepair(
+class CreateRepair @Inject constructor (
     private val repository: TiemedRepository
 ) {
 

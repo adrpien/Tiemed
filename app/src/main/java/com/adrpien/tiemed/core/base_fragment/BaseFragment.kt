@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.adrpien.tiemed.domain.model.Inspection
 import com.adrpien.tiemed.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.reflect.full.memberProperties
 
+@AndroidEntryPoint
 abstract class BaseFragment: Fragment(){
 
     fun setActionBarTitle(title: String){

@@ -16,7 +16,7 @@ interface TiemedDao {
 
     /* ***** Repairs **************************************************************************** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRepair(repair: RepairEntity)
+    suspend fun insertRepair(repairEntity: RepairEntity)
 
     @Transaction
     @Query("SELECT * FROM repairentity WHERE repairId LIKE :repairId")
@@ -32,7 +32,7 @@ interface TiemedDao {
 
     /* ***** Inspections ************************************************************************ */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInspection(inspection: InspectionEntity)
+    suspend fun insertInspection(inspectionEntity: InspectionEntity)
 
     @Transaction
     @Query("SELECT * FROM inspectionentity WHERE inspectionId LIKE :inspectionId")
@@ -48,7 +48,7 @@ interface TiemedDao {
 
     /* ***** Parts ****************************************************************************** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPart(part: Part)
+    suspend fun insertPart(partEntity: PartEntity)
 
     @Transaction
     @Query("SELECT * FROM partentity WHERE partId LIKE :partId")
@@ -65,7 +65,7 @@ interface TiemedDao {
     /* ***** Devices **************************************************************************** */
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDevice(device: Device)
+    suspend fun insertDevice(deviceEntity: DeviceEntity)
 
     @Transaction
     @Query("SELECT * FROM deviceentity WHERE deviceId LIKE :deviceId")

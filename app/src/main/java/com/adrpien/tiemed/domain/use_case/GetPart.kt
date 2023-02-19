@@ -5,8 +5,9 @@ import com.adrpien.tiemed.domain.model.Part
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GetPart(
+class GetPart @Inject constructor (
     private val repository: TiemedRepository
 ) {
 
