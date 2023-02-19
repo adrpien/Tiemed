@@ -87,7 +87,6 @@ class RepairListFragment : BaseFragment() {
     /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRepairListBinding.inflate(inflater, container, false)
@@ -213,28 +212,14 @@ class RepairListFragment : BaseFragment() {
                     when(result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if(result.data != null) {
-                                // hospitalList = result.data
-                                // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
-                                //     ArrayAdapter(
-                                //         it,
-                                //         android.R.layout.simple_spinner_item,
-                                //         hospitalList
-                                //     )
-                                // }
-                                // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
+                                hospitalList = result.data
+                                activity?.invalidateOptionsMenu()
                             }
                         }
                         ResourceState.LOADING -> {
                             if(result.data != null) {
-                                // hospitalList = result.data
-                                // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
-                                //     ArrayAdapter(
-                                //         it,
-                                //         android.R.layout.simple_spinner_item,
-                                //         hospitalList
-                                //     )
-                                // }
-                                // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
+                                hospitalList = result.data
+                                activity?.invalidateOptionsMenu()
                             }
                         }
                         ResourceState.ERROR -> {
@@ -253,7 +238,7 @@ class RepairListFragment : BaseFragment() {
     }
     override fun onResume() {
         super.onResume()
-        // activity?.invalidateOptionsMenu()
+        activity?.invalidateOptionsMenu()
     }
     override fun onDestroy() {
         super.onDestroy()
