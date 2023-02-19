@@ -3,6 +3,7 @@ package com.adrpien.tiemed.presentation.feature_inspections.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adrpien.dictionaryapp.core.util.Resource
+import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,14 +34,14 @@ class InspectionViewModel @Inject constructor(
     /* ************************** getInspectionList ************************************************* */
     fun getInspectionListFlow(): StateFlow<Resource<List<Inspection>>> = getInspectionList().stateIn(
         scope = viewModelScope,
-        initialValue = emptyList<Inspection>(),
+        initialValue = Resource(ResourceState.LOADING, emptyList<Inspection>()),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<List<Inspection>>>
     val inspectionListStateFlow = getInspectionListFlow()
     /* ************************** getInspection ***************************************************** */
     fun getInspectionFlow(inspectionId: String): StateFlow<Resource<Inspection>> = getInspection(inspectionId).stateIn(
         scope = viewModelScope,
-        initialValue = Inspection(inspectionId = ""),
+        initialValue = Resource(ResourceState.LOADING, Inspection(inspectionId = "")),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<Inspection>>
     /* ************************** createInspection ************************************************** */
@@ -60,7 +61,7 @@ class InspectionViewModel @Inject constructor(
     /* ************************** getHospitalList *********************************************** */
     fun getHospitalListFlow(): StateFlow<Resource<List<Hospital>>> = getHospitalList().stateIn(
         scope = viewModelScope,
-        initialValue = emptyList<Hospital>(),
+        initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<List<Hospital>>>
     val hospitalListStateFlow = getHospitalListFlow()
@@ -69,7 +70,7 @@ class InspectionViewModel @Inject constructor(
     /* ************************** getSignature ************************************************** */
     fun getSignatureFlow(signatureId: String): StateFlow<Resource<ByteArray>> = getSignature(signatureId).stateIn(
         scope = viewModelScope,
-        initialValue = Inspection(inspectionId = ""),
+        initialValue = Resource(ResourceState.LOADING, Inspection(inspectionId = "")),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<ByteArray>>
     /* ************************** createSignature ************************************************** */
@@ -89,7 +90,7 @@ class InspectionViewModel @Inject constructor(
     /* ************************** getDevice ***************************************************** */
     fun getDeviceFlow(deviceId: String): StateFlow<Resource<Device>> = getDevice(deviceId).stateIn(
         scope = viewModelScope,
-        initialValue = Device(deviceId = ""),
+        initialValue = Resource(ResourceState.LOADING, Device(deviceId = "")),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<Device>>
     /* ************************** createDevice ************************************************** */
@@ -109,7 +110,7 @@ class InspectionViewModel @Inject constructor(
     /* ************************** getEstStateList *********************************************** */
     fun getEstStateListFlow(): StateFlow<Resource<List<EstState>>> = getEstStateList().stateIn(
         scope = viewModelScope,
-        initialValue = emptyList<Hospital>(),
+        initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<List<EstState>>>
     val estStateListStateFlow = getHospitalListFlow()
@@ -118,7 +119,7 @@ class InspectionViewModel @Inject constructor(
     /* ************************** INSPECTION STATE  LIST *********************************************** */
     fun getinspectionStateListFlow(): StateFlow<Resource<List<InspectionState>>> = getInspectionStateList().stateIn(
         scope = viewModelScope,
-        initialValue = emptyList<Hospital>(),
+        initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<List<InspectionState>>>
     val inspectionStateListStateFlow = getHospitalListFlow()

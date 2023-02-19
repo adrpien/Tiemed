@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +51,9 @@ class RepairListFragment : BaseFragment() {
     private var preparedRepairList: List<Repair> = listOf()
     private var repairStateList: List<RepairState> = listOf()
 
+    lateinit var spinnerItem: MenuItem
+    lateinit var repairListHospitalSpinner: Spinner
+
     // Filtering, sorting and grouping
     private var filteringCondition: Bundle = bundleOf()
     private var sortingConditions: Bundle = bundleOf()
@@ -56,11 +62,6 @@ class RepairListFragment : BaseFragment() {
     // Lazy instance of ViewModelProvider
     val RepairListViewModel by viewModels<RepairViewModel>()
 
-    // Options menu
-    init{
-        setHasOptionsMenu(true)
-        // activity?.setTitle("Repair List")
-    }
 
     val listener: OnRepairItemClickListener = object: OnRepairItemClickListener {
         // onRepairItemClickListener interface implementation
@@ -83,65 +84,10 @@ class RepairListFragment : BaseFragment() {
         }
     }
 
-    /* ***************************** MENU ******************************************************* */
-    // Creating Fragment Options Menu
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = inflater
-        inflater.inflate(R.menu.repair_list_options_menu, menu)
-
-        // Setting Action Bar Name according to open fragment
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
-
-        // Hospital spinner in action bar implementation
-        // val spinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
-        // val repairListHospitalSpinner = spinnerItem.actionView as AppCompatSpinner
-        // spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
-        // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
-        //     ArrayAdapter(
-        //         it,
-        //         android.R.layout.simple_spinner_item,
-        //         hospitalList
-        //     )
-        // }
-        // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
-        // repairListHospitalSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-        //     override fun onItemSelected(
-        //         parent: AdapterView<*>?,
-        //         view: View?,
-        //         position: Int,
-        //         id: Long
-        //     ) {
-        //         selectHospital(position)
-        //     }
-//
-        //     override fun onNothingSelected(parent: AdapterView<*>?) {
-        //     }
-//
-        // }
-    }
-    // HandLing options menu click events
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handling repair menu item selection
-        return when (item.itemId) {
-            R.id.repairSortItem-> {
-                sortRepairListItemClick()
-                true
-            }
-            R.id.repairFilterItem-> {
-                filterRepairListItemClick()
-                true
-            }
-            R.id.repairGroupItem-> {
-                groupRepairListItemClick()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRepairListBinding.inflate(inflater, container, false)
@@ -149,6 +95,65 @@ class RepairListFragment : BaseFragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+
+        /* ********************** MENU ******************************************** */
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    // Add menu items here
+                    menuInflater.inflate(R.menu.repair_list_options_menu, menu)
+                    // Setting Action Bar Name according to open fragment
+                    (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
+
+                    // Hospital spinner in action bar implementation
+                    // TODO Hospital spinner in RepairListFragment to implement...
+                    spinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
+                    repairListHospitalSpinner = spinnerItem.actionView as Spinner
+                    //spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
+                    val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+                        ArrayAdapter(
+                            it,
+                            android.R.layout.simple_spinner_item,
+                            hospitalList
+                        )
+                    }
+                    repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
+                    repairListHospitalSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            selectHospital(position)
+                        }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
+                    }
+                }
+                override fun onMenuItemSelected(item: MenuItem): Boolean {
+                    return when (item.itemId) {
+                        R.id.repairSortItem-> {
+                            sortRepairListItemClick()
+                            true
+                        }
+                        R.id.repairFilterItem-> {
+                            filterRepairListItemClick()
+                            true
+                        }
+                        R.id.repairGroupItem-> {
+                            groupRepairListItemClick()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                                  },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED)
+
+        /* ********************** RECYCLER VIEW ******************************************** */
         // Setting RecyclerView
         binding.repairRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         // List divider
@@ -208,12 +213,28 @@ class RepairListFragment : BaseFragment() {
                     when(result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if(result.data != null) {
-                                hospitalList = result.data
+                                // hospitalList = result.data
+                                // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+                                //     ArrayAdapter(
+                                //         it,
+                                //         android.R.layout.simple_spinner_item,
+                                //         hospitalList
+                                //     )
+                                // }
+                                // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
                             }
                         }
                         ResourceState.LOADING -> {
                             if(result.data != null) {
-                                hospitalList = result.data
+                                // hospitalList = result.data
+                                // val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+                                //     ArrayAdapter(
+                                //         it,
+                                //         android.R.layout.simple_spinner_item,
+                                //         hospitalList
+                                //     )
+                                // }
+                                // repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
                             }
                         }
                         ResourceState.ERROR -> {
@@ -224,6 +245,7 @@ class RepairListFragment : BaseFragment() {
             }
         }
 
+        /* ********************** FAB BUTTON ******************************************** */
         // Adding new repair record
         binding.addRepairFABButton.setOnClickListener {
             findNavController().navigate(RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())

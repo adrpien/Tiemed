@@ -91,7 +91,6 @@ class InspectionListFragment() : BaseFragment(){
         // Hospital spinner in action bar implementation
         val spinnerItem = menu.findItem(R.id.inspectionListHospitalSpinner)
         val inspectionListHospitalSpinner = spinnerItem.actionView as AppCompatSpinner
-        spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
         val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
             ArrayAdapter(
                 it,

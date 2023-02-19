@@ -27,33 +27,35 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
         // Sets colour of StateMarker
         // TODO This implementation works terrible, because order of documents in Firestore Database changes when you add new document, but leave this as it is to focus on other problems to solve
         fun setMarkerColour(repair: Repair) {
-            when(repair.repairStateId){
-                repairStateList[0].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.repaired)
-                }
-                repairStateList[1].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.diagnosed)
-                }
-                repairStateList[2].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.cancelled)
-                }
-                repairStateList[3].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.to_diagnose)
-                }
-                repairStateList[4].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.waiting_for_parts)
-                }
-                repairStateList[5].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.waiting)
-                }
-                repairStateList[6].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.sent_to_external_service)
-                }
-                repairStateList[7].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.finished)
-                }
-                repairStateList[8].repairStateId -> {
-                    holder.stateMarker.setBackgroundResource(R.color.reported)
+            if(repairStateList.isNotEmpty()) {
+                when (repair.repairStateId) {
+                    repairStateList[0].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.repaired)
+                    }
+                    repairStateList[1].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.diagnosed)
+                    }
+                    repairStateList[2].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.cancelled)
+                    }
+                    repairStateList[3].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.to_diagnose)
+                    }
+                    repairStateList[4].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.waiting_for_parts)
+                    }
+                    repairStateList[5].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.waiting)
+                    }
+                    repairStateList[6].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.sent_to_external_service)
+                    }
+                    repairStateList[7].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.finished)
+                    }
+                    repairStateList[8].repairStateId -> {
+                        holder.stateMarker.setBackgroundResource(R.color.reported)
+                    }
                 }
             }
         }
@@ -68,14 +70,16 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
         }
 
         /* ********** Filling TextViews with values ********************************************* */
+
+        val device = repairList[position].device
         holder.repairRowIdRepairTextView.setText(repairList[position].repairId)
-        //holder.repairRowNameRepairTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].name)
-        // holder.repairRowManufacturerTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].manufacturer)
-        // holder.repairRowModelTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].model)
-        // holder.repairRowSnNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].serialNumber)
-        // holder.repairInNumberTextView.setText(deviceList[deviceList.indexOf(repairList[position].device)].inventoryNumber)
-        // holder.repairRowWardTextView.setText(repairList[position].ward)
-        // setMarkerColour(repairList[position])
+        holder.repairRowNameRepairTextView.setText(device.name)
+        holder.repairRowManufacturerTextView.setText(device.manufacturer)
+        holder.repairRowModelTextView.setText(device.model)
+        holder.repairRowSnNumberTextView.setText(device.serialNumber)
+        holder.repairInNumberTextView.setText(device.inventoryNumber)
+        holder.repairRowWardTextView.setText(repairList[position].ward)
+        setMarkerColour(repairList[position])
         // holder.repairRowOpeningDateTextView.append(
         //     com.adrpien.tiemed.presentation.feature_inspections.getDateString(
         //         repairList[position].openingDate.toLong()

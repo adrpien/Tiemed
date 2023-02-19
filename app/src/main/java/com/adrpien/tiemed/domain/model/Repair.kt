@@ -27,7 +27,7 @@ data class Repair(
     var recipient: String = "",
     var recipientSignatureId: String = "",
 
-    val device: Device = Device()
+    var device: Device = Device()
     ) {
     fun toRepairEntity(): RepairEntity {
         return RepairEntity(
