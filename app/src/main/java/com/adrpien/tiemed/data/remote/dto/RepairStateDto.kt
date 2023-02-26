@@ -10,7 +10,7 @@ data class RepairStateDto (
     fun toRepairStateEntity(): RepairStateEntity {
         return RepairStateEntity(
             repairStateId = repairStateId,
-            state = state
+            repairState = state
         )
     }
 

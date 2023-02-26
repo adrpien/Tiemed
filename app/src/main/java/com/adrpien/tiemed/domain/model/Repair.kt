@@ -10,7 +10,6 @@ data class Repair(
     var deviceId: String = "",
     var hospitalId: String = "",
     var ward: String = "",
-    // var photoList: List<String> = emptyList<String>(),
     var defectDescription: String = "",
     var repairDescription: String = "",
     //var partList: List<String> = emptyList(),

@@ -10,7 +10,7 @@ data class  InspectionStateDto (
     fun toInspectionStateEntity(): InspectionStateEntity{
         return InspectionStateEntity(
             inspectionStateId = inspectionStateId,
-            state = state
+            inspectionState = state
         )
     }
 

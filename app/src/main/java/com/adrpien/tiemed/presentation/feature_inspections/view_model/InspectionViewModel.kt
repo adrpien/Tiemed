@@ -6,6 +6,16 @@ import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.use_case.*
+import com.adrpien.tiemed.domain.use_case.hospitals.GetHospitalList
+import com.adrpien.tiemed.domain.use_case.inspections.CreateInspection
+import com.adrpien.tiemed.domain.use_case.inspections.GetInspection
+import com.adrpien.tiemed.domain.use_case.inspections.GetInspectionList
+import com.adrpien.tiemed.domain.use_case.inspections.UpdateInspection
+import com.adrpien.tiemed.domain.use_case.signatures.CreateSignature
+import com.adrpien.tiemed.domain.use_case.signatures.GetSignature
+import com.adrpien.tiemed.domain.use_case.signatures.UpdateSignature
+import com.adrpien.tiemed.domain.use_case.states.GetEstStateList
+import com.adrpien.tiemed.domain.use_case.states.GetInspectionStateList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject

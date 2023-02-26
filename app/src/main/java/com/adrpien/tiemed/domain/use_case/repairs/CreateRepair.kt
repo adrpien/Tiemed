@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.domain.use_case
+package com.adrpien.tiemed.domain.use_case.repairs
 
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.tiemed.domain.model.Device
@@ -13,8 +13,7 @@ class CreateRepair @Inject constructor (
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(repair: Repair, device: Device): Flow<Resource<String?>> {
-        return repository.insertRepair(repair)
+    operator fun invoke(repair: Repair) {
+        repository.insertRepair(repair)
     }
-
 }

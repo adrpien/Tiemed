@@ -8,13 +8,13 @@ import com.adrpien.tiemed.domain.model.Technician
 data class TechnicianEntity(
     @PrimaryKey(autoGenerate = false)
     val technicianId: String,
-    val name: String = ""
+    val technicianName: String = ""
 ) {
 
     fun toTechnician(): Technician {
         return Technician(
             technicianId = technicianId,
-            name = name
+            technicianName = technicianName
         )
     }
 }

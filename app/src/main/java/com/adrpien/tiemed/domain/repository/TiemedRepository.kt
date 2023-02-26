@@ -7,6 +7,16 @@ import kotlinx.coroutines.flow.Flow
 
 interface TiemedRepository {
 
+    /* ***** Room DB **************************************************************************** */
+    fun updateRoomHospitalList(hospitalList: List<Hospital>): Flow<Resource<Boolean>>
+    fun updateRoomRepairList(repairList: List<Repair>): Flow<Resource<Boolean>>
+    fun updateRoomInspectionList(inspectionList: List<Inspection>): Flow<Resource<Boolean>>
+    fun updateRoomTechnicianList(technicianList: List<Technician>): Flow<Resource<Boolean>>
+    fun updateRoomRepairStateList(repairStateList: List<RepairState>): Flow<Resource<Boolean>>
+    fun updateRoomInspectionStateList(inspectionStateList: List<InspectionState>): Flow<Resource<Boolean>>
+    fun updateRoomEstStateList(estStateList: List<EstState>): Flow<Resource<Boolean>>
+
+
     /* ***** Inspections ************************************************************************ */
     fun getInspection(inspectionId: String): Flow<Resource<Inspection>>
     fun getInspectionList() : Flow<Resource<List<Inspection>>>

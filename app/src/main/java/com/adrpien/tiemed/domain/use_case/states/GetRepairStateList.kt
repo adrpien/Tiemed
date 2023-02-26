@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.domain.use_case
+package com.adrpien.tiemed.domain.use_case.states
 
 import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.tiemed.domain.model.RepairState

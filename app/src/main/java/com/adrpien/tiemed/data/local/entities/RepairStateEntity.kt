@@ -8,13 +8,13 @@ import com.adrpien.tiemed.domain.model.RepairState
 data class RepairStateEntity (
     @PrimaryKey(autoGenerate = false)
     val repairStateId: String,
-    val state: String = ""
+    val repairState: String = ""
 ) {
 
     fun toRepairState(): RepairState {
         return RepairState(
             repairStateId = repairStateId,
-            repairState = state
+            repairState = repairState
         )
     }
 }

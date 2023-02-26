@@ -8,13 +8,13 @@ import com.adrpien.tiemed.domain.model.InspectionState
 data class  InspectionStateEntity (
     @PrimaryKey(autoGenerate = false)
     val inspectionStateId: String,
-    val state: String =  ""
+    val inspectionState: String =  ""
     ){
 
     fun toInspectionState(): InspectionState{
         return InspectionState(
             inspectionStateId = inspectionStateId,
-            inspectionState = state
+            inspectionState = inspectionState
         )
     }
 }

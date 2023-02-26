@@ -7,7 +7,6 @@ import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.repository.TiemedRepository
 import kotlinx.coroutines.flow.*
-import javax.inject.Inject
 
 
 class  TiemedRepositoryImplementation(
@@ -17,6 +16,51 @@ class  TiemedRepositoryImplementation(
 
     private val TIEMED_REPOSITORY_IMPLEMENTATION = "TIEMED REPOSITORY IMPLEMENTATION"
 
+    /* ********************************* Room DB ************************************************ */
+    override fun updateRoomEstStateList(estStateList: List<EstState>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllEstStates()
+        for (item in estStateList) {
+            tiemedDao.insertEstStateEntity(item.toEstStateEntity() )
+        }
+    }
+    override fun updateRoomRepairStateList(repairStateList: List<RepairState>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllRepairStates()
+        for (item in repairStateList) {
+            tiemedDao.insertRepairStateEntity(item.toRepairStateEntity() )
+        }
+    }
+    override fun updateRoomInspectionStateList(inspectionStateList: List<InspectionState>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllInspectionStates()
+        for (item in inspectionStateList) {
+            tiemedDao.insertInspectionStateEntity(item.toInspectionStateEntity())
+        }
+
+    }
+    override fun updateRoomTechnicianList(technicianList: List<Technician>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllTechnicians()
+        for (item in technicianList) {
+            tiemedDao.insertTechnician(item.toTechncianEntity())
+        }
+    }
+    override fun updateRoomInspectionList(inspectionList: List<Inspection>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllInspections()
+        for( item in inspectionList) {
+            tiemedDao.insertInspection(item.toInspectionEntity())
+        }
+    }
+    override fun updateRoomRepairList(repairList: List<Repair>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllRepairs()
+        for(item in repairList){
+            tiemedDao.insertRepair(item.toRepairEntity())
+        }
+    }
+    override fun updateRoomHospitalList(hospitalList: List<Hospital>): Flow<Resource<Boolean>> = flow {
+        tiemedDao.deleteAllHospitals()
+        for (item in hospitalList){
+            tiemedDao.insertHospital(item.toHospitalEntity())
+        }
+    }
+
     /* ********************************* INSPECTIONS ******************************************** */
     private fun inspectionListFlow(): Flow<Resource<List<Inspection>>> {
         return firebaseApi.getInspectionList()
@@ -25,25 +69,24 @@ class  TiemedRepositoryImplementation(
         emit(Resource(ResourceState.LOADING, null))
         val inspectionList = tiemedDao.getInspectionList()
         emit(Resource(ResourceState.LOADING, inspectionList.map { it.toInspection() }))
-    }.flatMapLatest {
+    }.flatMapConcat {
         inspectionListFlow()
     }
-    override fun getInspection(repairId: String): Flow<Resource<Inspection>> = flow {
+    private fun inspectionFlow(inspectionId: String): Flow<Resource<Inspection>> {
+        return firebaseApi.getInspection(inspectionId)
+    }
+    override fun getInspection(inspectionId: String): Flow<Resource<Inspection>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val repair = tiemedDao.getInspection(repairId).toInspection()
+        val repair = tiemedDao.getInspection(inspectionId).toInspection()
         emit(Resource(ResourceState.SUCCESS, repair))
+    }.flatMapConcat {
+        inspectionFlow(inspectionId)
     }
     override fun insertInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
-        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createInspection(inspection)
-        emit(Resource(ResourceState.SUCCESS, null))
-
     }
     override fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
         firebaseApi.updateInspection(inspection)
-        emit(Resource(ResourceState.SUCCESS, true))
-
     }
 
     /* ********************************* REPAIRS ************************************************ */
@@ -67,15 +110,11 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         repairFlow(repairId)
     }
-    override fun insertRepair(repair: Repair): Flow<Resource<String>> = flow {
-        emit(Resource((ResourceState.LOADING), null))
+    override fun insertRepair(repair: Repair): Flow<Resource<String?>> = flow {
         firebaseApi.createRepair(repair)
-        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
         firebaseApi.updateRepair(repair)
-        emit(Resource(ResourceState.SUCCESS, true))
     }
 
     /* ********************************* DEVICES ************************************************ */
@@ -86,25 +125,25 @@ class  TiemedRepositoryImplementation(
         emit(Resource(ResourceState.LOADING, null))
         val deviceList = tiemedDao.getDeviceList()
         emit(Resource(ResourceState.LOADING, deviceList.map { it.toDevice() }))
-    }.flatMapLatest {
+    }.flatMapConcat {
         deviceListFlow()
+    }
+    private fun deviceFlow(deviceId: String): Flow<Resource<Device>> = flow {
+        firebaseApi.getDevice(deviceId)
     }
     override fun getDevice(deviceId: String): Flow<Resource<Device>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val device = tiemedDao.getDevice(deviceId).toDevice()
         emit(Resource(ResourceState.SUCCESS, device))
+    }.flatMapLatest {
+        deviceFlow(deviceId)
     }
     override fun insertDevice(device: Device): Flow<Resource<String?>> = flow {
-        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createDevice(device)
-        emit(Resource(ResourceState.SUCCESS, null))
 
     }
     override fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
         firebaseApi.updateDevice(device)
-        emit(Resource(ResourceState.SUCCESS, true))
-
     }
 
 
@@ -119,22 +158,38 @@ class  TiemedRepositoryImplementation(
     }.flatMapLatest {
         partListFlow()
     }
+    private fun partFlow(partId: String): Flow<Resource<Part>> = flow {
+        firebaseApi.getPart(partId)
+    }
     override fun getPart(partId: String): Flow<Resource<Part>>  = flow {
         emit(Resource(ResourceState.LOADING, null))
         val part = tiemedDao.getPart(partId).toPart()
         emit(Resource(ResourceState.SUCCESS, part))
+    }.flatMapConcat {
+        partFlow(partId)
     }
     override fun insertPart(part: Part): Flow<Resource<String>> = flow {
-        emit(Resource((ResourceState.LOADING), null))
         firebaseApi.createPart(part)
-        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updatePart(part: Part): Flow<Resource<Boolean>> = flow {
-        emit(Resource((ResourceState.LOADING), false))
         firebaseApi.updatePart(part)
-        emit(Resource(ResourceState.SUCCESS, true))
     }
 
+    /* ********************************* SIGNATURES ********************************************* */
+
+    private fun signatureFlow(signatureId: String): Flow<Resource<String>> = flow {
+        firebaseApi.getSignature(signatureId)
+
+    }
+    override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> = flow {
+        signatureFlow(signatureId)
+    }
+    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
+        return firebaseApi.uploadSignature(signatureId, byteArray)
+    }
+    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
+        return firebaseApi.uploadSignature(signatureId, byteArray)
+    }
 
     /* ********************************* HOSPITALS ********************************************* */
     private fun hospitalListFlow(): Flow<Resource<List<Hospital>>>{
@@ -195,16 +250,4 @@ class  TiemedRepositoryImplementation(
     }.flatMapLatest {
         estStateListFlow()
     }
-
-    /* ********************************* SIGNATURES ********************************************* */
-    override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> {
-    return  firebaseApi.getSignature(signatureId)
-    }
-    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
-        return firebaseApi.uploadSignature(signatureId, byteArray)
-    }
-    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
-        return firebaseApi.uploadSignature(signatureId, byteArray)
-    }
-
 }

@@ -1,15 +1,8 @@
 package com.adrpien.tiemed.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.adrpien.tiemed.data.local.entities.*
-import com.adrpien.tiemed.domain.model.Device
-import com.adrpien.tiemed.domain.model.Inspection
-import com.adrpien.tiemed.domain.model.Part
-import com.adrpien.tiemed.domain.model.Repair
+import com.adrpien.tiemed.domain.model.*
 
 @Dao
 interface TiemedDao {
@@ -30,6 +23,10 @@ interface TiemedDao {
     @Query("DELETE FROM repairentity WHERE repairId LIKE :repairId")
     suspend fun deleteRepair(repairId: String)
 
+    @Transaction
+    @Query("DELETE * FROM repairentity")
+    suspend fun deleteAllRepairs()
+
     /* ***** Inspections ************************************************************************ */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInspection(inspectionEntity: InspectionEntity)
@@ -46,6 +43,10 @@ interface TiemedDao {
     @Query("DELETE FROM inspectionentity WHERE inspectionId LIKE :inspectionId")
     suspend fun deleteInspection(inspectionId: String)
 
+    @Transaction
+    @Query("DELETE * FROM inspectionentity")
+    suspend fun deleteAllInspections()
+
     /* ***** Parts ****************************************************************************** */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPart(partEntity: PartEntity)
@@ -61,6 +62,11 @@ interface TiemedDao {
     @Transaction
     @Query("DELETE FROM partentity WHERE partId LIKE :partId")
     suspend fun deletePart(partId: String)
+
+    @Transaction
+    @Query("DELETE * FROM partentity")
+    suspend fun deleteAllParts()
+
 
     /* ***** Devices **************************************************************************** */
 
@@ -79,29 +85,108 @@ interface TiemedDao {
     @Query("DELETE FROM deviceentity WHERE deviceId LIKE :deviceId")
     suspend fun deleteDevice(deviceId: String)
 
+    @Transaction
+    @Query("DELETE * FROM deviceentity")
+    suspend fun deleteAllDevices()
+
     /* ***** Hospitals ************************************************************************** */
     @Transaction
     @Query("SELECT * FROM hospitalentity")
     suspend fun getHospitalList(): List<HospitalEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHospital(hospitalEntity: HospitalEntity)
+
+    @Transaction
+    @Query("SELECT * FROM hospitalentity WHERE deviceId LIKE :hospitalId")
+    suspend fun getHospital(hospitalId: String): HospitalEntity
+
+    @Transaction
+    @Query("DELETE FROM hospitalentity WHERE hospitalId LIKE :hospitalId")
+    suspend fun deleteHospital(hospitalId: String)
+
+    @Transaction
+    @Query("DELETE * FROM hospitalentity")
+    suspend fun deleteAllHospitals()
 
     /* ***** Technicians ************************************************************************ */
     @Transaction
     @Query("SELECT * FROM technicianentity")
     suspend fun getTechnicianList(): List<TechnicianEntity>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTechnician(technicianEntity: TechnicianEntity)
+
+    @Transaction
+    @Query("SELECT * FROM technicianentity WHERE technicianId LIKE :technicianId")
+    suspend fun getTechnician(technicianId: String): TechnicianEntity
+
+    @Transaction
+    @Query("DELETE FROM technicianentity WHERE technicianId LIKE :technicianId")
+    suspend fun deleteTechnician(technicianId: String)
+
+    @Transaction
+    @Query("DELETE * FROM technicianentity")
+    suspend fun deleteAllTechnicians()
+
     /* ***** EstStates ************************************************************************** */
     @Transaction
     @Query("SELECT * FROM eststateentity")
     suspend fun getEstStateList(): List<EstStateEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEstStateEntity(estStateEntity: EstStateEntity)
+
+    @Transaction
+    @Query("SELECT * FROM eststateentity WHERE estStateId LIKE :estStateId")
+    suspend fun getEstStateEntity(estStateEntityId: String): EstStateEntity
+
+    @Transaction
+    @Query("DELETE FROM eststateentity WHERE estStateId LIKE :estStateId")
+    suspend fun deleteEstState(estStateId: String)
+
+    @Transaction
+    @Query("DELETE * FROM eststateentity")
+    suspend fun deleteAllEstStates()
 
     /* ***** InspectionState ******************************************************************** */
     @Transaction
     @Query("SELECT * FROM inspectionstateentity")
     suspend fun getInspectionStateList(): List<InspectionStateEntity>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertInspectionStateEntity(inspectionStateEntity: InspectionStateEntity)
+
+    @Transaction
+    @Query("SELECT * FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
+    suspend fun getInspectionStateEntity(inspectionStateEntityId: String): InspectionStateEntity
+
+    @Transaction
+    @Query("DELETE FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
+    suspend fun deleteInspectionState(inspectionStateId: String)
+
+    @Transaction
+    @Query("DELETE * FROM inspectionstateentity")
+    suspend fun deleteAllInspectionStates()
+
     /* ***** RepairStates *********************************************************************** */
     @Transaction
     @Query("SELECT * FROM repairstateentity")
     suspend fun getRepairStateList(): List<RepairStateEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRepairStateEntity(repairStateEntity: RepairStateEntity)
+
+    @Transaction
+    @Query("SELECT * FROM repairstateentity WHERE repairStateId LIKE :repairStateId")
+    suspend fun getRepairStateEntity(inspectionStateEntityId: String): RepairStateEntity
+
+    @Transaction
+    @Query("DELETE FROM repairstateentity WHERE repairStateId LIKE :repairStateId")
+    suspend fun deleteRepairState(repairStateId: String)
+
+    @Transaction
+    @Query("DELETE * FROM repairstateentity")
+    suspend fun deleteAllRepairStates()
 
 }

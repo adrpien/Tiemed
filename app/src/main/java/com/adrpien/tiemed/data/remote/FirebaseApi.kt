@@ -25,7 +25,7 @@ class  FirebaseApi(
 
     /* ********************************* INSPECTIONS ********************************* */
     fun getInspectionList(): Flow<Resource<List<Inspection>>> = flow {
-        // emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseFirestore.collection("inspections")
         val result = documentReference.get()
         result.await()
@@ -55,8 +55,8 @@ class  FirebaseApi(
                 Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetch error")
             }
     }
-    // TODO Need to implement caching mechanism
     fun createInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
+        // TODO Need to implement caching mechanism in createInspection fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
@@ -85,8 +85,8 @@ class  FirebaseApi(
 
         }
     }
-    // TODO Need to implement caching mechanism
     fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
+        // TODO Need to implement caching mechanism in updateInspection fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "inspectionId" to inspection.inspectionId,
@@ -146,8 +146,8 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetch error")
         }
     }
-    // TODO Need to implement caching mechanism
     fun createRepair(repair: Repair): Flow<Resource<String?>> = flow {
+        // TODO Need to implement caching mechanism in createRepair fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -186,8 +186,8 @@ class  FirebaseApi(
 
         }
     }
-    // TODO Need to implement caching mechanism§
     fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
+        // TODO Need to implement caching mechanism in updateRepair fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "repairId" to repair.repairId,
@@ -258,8 +258,8 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
         }
     }
-    // TODO Need to implement caching mechanism
     fun createDevice(device: Device): Flow<Resource<String?>> = flow {
+        // TODO Need to implement caching mechanism in createDevice fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -285,8 +285,8 @@ class  FirebaseApi(
 
         }
     }
-    // TODO Need to implement caching mechanism
     fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
+        // TODO Need to implement caching mechanism in updateDevice fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
@@ -320,7 +320,7 @@ class  FirebaseApi(
             val result = documentReference.putBytes(signatureBytes)
             result.await()
                     if (result.isSuccessful) {
-                        // TODO Need to think about storing photos
+                        // TODO Need implement storing photos in
                         emit(Resource(ResourceState.SUCCESS, documentReference.downloadUrl.toString()))
                         Log.d(TIEMED_REPOSITORY_DEBUG, "Signature uploaded")
 
@@ -377,8 +377,8 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Part list fetch error")
         }
     }
-    // TODO Need to implement caching mechanism
     fun createPart(part: Part): Flow<Resource<String?>> = flow {
+        // TODO Need to implement caching mechanism in createPart fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
@@ -399,8 +399,8 @@ class  FirebaseApi(
 
         }
     }
-    // TODO Need to implement caching mechanism
     fun updatePart(part: Part): Flow<Resource<Boolean>> = flow {
+        // TODO Need to implement caching mechanism in updatePart fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var map = mapOf<String, String>(
             "partId" to part.partId,
