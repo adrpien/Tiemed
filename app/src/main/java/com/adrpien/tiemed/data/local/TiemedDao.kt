@@ -24,7 +24,7 @@ interface TiemedDao {
     suspend fun deleteRepair(repairId: String)
 
     @Transaction
-    @Query("DELETE * FROM repairentity")
+    @Query("DELETE FROM repairentity")
     suspend fun deleteAllRepairs()
 
     /* ***** Inspections ************************************************************************ */
@@ -44,7 +44,7 @@ interface TiemedDao {
     suspend fun deleteInspection(inspectionId: String)
 
     @Transaction
-    @Query("DELETE * FROM inspectionentity")
+    @Query("DELETE FROM inspectionentity")
     suspend fun deleteAllInspections()
 
     /* ***** Parts ****************************************************************************** */
@@ -64,7 +64,7 @@ interface TiemedDao {
     suspend fun deletePart(partId: String)
 
     @Transaction
-    @Query("DELETE * FROM partentity")
+    @Query("DELETE FROM partentity")
     suspend fun deleteAllParts()
 
 
@@ -86,7 +86,7 @@ interface TiemedDao {
     suspend fun deleteDevice(deviceId: String)
 
     @Transaction
-    @Query("DELETE * FROM deviceentity")
+    @Query("DELETE FROM deviceentity")
     suspend fun deleteAllDevices()
 
     /* ***** Hospitals ************************************************************************** */
@@ -98,7 +98,7 @@ interface TiemedDao {
     suspend fun insertHospital(hospitalEntity: HospitalEntity)
 
     @Transaction
-    @Query("SELECT * FROM hospitalentity WHERE deviceId LIKE :hospitalId")
+    @Query("SELECT * FROM hospitalentity WHERE hospitalId LIKE :hospitalId")
     suspend fun getHospital(hospitalId: String): HospitalEntity
 
     @Transaction
@@ -106,7 +106,7 @@ interface TiemedDao {
     suspend fun deleteHospital(hospitalId: String)
 
     @Transaction
-    @Query("DELETE * FROM hospitalentity")
+    @Query("DELETE FROM hospitalentity")
     suspend fun deleteAllHospitals()
 
     /* ***** Technicians ************************************************************************ */
@@ -126,7 +126,7 @@ interface TiemedDao {
     suspend fun deleteTechnician(technicianId: String)
 
     @Transaction
-    @Query("DELETE * FROM technicianentity")
+    @Query("DELETE FROM technicianentity")
     suspend fun deleteAllTechnicians()
 
     /* ***** EstStates ************************************************************************** */
@@ -135,18 +135,18 @@ interface TiemedDao {
     suspend fun getEstStateList(): List<EstStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEstState(estStateEntity: EstStateEntity)
+    suspend fun insertEstState(estState: EstStateEntity)
 
     @Transaction
     @Query("SELECT * FROM eststateentity WHERE estStateId LIKE :estStateId")
-    suspend fun getEstState(estStateEntityId: String): EstStateEntity
+    suspend fun getEstState(estStateId: String): EstStateEntity
 
     @Transaction
     @Query("DELETE FROM eststateentity WHERE estStateId LIKE :estStateId")
     suspend fun deleteEstState(estStateId: String)
 
     @Transaction
-    @Query("DELETE * FROM eststateentity")
+    @Query("DELETE FROM eststateentity")
     suspend fun deleteAllEstStates()
 
     /* ***** InspectionState ******************************************************************** */
@@ -155,18 +155,18 @@ interface TiemedDao {
     suspend fun getInspectionStateList(): List<InspectionStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInspectionState(inspectionStateEntity: InspectionStateEntity)
+    suspend fun insertInspectionState(inspectionState: InspectionStateEntity)
 
     @Transaction
     @Query("SELECT * FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
-    suspend fun getInspectionState(inspectionStateEntityId: String): InspectionStateEntity
+    suspend fun getInspectionState(inspectionStateId: String): InspectionStateEntity
 
     @Transaction
     @Query("DELETE FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
     suspend fun deleteInspectionState(inspectionStateId: String)
 
     @Transaction
-    @Query("DELETE * FROM inspectionstateentity")
+    @Query("DELETE FROM inspectionstateentity")
     suspend fun deleteAllInspectionStates()
 
     /* ***** RepairStates *********************************************************************** */
@@ -175,18 +175,18 @@ interface TiemedDao {
     suspend fun getRepairStateList(): List<RepairStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRepairState(repairStateEntity: RepairStateEntity)
+    suspend fun insertRepairState(repairState: RepairStateEntity)
 
     @Transaction
     @Query("SELECT * FROM repairstateentity WHERE repairStateId LIKE :repairStateId")
-    suspend fun getRepairState(inspectionStateEntityId: String): RepairStateEntity
+    suspend fun getRepairState(repairStateId: String): RepairStateEntity
 
     @Transaction
     @Query("DELETE FROM repairstateentity WHERE repairStateId LIKE :repairStateId")
     suspend fun deleteRepairState(repairStateId: String)
 
     @Transaction
-    @Query("DELETE * FROM repairstateentity")
+    @Query("DELETE FROM repairstateentity")
     suspend fun deleteAllRepairStates()
 
 }

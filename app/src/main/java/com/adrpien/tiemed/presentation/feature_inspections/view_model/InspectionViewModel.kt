@@ -6,6 +6,9 @@ import com.adrpien.dictionaryapp.core.util.Resource
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.use_case.*
+import com.adrpien.tiemed.domain.use_case.devices.CreateDevice
+import com.adrpien.tiemed.domain.use_case.devices.GetDevice
+import com.adrpien.tiemed.domain.use_case.devices.UpdateDevice
 import com.adrpien.tiemed.domain.use_case.hospitals.GetHospitalList
 import com.adrpien.tiemed.domain.use_case.inspections.CreateInspection
 import com.adrpien.tiemed.domain.use_case.inspections.GetInspection

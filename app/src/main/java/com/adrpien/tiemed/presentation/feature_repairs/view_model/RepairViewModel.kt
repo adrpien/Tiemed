@@ -160,7 +160,7 @@ class RepairViewModel @Inject constructor(
             initialValue = Resource(ResourceState.LOADING, emptyList<RepairState>()),
             started = SharingStarted.Lazily
         ) as StateFlow<Resource<List<RepairState>>>
-    val repairStateListStateFlow = getHospitalListFlow()
+    val repairStateListStateFlow = getRepairStateListFlow()
 
     /* ************************** ROOM ********************************************************** */
     fun updateRoomHospitalListFlow(hospitalList: List<Hospital>): StateFlow<Resource<Boolean>> = updateRoomHospitalList(hospitalList).stateIn(

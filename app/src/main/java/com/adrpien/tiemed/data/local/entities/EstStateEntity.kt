@@ -8,13 +8,13 @@ import com.adrpien.tiemed.domain.model.EstState
 data class EstStateEntity (
     @PrimaryKey(autoGenerate = false)
     val estStateId: String,
-    val state: String = ""
+    val estState: String = ""
 ){
 
     fun toEstState(): EstState {
         return EstState(
             estStateId = estStateId,
-            estState = state
+            estState = estState
         )
     }
 }

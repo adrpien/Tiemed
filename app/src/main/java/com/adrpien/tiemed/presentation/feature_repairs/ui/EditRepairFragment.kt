@@ -106,7 +106,7 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                         }
                     }
 
-                    repairViewModel.createRepairFlow(tempRepair,tempDevice)
+                    repairViewModel.createRepairFlow(tempRepair)
                 }
                 return true
             }

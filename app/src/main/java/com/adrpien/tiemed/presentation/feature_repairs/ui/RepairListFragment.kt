@@ -48,13 +48,15 @@ class RepairListFragment : BaseFragment() {
     // Data
     private var repairList: List<Repair> = listOf()
         set(value) {
+
             RepairListViewModel.updateRoomRepairListFlow(value)
-            field =value
+            field = value
             preparedRepairList = value
+            prepareRepairList()
         }
     private var deviceList: List<Device> = listOf()
         set(value) {
-            field =value
+            field = value
             RepairListViewModel.updateRoomDeviceListFlow(value)
             updateRecyclerViewAdapter()
         }
@@ -82,7 +84,6 @@ class RepairListFragment : BaseFragment() {
     private var preparedRepairList: List<Repair> = listOf()
         set(value) {
             field = value
-            prepareRepairList()
             updateRecyclerViewAdapter()
         }
     // Hospital Spinner
@@ -405,11 +406,11 @@ class RepairListFragment : BaseFragment() {
         val switch = bundle.getBoolean("switch")
         val value = bundle.getLong("value")
         preparedRepairList = repairList.filter { repair ->
-            if (switch) {
-                repair.openingDate.toLong() > value
-            } else {
-                repair.openingDate.toLong() < value
-            }
+                if (switch) {
+                    repair.openingDate.toLong() > value
+                } else {
+                    repair.openingDate.toLong() < value
+                }
         }
         binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , listener)
     }
@@ -422,9 +423,9 @@ class RepairListFragment : BaseFragment() {
         return  filteringCondition
     }
     private fun prepareRepairList() {
-        filterRepairList(filteringCondition)
-        sortRepairList(sortingConditions)
-        groupRepairList(groupingCondition)
+        //filterRepairList(filteringCondition)
+        //sortRepairList(sortingConditions)
+        //groupRepairList(groupingCondition)
     }
     private fun updateRecyclerViewAdapter(){
         binding.repairRecyclerView.adapter =
