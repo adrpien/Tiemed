@@ -164,8 +164,8 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                         }
                     }
                     for (item in hospitalList) {
-                        item.name.let {
-                            spinnerHospitalList.add(item.name)
+                        item.hospitalName.let {
+                            spinnerHospitalList.add(item.hospitalName)
                         }
                     }
                     val hospitalListArrayAdapter = activity?.baseContext?.let { it ->
@@ -211,8 +211,8 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                         }
                     }
                     for (item in hospitalList) {
-                        item.name.let {
-                            spinnerRepairStateList.add(item.name)
+                        item.hospitalName.let {
+                            spinnerRepairStateList.add(item.hospitalName)
                         }
                     }
                     val repairStateListArrayAdapter = activity?.baseContext?.let { it ->
@@ -274,8 +274,8 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                                         }
                                     }
                                     for (item in hospitalList) {
-                                        item.name.let {
-                                            spinnerEstStateList.add(item.name)
+                                        item.hospitalName.let {
+                                            spinnerEstStateList.add(item.hospitalName)
                                         }
                                     }
                                     val estStateListArrayAdapter =

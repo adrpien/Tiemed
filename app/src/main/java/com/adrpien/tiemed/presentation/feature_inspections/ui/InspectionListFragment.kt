@@ -23,7 +23,6 @@ import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
 import com.adrpien.tiemed.presentation.feature_inspections.OnInspectionItemClickListener
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 import com.adrpien.tiemed.presentation.feature_repairs.ui.EditRepairFragment
-import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -222,7 +221,7 @@ class InspectionListFragment() : BaseFragment(){
     /* ***************************** FUNCTIONS ************************************************** */
 
     private fun selectHospital(position: Int) {
-        val selection = hospitalList[position].name
+        val selection = hospitalList[position].hospitalName
         preparedInspectionList = inspectionList.filter { it.hospitalId == selection }
         binding.inspectionRecyclerView.adapter =
             InspectionListAdapter(preparedInspectionList, hospitalList, deviceList, inspectionStateList , listener)

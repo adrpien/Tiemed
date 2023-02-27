@@ -13,7 +13,7 @@ class CreateRepair @Inject constructor (
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(repair: Repair) {
-        repository.insertRepair(repair)
+    operator fun invoke(repair: Repair): Flow<Resource<String?>> {
+        return repository.insertRepair(repair)
     }
 }

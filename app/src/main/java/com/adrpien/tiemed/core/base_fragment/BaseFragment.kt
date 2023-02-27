@@ -12,11 +12,12 @@ import kotlin.reflect.full.memberProperties
 @AndroidEntryPoint
 abstract class BaseFragment: Fragment(){
 
+    // Setting Action Bar Name according to open fragment
     fun setActionBarTitle(title: String){
-        // Setting Action Bar Name according to open fragment
         (requireActivity() as AppCompatActivity).supportActionBar?.title = title
     }
 
+    // Changing millis into String format
     fun getDateString(millis: Long): String{
         var date: Calendar = Calendar.getInstance()
         date.timeInMillis = millis

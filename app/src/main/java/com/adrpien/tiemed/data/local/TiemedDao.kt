@@ -135,11 +135,11 @@ interface TiemedDao {
     suspend fun getEstStateList(): List<EstStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEstStateEntity(estStateEntity: EstStateEntity)
+    suspend fun insertEstState(estStateEntity: EstStateEntity)
 
     @Transaction
     @Query("SELECT * FROM eststateentity WHERE estStateId LIKE :estStateId")
-    suspend fun getEstStateEntity(estStateEntityId: String): EstStateEntity
+    suspend fun getEstState(estStateEntityId: String): EstStateEntity
 
     @Transaction
     @Query("DELETE FROM eststateentity WHERE estStateId LIKE :estStateId")
@@ -155,11 +155,11 @@ interface TiemedDao {
     suspend fun getInspectionStateList(): List<InspectionStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInspectionStateEntity(inspectionStateEntity: InspectionStateEntity)
+    suspend fun insertInspectionState(inspectionStateEntity: InspectionStateEntity)
 
     @Transaction
     @Query("SELECT * FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
-    suspend fun getInspectionStateEntity(inspectionStateEntityId: String): InspectionStateEntity
+    suspend fun getInspectionState(inspectionStateEntityId: String): InspectionStateEntity
 
     @Transaction
     @Query("DELETE FROM inspectionstateentity WHERE inspectionStateId LIKE :inspectionStateId")
@@ -175,11 +175,11 @@ interface TiemedDao {
     suspend fun getRepairStateList(): List<RepairStateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRepairStateEntity(repairStateEntity: RepairStateEntity)
+    suspend fun insertRepairState(repairStateEntity: RepairStateEntity)
 
     @Transaction
     @Query("SELECT * FROM repairstateentity WHERE repairStateId LIKE :repairStateId")
-    suspend fun getRepairStateEntity(inspectionStateEntityId: String): RepairStateEntity
+    suspend fun getRepairState(inspectionStateEntityId: String): RepairStateEntity
 
     @Transaction
     @Query("DELETE FROM repairstateentity WHERE repairStateId LIKE :repairStateId")

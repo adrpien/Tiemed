@@ -6,6 +6,7 @@ import com.adrpien.tiemed.data.local.TiemedDao
 import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.domain.repository.TiemedRepository
+import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.flow.*
 
 
@@ -18,47 +19,125 @@ class  TiemedRepositoryImplementation(
 
     /* ********************************* Room DB ************************************************ */
     override fun updateRoomEstStateList(estStateList: List<EstState>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllEstStates()
-        for (item in estStateList) {
-            tiemedDao.insertEstStateEntity(item.toEstStateEntity() )
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllEstStates()
+            for (item in estStateList) {
+                tiemedDao.insertEstState(item.toEstStateEntity() )
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
-    }
-    override fun updateRoomRepairStateList(repairStateList: List<RepairState>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllRepairStates()
-        for (item in repairStateList) {
-            tiemedDao.insertRepairStateEntity(item.toRepairStateEntity() )
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
-    }
-    override fun updateRoomInspectionStateList(inspectionStateList: List<InspectionState>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllInspectionStates()
-        for (item in inspectionStateList) {
-            tiemedDao.insertInspectionStateEntity(item.toInspectionStateEntity())
-        }
+        emit(Resource(ResourceState.SUCCESS, null))
 
     }
-    override fun updateRoomTechnicianList(technicianList: List<Technician>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllTechnicians()
-        for (item in technicianList) {
-            tiemedDao.insertTechnician(item.toTechncianEntity())
+    override fun updateRoomDeviceList(deviceList: List<Device>): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllDevices()
+            for (item in deviceList) {
+                tiemedDao.insertDevice(item.toDeviceEntity())
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
+
+    }
+    override fun updateRoomRepairStateList(repairStateList: List<RepairState>): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllRepairStates()
+            for (item in repairStateList) {
+                tiemedDao.insertRepairState(item.toRepairStateEntity() )
+        }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
+    }
+    override fun updateRoomInspectionStateList(inspectionStateList: List<InspectionState>): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllInspectionStates()
+            for (item in inspectionStateList) {
+                tiemedDao.insertInspectionState(item.toInspectionStateEntity()) }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
+    }
+    override fun updateRoomTechnicianList(technicianList: List<Technician>): Flow<Resource<Boolean>> = flow {
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllTechnicians()
+            for (item in technicianList) {
+                tiemedDao.insertTechnician(item.toTechncianEntity())
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRoomInspectionList(inspectionList: List<Inspection>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllInspections()
-        for( item in inspectionList) {
-            tiemedDao.insertInspection(item.toInspectionEntity())
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllInspections()
+            for( item in inspectionList) {
+                tiemedDao.insertInspection(item.toInspectionEntity())
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRoomRepairList(repairList: List<Repair>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllRepairs()
-        for(item in repairList){
-            tiemedDao.insertRepair(item.toRepairEntity())
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllRepairs()
+            for(item in repairList){
+                tiemedDao.insertRepair(item.toRepairEntity())
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRoomHospitalList(hospitalList: List<Hospital>): Flow<Resource<Boolean>> = flow {
-        tiemedDao.deleteAllHospitals()
-        for (item in hospitalList){
-            tiemedDao.insertHospital(item.toHospitalEntity())
+        emit(Resource(ResourceState.LOADING, null))
+        try {
+            tiemedDao.deleteAllHospitals()
+            for (item in hospitalList){
+                tiemedDao.insertHospital(item.toHospitalEntity())
+            }
+        } catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
         }
+        catch (e: HttpException) {
+            emit(Resource(ResourceState.ERROR, null))
+        }
+        emit(Resource(ResourceState.SUCCESS, null))
     }
 
     /* ********************************* INSPECTIONS ******************************************** */

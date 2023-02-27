@@ -15,6 +15,7 @@ interface TiemedRepository {
     fun updateRoomRepairStateList(repairStateList: List<RepairState>): Flow<Resource<Boolean>>
     fun updateRoomInspectionStateList(inspectionStateList: List<InspectionState>): Flow<Resource<Boolean>>
     fun updateRoomEstStateList(estStateList: List<EstState>): Flow<Resource<Boolean>>
+    fun updateRoomDeviceList(deviceList: List<Device>): Flow<Resource<Boolean>>
 
 
     /* ***** Inspections ************************************************************************ */
