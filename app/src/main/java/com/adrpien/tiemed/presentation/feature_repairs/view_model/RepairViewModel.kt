@@ -24,6 +24,7 @@ import com.adrpien.tiemed.domain.use_case.states.GetRepairStateList
 import com.adrpien.tiemed.domain.use_case.technicians.GetTechnicianList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import java.security.Signature
 import javax.inject.Inject
 
 @HiltViewModel
@@ -100,7 +101,7 @@ class RepairViewModel @Inject constructor(
     fun getSignatureFlow(signatureId: String): StateFlow<Resource<ByteArray>> =
         getSignature(signatureId).stateIn(
             scope = viewModelScope,
-            initialValue = Resource(ResourceState.LOADING, Repair(repairId = "")),
+            initialValue = Resource(ResourceState.LOADING, byteArrayOf()),
             started = SharingStarted.Lazily
         ) as StateFlow<Resource<ByteArray>>
     fun createSignatureFlow(

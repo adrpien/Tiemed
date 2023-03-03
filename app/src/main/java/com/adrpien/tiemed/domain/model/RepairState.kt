@@ -3,8 +3,8 @@ package com.adrpien.tiemed.domain.model
 import com.adrpien.tiemed.data.local.entities.RepairStateEntity
 
 data class RepairState (
-    val repairStateId: String = "",
-    val repairState: String = ""
+    var repairStateId: String = "",
+    var repairState: String = ""
         ) {
 
     fun toRepairStateEntity(): RepairStateEntity {

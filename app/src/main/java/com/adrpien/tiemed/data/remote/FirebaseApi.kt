@@ -229,7 +229,7 @@ class  FirebaseApi(
     /* ********************************* DEVICES ************************************************ */
     fun getDeviceList(): Flow<Resource<List<Device>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("repairs")
+        val documentReference = firebaseFirestore.collection("devices")
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {

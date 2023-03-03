@@ -6,6 +6,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.dialogs.filtering_dialog.FilteringDialog
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class InspectionListFragment() : BaseFragment(){
+class InspectionListFragment() : Fragment(){
 
     // ViewBinding
     private var _binding: FragmentInspectionListBinding? = null
@@ -71,12 +71,7 @@ class InspectionListFragment() : BaseFragment(){
         }
 
         override fun setOnInspectionItemLongClick(itemView: View, position: Int) {
-            val fragment = EditRepairFragment()
-            fragment.arguments = bundleOf("id" to inspectionList[position].inspectionId)
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.add(R.id.pinnedFragmentContainerView, fragment)
-                ?.addToBackStack(null)
-                ?.commit()
+            // TODO Wait for implementation
         }
     }
     /* ***************************** MENU ******************************************************* */

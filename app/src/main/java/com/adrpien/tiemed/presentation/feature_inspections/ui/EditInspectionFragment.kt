@@ -1,33 +1,14 @@
 package com.adrpien.tiemed.presentation.feature_inspections.ui
 
 
-import android.app.DatePickerDialog
-import android.graphics.BitmapFactory
-import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.fragment.app.FragmentResultListener
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.findNavController
-import com.adrpien.tiemed.R
-import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
-import com.adrpien.tiemed.core.dialogs.defect_description.DefectDescriptionDialog
-import com.adrpien.tiemed.core.dialogs.date.InspectionDatePickerDialog
-import com.adrpien.tiemed.core.base_fragment.BaseFragment
-import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
-import com.adrpien.tiemed.domain.model.Hospital
-import com.adrpien.tiemed.domain.model.Inspection
-import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
+import androidx.fragment.app.Fragment
+//import com.adrpien.tiemed.databinding.FragmentEditInspectionBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class   EditInspectionFragment : BaseFragment() {
+class   EditInspectionFragment : Fragment() {
 
                                                 }
 ////, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener{

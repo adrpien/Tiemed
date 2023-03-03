@@ -21,6 +21,6 @@ class ViewRepairFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_repair, container, false)
+        return inflater.inflate(R.layout.fragment_repair_view, container, false)
     }
 }

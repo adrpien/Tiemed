@@ -12,7 +12,6 @@ data class Repair(
     var ward: String = "",
     var defectDescription: String = "",
     var repairDescription: String = "",
-    //var partList: List<String> = emptyList(),
     var partDescription: String = "",
     var comment: String = "",
     var estStateId: String = "",

@@ -20,7 +20,7 @@
         android:id="@+id/editRepairFragment"
         android:name="com.adrpien.tiemed.presentation.feature_repairs.ui.EditRepairFragment"
         android:label="fragment_edit_repair"
-        tools:layout="@layout/fragment_edit_repair" >
+        tools:layout="@layout/fragment_repair_edit" >
         <action
             android:id="@+id/action_editRepairFragment_to_repairListFragment"
             app:destination="@id/repairListFragment" />
@@ -40,7 +40,7 @@
         android:id="@+id/editInspectionFragment"
         android:name="com.adrpien.tiemed.presentation.feature_inspections.ui.EditInspectionFragment"
         android:label="fragment_edit_inspection"
-        tools:layout="@layout/fragment_edit_inspection" >
+        tools:layout="@layout/fragment_inspection_edit" >
         <action
             android:id="@+id/action_editInspectionFragment_to_inspectionListFragment"
             app:destination="@id/inspectionListFragment" />
@@ -49,7 +49,7 @@
         android:id="@+id/viewRepairFragment"
         android:name="com.adrpien.tiemed.presentation.feature_repairs.ui.ViewRepairFragment"
         android:label="fragment_view_repair"
-        tools:layout="@layout/fragment_view_repair" >
+        tools:layout="@layout/fragment_repair_view" >
         <action
             android:id="@+id/action_viewRepairFragment_to_repairListFragment"
             app:destination="@id/repairListFragment" />
@@ -58,7 +58,7 @@
         android:id="@+id/viewInspectionFragment"
         android:name="com.adrpien.tiemed.presentation.feature_inspections.ui.ViewInspectionFragment"
         android:label="fragment_view_inspection"
-        tools:layout="@layout/fragment_view_inspection" >
+        tools:layout="@layout/fragment_inspection_view" >
         <action
             android:id="@+id/action_viewInspectionFragment_to_inspectionListFragment"
             app:destination="@id/inspectionListFragment" />

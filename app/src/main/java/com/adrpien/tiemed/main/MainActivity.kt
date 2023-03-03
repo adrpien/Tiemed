@@ -3,6 +3,7 @@ package com.adrpien.tiemed.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -42,11 +43,20 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(findNavController(R.id.mainFragmentContainer))
     }
 
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
+
     // Creating Options Menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.options_menu, menu)
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 
     // Hanlding options menu click events

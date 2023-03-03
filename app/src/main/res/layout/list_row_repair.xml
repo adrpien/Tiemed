@@ -28,6 +28,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:clickable="false"
+            android:maxLines="1"
             android:text="ID"
             android:layout_margin="5dp"
             app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
@@ -38,6 +39,7 @@
             android:id="@+id/repairRowNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:layout_margin="5dp"
             android:text="Nazwa"
             app:layout_constraintStart_toEndOf="@+id/repairRowIdTextView"
@@ -74,12 +76,12 @@
             app:layout_constraintTop_toBottomOf="@+id/repairRowIdTextView" />
 
 <!--        Serial number-->
-            <TextView
+        <TextView
             android:id="@+id/repairRowSNTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SN:"
             android:layout_margin="5dp"
+            android:text="SN: "
             app:layout_constraintStart_toEndOf="@+id/repairRowStateMarker"
             app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
 
@@ -89,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="InventoryNumber:"
+            android:text="InventoryNumber: "
             app:layout_constraintStart_toEndOf="@+id/repairRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/repairRowManufacturerTextView" />
 

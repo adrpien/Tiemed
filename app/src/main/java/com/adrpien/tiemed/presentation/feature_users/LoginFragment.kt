@@ -6,15 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.adrpien.tiemed.databinding.FragmentLoginBinding
-import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment() {
+class LoginFragment : Fragment() {
 
     // ViewBinding
     private var _binding: FragmentLoginBinding? = null

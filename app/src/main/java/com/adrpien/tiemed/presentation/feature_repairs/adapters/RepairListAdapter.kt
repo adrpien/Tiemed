@@ -71,13 +71,16 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
 
         /* ********** Filling TextViews with values ********************************************* */
 
-        val device = repairList[position].device
+        val deviceId = repairList[position].deviceId
+        val device = deviceList.find { device: Device ->
+            device.deviceId == deviceId
+        }
         holder.repairRowIdRepairTextView.setText(repairList[position].repairId)
-        holder.repairRowNameRepairTextView.setText(device.name)
-        holder.repairRowManufacturerTextView.setText(device.manufacturer)
-        holder.repairRowModelTextView.setText(device.model)
-        holder.repairRowSnNumberTextView.setText(device.serialNumber)
-        holder.repairInNumberTextView.setText(device.inventoryNumber)
+        holder.repairRowNameRepairTextView.setText(device?.name)
+        holder.repairRowManufacturerTextView.setText(device?.manufacturer)
+        holder.repairRowModelTextView.setText(device?.model)
+        holder.repairRowSnNumberTextView.append(device?.serialNumber.toString())
+        holder.repairInNumberTextView.append(device?.inventoryNumber.toString())
         holder.repairRowWardTextView.setText(repairList[position].ward)
         setMarkerColour(repairList[position])
         // holder.repairRowOpeningDateTextView.append(

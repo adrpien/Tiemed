@@ -18,7 +18,7 @@ class ViewInspectionFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_view_inspection, container, false)
+        return inflater.inflate(R.layout.fragment_inspection_view, container, false)
         // Setting Action Bar Name according to open fragment
         (requireActivity() as AppCompatActivity).supportActionBar?.title = ACTION_BAR_TITLE
 

@@ -73,4 +73,5 @@
     <string name="WAIT_FOR_IMPLEMENTATION">Waiting for implementation</string>
     <string name="repair_hospital_spinner">Repair Hospital Spinner</string>
     <string name="filter_repair">Repair filter</string>
+    <string name="part_description">Part description</string>
 </resources>

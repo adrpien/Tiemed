@@ -19,7 +19,9 @@
     <style name="DividierTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+
     </style>
 
     <style name="RadioButtonStyle">
@@ -37,11 +39,8 @@
 
     <style name="SectionTitle">
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">3dp</item>
-        <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

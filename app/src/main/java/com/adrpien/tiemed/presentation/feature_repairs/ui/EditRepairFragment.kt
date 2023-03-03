@@ -7,14 +7,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.Toast
+import android.widget.RadioButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,10 +23,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.databinding.FragmentEditRepairBinding
 import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
-import com.adrpien.tiemed.core.base_fragment.BaseFragment
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.core.util.Helper.Companion.getDateString
+import com.adrpien.tiemed.databinding.FragmentRepairEditBinding
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,17 +35,17 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 @AndroidEntryPoint
-class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
-    AdapterView.OnItemSelectedListener {
+class EditRepairFragment() : Fragment() {
 
     // ViewBinding
-    private var _binding: FragmentEditRepairBinding? = null
+    private var _binding: FragmentRepairEditBinding? = null
     private val binding
         get() = _binding!!
 
     // ViewModel
-    val repairViewModel by viewModels<RepairViewModel>()
+    val RepairViewModel by viewModels<RepairViewModel>()
 
+    private val EDIT_REPAIR_FRAGMENT = "EDIT_REPAIR_FRAGMENT"
     private val REPAIR_UPDATE_TAG = "INSPECTION UPDATE TAG"
     private val SIGNATURE_DIALOG_TAG = "SIGNATURE DIALOG TAG"
     private var REQUEST_IMAGE_CAPTURE: Int = 0
@@ -55,159 +56,325 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    // Repair id
     private var repairId: String = ""
 
-    // temp data
-    private lateinit var tempRepair: Repair
-    private lateinit var tempSignatureByteArray: ByteArray
-    private lateinit var tempDevice: Device
-    private lateinit var tempPhotoByteArray: ByteArray
+    // Temp data
+    private var tempRepair = Repair()
+    private var tempDevice = Device()
+    private var tempSignatureByteArray = byteArrayOf()
+    private var tempPhotoByteArray = byteArrayOf()
 
+    private var isEditable = false
 
     // Fetched data
-    private lateinit var hospitalList: List<Hospital>
-    private lateinit var repair: Repair
-    private lateinit var estStateList: List<EstState>
-    private lateinit var repairStateList: List<RepairState>
-    private lateinit var device: Device
-    private lateinit var signatureByteArray: ByteArray
-
-
-    // Init
-    init{
-        setHasOptionsMenu(true)
-        activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    /* ***************************** MENU ******************************************************* */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.edit_repair_options_menu, menu)
-
-        // Setting action bar title
-        setActionBarTitle("Edit Repair")
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
-            R.id.saveRepairItem -> {
-                if (arguments?.getString("id") != null){
-                    //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
-                    repairViewModel.updateRepairFlow(tempRepair)
-                }
-                else {
-                    lifecycleScope.launch{
-                        repeatOnLifecycle(Lifecycle.State.STARTED){
-                            repairViewModel.createDeviceFlow(tempDevice).collect() { data ->
-                                val deviceId: String? = data.data
-                                if (deviceId != null) {
-                                    tempRepair.deviceId = deviceId
-                                }
-                            }
-                        }
-                    }
-
-                    repairViewModel.createRepairFlow(tempRepair)
-                }
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
+    private var hospitalList = listOf<Hospital>()
+        set(value) {
+            field =value
+            RepairViewModel.updateRoomHospitalListFlow(value)
+            initHospitalListSpinner()
         }
+    private var estStateList = listOf<EstState>()
+        set(value) {
+            field =value
+            RepairViewModel.updateRoomEstStateListFlow(value)
+            initEstStateGroupButton()
+        }
+    private var repairStateList = listOf<RepairState>()
+        set(value) {
+            field =value
+            RepairViewModel.updateRoomRepairStateListFlow(value)
+            initRepairStateSpinner()
+
+        }
+    private var device = Device()
+        set(value) {
+            field =value
+            bindDeviceData(value)
+            if (tempDevice == null) {
+                tempDevice = value
+            }
+        }
+    private var repair = Repair()
+        set(value) {
+            field =value
+            bindRepairData(value)
+            if(tempRepair == null) {
+                tempRepair = value
+            }
+        }
+    private var signatureByteArray = byteArrayOf()
+        set(value) {
+            field = value
+            bindSignatureImageButton(value)
+        }
+
+    val hospitalSpinnerListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            p1: View?,
+            position: Int,
+            p3: Long
+        ) {
+            if (parent?.id == R.id.inspectionHospitalSpinner) {
+                tempRepair.hospitalId = parent.getItemAtPosition(position).toString()
+            }
+        }
+
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+            // lave empty here, i think
+        }
+    }
+
+    val repairStateSpinnerListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            p1: View?,
+            position: Int,
+            p3: Long
+        ) {
+            if (parent?.id == R.id.inspectionHospitalSpinner) {
+                tempRepair.repairStateId = parent.getItemAtPosition(position).toString()
+            }
+        }
+
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+            // lave empty here, i think
+        }
+    }
+
+    val datePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+            var date: Calendar = Calendar.getInstance()
+            date.set(year, month, dayOfMonth)
+            tempRepair.openingDate = date.timeInMillis.toString()
+            binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))
+        }
+
+    }
+
+    init{
+        activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        photoResultLauncher()
 
-        // Get repair uid if passed in bundle
+        // What id does??
+        // photoResultLauncher()
+
+        /* *************************** GET BUNDLE ****************************************** */
         repairId = arguments?.getString("repairId", "") ?: ""
+    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentRepairEditBinding.inflate(layoutInflater)
+        return binding.root
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // tempRepair
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repairViewModel.getRepairFlow(repairId).collect { result ->
+
+        /* *************************** COMPONENTS INITIALIZATION ****************************************** */
+
+        initRepairData()
+        binding.editRepairOpeningDateButton.setOnClickListener {
+            val dialog = RepairDatePickerDialog()
+            dialog.show(childFragmentManager, "repair_time_picker")
+        }
+        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            var stateId = group.findViewById<RadioButton>(checkedId)
+            val position = group.indexOfChild(stateId)
+            tempRepair.estStateId = estStateList[position].estStateId
+            /*var stateId = group.findViewById<RadioButton>(checkedId).text.toString()
+                .uppercase()
+                .replace(" ", "_")*/
+        }
+        binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
+        binding.editRepairSignatureImageButton.setOnClickListener {
+            val dialog = SignatureDialog()
+            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                getString(R.string.signature_request_key),
+                viewLifecycleOwner,
+                FragmentResultListener { requestKey, result ->
+                    tempSignatureByteArray = result.getByteArray("signature")!!
+                    binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
+                })
+            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
+        }
+        binding.editRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
+
+        // Save/edit repair button  implementation
+        binding.editRepairEditSaveButton.setOnClickListener {
+            if(isEditable == true) {
+                saveRepair()
+                setComponentsToNotEditable()
+                // binding.editRepairEditSaveButton.setImageResource(R.drawable.accept_icon)
+                isEditable = false
+            } else {
+                setComponentsToEditable()
+                // binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
+                isEditable = true
+            }
+        }
+
+        // TODO cancel repair button  implementation
+        binding.editRepairCancelButton.setOnClickListener {
+            if(isEditable == true ) {
+                setComponentsToNotEditable()
+                isEditable = false
+            } else {
+                childFragmentManager.beginTransaction()
+                    .remove(this)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+        }
+
+        //  TODO Make photo button implementation
+        /*
+        binding.editRepairMakePhotoButton.setOnClickListener {
+        takePicture()
+        }
+        */
+        // TODO Add photo button implementation
+        /*binding.editRepairAddPhotoButton.setOnClickListener {
+        addPicture()
+        }*/
+
+        /* *************************** COLLECT STATE FLOW ****************************************** */
+
+        if (repairId != "") {
+            // repair
+            viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getRepairFlow(repairId).collect { result ->
                     when (result.resourceState) {
                         ResourceState.ERROR -> {
-                            repair = result.data ?: Repair(repairId = "")
-                            tempRepair = repair
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Repair collecting error")
                         }
                         ResourceState.SUCCESS -> {
-                            repair = result.data ?: Repair(repairId = "")
-                            tempRepair = repair
+                            if (result.data != null) {
+                                repair = result.data
+                                if (tempRepair.repairId == "") {
+                                    tempRepair = repair
+                                }
+                            }
                         }
                         ResourceState.LOADING -> {
-                            repair = result.data ?: Repair(repairId = "")
-                            tempRepair = repair
+                            if (result.data != null) {
+                                repair = result.data
+                                if (tempRepair.repairId == "") {
+                                    tempRepair = repair
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+            // device
+            viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getDeviceFlow(repair.deviceId).collect { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            if (result.data != null) {
+                                device = result.data
+                                if (tempDevice.deviceId == "") {
+                                    tempDevice = device
+                                }
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            if (result.data != null) {
+                                device = result.data
+                                if (tempDevice.deviceId == "") {
+                                    tempDevice = device
+                                }
+                            }
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Device collecting error")
+                        }
+                    }
+                }
+            }
+        }
+            // signature
+            viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getSignatureFlow(repair.recipientSignatureId).collect { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            if (result.data != null) {
+                                signatureByteArray = result.data
+                                if (tempSignatureByteArray.isEmpty()) {
+                                    tempSignatureByteArray = signatureByteArray
+                                }
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            if (result.data != null) {
+                                signatureByteArray = result.data
+                                if (tempSignatureByteArray.isEmpty()) {
+                                    tempSignatureByteArray = signatureByteArray
+                                }
+                            }
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Signature collectin error")
+                        }
+
+                    }
+                }
+            }
+        }
         }
         // hospitalList
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repairViewModel.getHospitalListFlow().collect { result ->
-                    when (result.resourceState) {
-                        ResourceState.ERROR -> {
-                            Toast.makeText(
-                                context,
-                                "Fetching hospital list error ",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        ResourceState.SUCCESS -> {
-                            // Hospital spinner implementation
-                            hospitalList = result.data ?: emptyList()
-
-                        }
-                        ResourceState.LOADING -> {
-                        }
-                    }
-                    for (item in hospitalList) {
-                        item.hospitalName.let {
-                            spinnerHospitalList.add(item.hospitalName)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RepairViewModel.getHospitalListFlow().collect { result ->
+                        when (result.resourceState) {
+                            ResourceState.ERROR -> {
+                                Log.d(EDIT_REPAIR_FRAGMENT, "Hospital list collecting error")
+                            }
+                            ResourceState.SUCCESS -> {
+                                if (result.data != null) {
+                                    hospitalList = result.data
+                                }
+                            }
+                            ResourceState.LOADING -> {
+                                if (result.data != null) {
+                                    hospitalList = result.data
+                                }
+                            }
                         }
                     }
-                    val hospitalListArrayAdapter = activity?.baseContext?.let { it ->
-                        ArrayAdapter(
-                            it,
-                            android.R.layout.simple_spinner_item,
-                            spinnerHospitalList
-                        )
-                    }
-                    binding.editRepairHospitalSpinner.adapter = hospitalListArrayAdapter
                 }
             }
-        }
-        // tempSignature
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repairViewModel.getSignatureFlow(repair.repairId).collect { result ->
-                    signatureByteArray = result.data ?: byteArrayOf()
-                    tempSignatureByteArray = signatureByteArray
-                    bindSignatureImageButton(tempSignatureByteArray)
-                }
-            }
-        }
         // repairStateList
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repairViewModel.getRepairStateListFlow().collect { result ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getRepairStateListFlow().collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
-                            repairStateList = result.data ?: emptyList()
+                            if (result.data != null) {
+                                repairStateList = result.data
+                            }
                         }
                         ResourceState.LOADING -> {
-                            repairStateList = result.data ?: emptyList()
+                            if (result.data != null) {
+                                repairStateList = result.data
+                            }
                         }
                         ResourceState.ERROR -> {
-                            repairStateList = emptyList()
-                            Toast.makeText(
-                                context,
-                                "Fetching repair state list error",
-                                Toast.LENGTH_SHORT
-                            )
-
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Repair state list collecting error")
                         }
                     }
                     for (item in hospitalList) {
@@ -227,219 +394,208 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                 }
             }
         }
-        // tempDevice
-        lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
-            repairViewModel.getDeviceFlow(repair.deviceId).collect { result ->
-                when (result.resourceState) {
-                    ResourceState.SUCCESS -> {
-                        device = result.data ?: Device("")
-                        tempDevice = device
-                    }
-                    ResourceState.LOADING -> {
-                        device = result.data ?: Device("")
-                        tempDevice = device
-                    }
-                    ResourceState.ERROR -> {
-                        device = result.data ?: Device("")
-                        tempDevice = device
-                        Toast.makeText(
-                            context,
-                            "Fetching repair state list error",
-                            Toast.LENGTH_SHORT
-                        )
+        // estStateList
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getEstStateListFlow().collect { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            if (result.data != null) {
+                                estStateList = result.data
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            if (result.data != null) {
+                                estStateList = result.data
+                            }
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Est state list collecting error")
+                        }
                     }
                 }
             }
         }
-    }
-        // estStateList
-        lifecycleScope.launch {
-                            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                                repairViewModel.getEstStateListFlow().collect { result ->
-                                    when (result.resourceState) {
-                                        ResourceState.SUCCESS -> {
-                                            estStateList = result.data ?: emptyList()
-                                        }
-                                        ResourceState.LOADING -> {
-                                            estStateList = result.data ?: emptyList()
-                                        }
-                                        ResourceState.ERROR -> {
-                                            estStateList = emptyList()
-                                            Toast.makeText(
-                                                context,
-                                                "Fetching est state list error",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                        }
-                                    }
-                                    for (item in hospitalList) {
-                                        item.hospitalName.let {
-                                            spinnerEstStateList.add(item.hospitalName)
-                                        }
-                                    }
-                                    val estStateListArrayAdapter =
-                                        activity?.baseContext?.let { it ->
-                                            ArrayAdapter(
-                                                it,
-                                                android.R.layout.simple_spinner_item,
-                                                spinnerEstStateList
-                                            )
-                                        }
-                                    binding.editRepairHospitalSpinner.adapter =
-                                        estStateListArrayAdapter
-                                }
-                            }
-                        }
-    }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentEditRepairBinding.inflate(layoutInflater)
-        return binding.root
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        bindRepairData(tempRepair, tempDevice)
+   }
 
-        // Make photo button implementation
-        binding.editRepairMakePhotoButton.setOnClickListener {
-            takePicture()
-        }
 
-        // Add photo button implementation
-        binding.editRepairAddPhotoButton.setOnClickListener {
-            addPicture()
-        }
-
-        // Showing Id is unnecessary
-        // Setting TextViews with values
-        // binding.editRepairIdInputEditText.setText(arguments?.getString("id"))
-
-        // Setting openingButton listener
-        binding.editRepairOpeningDateButton.setOnClickListener {
-             // Create TimePicker
-             val dialog = RepairDatePickerDialog()
-             dialog.show(childFragmentManager, "repair_time_picker")
-         }
-
-        // TODO Add parts button implementation
-
-        // TODO closing date implementation
-
-        // TODO Parts recycerview implementation
-
-        // EST spinner implementation
-        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            tempRepair.estStateId= group.findViewById<AppCompatRadioButton>(checkedId).text.toString()
-                .uppercase()
-                .replace(" ", "_")
-
-        }
-
-        // TODO State spinner implementation
-
-        binding.editRepairHospitalSpinner.onItemSelectedListener = this
-
-        // Signature image button implementation
-        binding.editRepairSignatureImageButton.setOnClickListener {
-
-            // Open SignatureDialog when signatureImageButtonClicked
-            val dialog = SignatureDialog()
-
-            // Dialog fragment result listener
-            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
-            requireActivity().supportFragmentManager.setFragmentResultListener(
-                getString(R.string.signature_request_key),
-                viewLifecycleOwner,
-                FragmentResultListener { requestKey, result ->
-                    tempSignatureByteArray = result.getByteArray("signature")!!
-                    val options = BitmapFactory.Options()
-                    options.inMutable = true
-                    val bmp = BitmapFactory.decodeByteArray(
-                        tempSignatureByteArray,
-                        0,
-                        tempSignatureByteArray.size,
-                        options
-                    )
-                    binding.editRepairSignatureImageButton.setImageBitmap(bmp)
-                })
-            // show MyTimePicker
-            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
-
-        }
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-    /* *************************** INTERFACES *************************************************** */
-    // Implementing DatePickerDialog.OnDateSetListener in fragment to use ViewModel, which is not in adapter
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        // Set values
-        var date: Calendar = Calendar.getInstance()
-        date.set(year, month, dayOfMonth)
-
-        // Set button text
-        tempRepair.openingDate = date.timeInMillis.toString()
-        binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))    }
 
     /* ***************************** FUNCTIONS ************************************************** */
-    // Bind all textviews, spinners, dates and radiogroups
-    private fun bindRepairData(repair: Repair, device:Device) {
-        binding.editRepairIdInputEditText.setText(tempRepair.repairId)
-        binding.editRepairNameEditText.setText(device.name)
-        binding.editRepairManufacturerEditText.setText(device.manufacturer)
-        binding.editRepairModelEditText.setText(device.model)
-        binding.editRepairInventoryNumberEditText.setText(device.inventoryNumber)
-        binding.editRepairSerialNumberEditText.setText(device.serialNumber)
+
+    private fun saveRepair(): Boolean {
+        if (arguments?.getString("id") != null) {
+            //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
+            RepairViewModel.updateRepairFlow(tempRepair)
+        } else {
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RepairViewModel.createDeviceFlow(tempDevice).collect() { data ->
+                        val deviceId: String? = data.data
+                        if (deviceId != null) {
+                            tempRepair.deviceId = deviceId
+                        }
+                    }
+                }
+            }
+
+            RepairViewModel.createRepairFlow(tempRepair)
+        }
+        return true
+    }
+    private fun bindData(){
+        bindDeviceData(tempDevice)
+        bindRepairData(tempRepair)
+        bindEstRadioButton(tempRepair)
+        bindHospitalListSpinner(tempRepair)
+        bindSignatureImageButton(signatureByteArray)
+        bindRepairStateSpinner(tempRepair)
+        //binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
+        //binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
+    }
+    private fun initRepairData() {
+        initRepairStateSpinner()
+        initHospitalListSpinner()
+        initEstStateGroupButton()
+    }
+    private fun setComponentsToEditable() {
+        TODO("Not yet implemented")
+    }
+    private fun setComponentsToNotEditable() {
+        TODO("Not yet implemented")
+    }
+
+    // Binding data functions
+    private fun bindRepairData(repair: Repair) {
+        binding.editRepairIdTextView.append(tempRepair.repairId)
         binding.editRepairWardTextInputEditText.setText(tempRepair.ward)
         binding.editRepairDefectDescriptionTextInputEditText.setText(tempRepair.defectDescription)
         binding.editRepairRepairDescriptionTextInputEditText.setText(tempRepair.repairDescription)
-        binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
-        binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
-
-        bindEstRadioButton(tempRepair)
-        bindHospitalSpinner(tempRepair)
-
-
-
+        binding.editRepairPartDescriptionTextInputEditText.setText(tempRepair.repairDescription)
     }
-    // Binding Hospital spinner with repair selection
-    private fun bindHospitalSpinner(repair: Repair) {
+    private fun bindRepairStateSpinner(tempRepair: Repair) {
         var position = 0
-        var selection = 1
-        for (item in spinnerHospitalList) {
-            if (repair.hospitalId == item.toString()) {
-                position = selection
+        for (item in repairStateList) {
+            if (repair.hospitalId == item.repairStateId) {
+                binding.editRepairHospitalSpinner.setSelection(position)
+                position += 1
             }
-            selection += 1
         }
-        binding.editRepairHospitalSpinner.setSelection(position)
     }
-    // takePicture implementation
-    /*
-    Funtion opens camera using intent and returns result as ByteArray
-     */
-    private fun takePicture():  ByteArray{
+    private fun bindHospitalListSpinner(repair: Repair) {
+        var position = 0
+        for (item in hospitalList) {
+            if (repair.hospitalId == item.hospitalId) {
+                binding.editRepairHospitalSpinner.setSelection(position)
+                position += 1
+            }
+        }
+    }
+    private fun bindEstRadioButton(repair: Repair) {
+        var position = 0
+        for (item in estStateList) {
+            if (repair.estStateId == item.toString()) {
+                binding.editRepairESTRadioGroup.check(binding.editRepairESTRadioGroup.getChildAt(position).id)
+            }
+            position += 1
+        }
+
+    }
+    private fun bindSignatureImageButton(bytes: ByteArray) {
+        val options = BitmapFactory.Options()
+        options.inMutable = true
+        val bmp = BitmapFactory.decodeByteArray(
+            bytes,
+            0,
+            bytes.size,
+            options
+        )
+        binding.editRepairSignatureImageButton.setImageBitmap(bmp)
+    }
+    private fun bindDeviceData(device: Device) {
+        binding.editRepairManufacturerEditText.setText(device.manufacturer)
+        binding.editRepairModelEditText.setText(device.model)
+        binding.editRepairNameEditText.setText(device.name)
+        binding.editRepairSerialNumberEditText.setText(device.serialNumber)
+        binding.editRepairInventoryNumberEditText.setText(device.inventoryNumber)
+    }
+
+    // Components initialization
+    private fun initEstStateGroupButton() {
+        for (item in hospitalList) {
+            spinnerEstStateList.add(item.hospitalName)
+        }
+        val estStateListArrayAdapter =
+            activity?.baseContext?.let { it ->
+                ArrayAdapter(
+                    it,
+                    android.R.layout.simple_spinner_item,
+                    spinnerEstStateList
+                )
+            }
+        binding.editRepairHospitalSpinner.adapter =
+            estStateListArrayAdapter
+    }
+    private fun initRepairStateSpinner() {
+        for (item in hospitalList) {
+                spinnerRepairStateList.add(item.hospitalName)
+        }
+        val repairStateListArrayAdapter = activity?.baseContext?.let { it ->
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_spinner_item,
+                spinnerRepairStateList
+            )
+        }
+        binding.editRepairHospitalSpinner.adapter = repairStateListArrayAdapter
+
+    }
+    private fun initHospitalListSpinner() {
+        for (item in hospitalList) {
+            item.hospitalName.let {
+                spinnerHospitalList.add(item.hospitalName)
+            }
+        }
+        val hospitalListArrayAdapter = activity?.baseContext?.let { it ->
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_spinner_item,
+                spinnerHospitalList
+            )
+        }
+        binding.editRepairHospitalSpinner.adapter = hospitalListArrayAdapter
+    }
+
+
+    private fun convertByteArrayToBitmap(): Bitmap? {
+        val options = BitmapFactory.Options()
+        options.inMutable = true
+        val bmp = BitmapFactory.decodeByteArray(
+            tempSignatureByteArray,
+            0,
+            tempSignatureByteArray.size,
+            options
+        )
+        return bmp
+    }
+
+    // Not in use now
+    private fun takePicture(): ByteArray {
         REQUEST_IMAGE_CAPTURE = 1
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         resultLauncher.launch(takePictureIntent)
         return tempPhotoByteArray
     }
-    // taddPicture implementation
-    /*
-    Function opens gallery and returns result as ByteArray
-     */
     private fun addPicture(): ByteArray {
         REQUEST_IMAGE_CAPTURE = 2
-        val addPictureIntent = Intent(Intent.ACTION_PICK,
-            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val addPictureIntent = Intent(
+            Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         resultLauncher.launch(addPictureIntent)
         return tempPhotoByteArray
     }
-    // Checks if photo is taken by camera or taken from gallery and saves it to ByteArray
-    private fun   photoResultLauncher() {
+    private fun photoResultLauncher() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -447,7 +603,11 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
                         val tempPhotoOutputStream = ByteArrayOutputStream()
                         val data: Intent? = result.data
                         val photoBitmap = data?.extras?.get("data") as Bitmap
-                        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, tempPhotoOutputStream)
+                        photoBitmap.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            100,
+                            tempPhotoOutputStream
+                        )
                         tempPhotoByteArray = tempPhotoOutputStream.toByteArray()
                     }
                     if (REQUEST_IMAGE_CAPTURE == 2) {
@@ -467,36 +627,5 @@ class EditRepairFragment() : BaseFragment(), DatePickerDialog.OnDateSetListener,
 
                 }
             }
-    }
-    // Binding data of inspection in state spinner
-    private fun bindEstRadioButton(repair: Repair) {
-        var position = 0
-        var selection = 0
-        for (item in estStateList) {
-            if (repair.estStateId == item.toString()) {
-                position = selection
-            }
-            selection += 1
-        }
-        binding.editRepairESTRadioGroup.check(binding.editRepairESTRadioGroup.getChildAt(position).id)
-    }
-    // Bind signature image button
-    private fun bindSignatureImageButton(bytes: ByteArray){
-        val options = BitmapFactory.Options()
-        options.inMutable = true
-        val bmp = BitmapFactory.decodeByteArray(
-            bytes,
-            0,
-            bytes.size,
-            options)
-        binding.editRepairSignatureImageButton.setImageBitmap(bmp)
-    }
-    // Hospital spinner implementation - onItemSelected
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if(parent?.id == R.id.inspectionHospitalSpinner){
-            tempRepair.hospitalId = parent.getItemAtPosition(position).toString()
-        }    }
-    // Hospital spinner implementation - onNothingSelected
-    override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 }
