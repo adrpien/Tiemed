@@ -7,6 +7,7 @@ import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.domain.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -137,7 +138,8 @@ class  FirebaseApi(
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
-            val data =  result.result.toObject(Repair::class.java)
+            val  data = result.result.toObject<Repair>()
+            //val data =  result.result.toObject(Repair::class.java)
             emit(Resource(ResourceState.SUCCESS, data))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair list fetched")
 
@@ -242,14 +244,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
         }
     }
-    fun getDevice(repairId: String): Flow<Resource<Device>> = flow {
+    fun getDevice(deviceId: String): Flow<Resource<Device>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("repairs")
-            .document(repairId)
+        val documentReference = firebaseFirestore.collection("devices")
+            .document(deviceId)
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
-            val data =  result.result.toObject(Device::class.java)
+            val data =  result.result.toObject<Device>()
             emit(Resource(ResourceState.SUCCESS, data))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetched")
 
@@ -363,7 +365,7 @@ class  FirebaseApi(
     }
     fun getPart(repairId: String): Flow<Resource<Part>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("repairs")
+        val documentReference = firebaseFirestore.collection("parts")
             .document(repairId)
         val result = documentReference.get()
         result.await()

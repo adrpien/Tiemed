@@ -26,6 +26,7 @@ import com.adrpien.tiemed.R
 import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.core.util.Helper.Companion.getDateString
+import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.databinding.FragmentRepairEditBinding
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
@@ -33,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditRepairFragment() : Fragment() {
@@ -57,6 +59,7 @@ class EditRepairFragment() : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     private var repairId: String = ""
+    private var deviceId: String = ""
 
     // Temp data
     private var tempRepair = Repair()
@@ -90,17 +93,11 @@ class EditRepairFragment() : Fragment() {
         set(value) {
             field =value
             bindDeviceData(value)
-            if (tempDevice == null) {
-                tempDevice = value
-            }
         }
     private var repair = Repair()
         set(value) {
             field =value
             bindRepairData(value)
-            if(tempRepair == null) {
-                tempRepair = value
-            }
         }
     private var signatureByteArray = byteArrayOf()
         set(value) {
@@ -116,7 +113,7 @@ class EditRepairFragment() : Fragment() {
             p3: Long
         ) {
             if (parent?.id == R.id.inspectionHospitalSpinner) {
-                tempRepair.hospitalId = parent.getItemAtPosition(position).toString()
+                repair.hospitalId = parent.getItemAtPosition(position).toString()
             }
         }
 
@@ -133,7 +130,7 @@ class EditRepairFragment() : Fragment() {
             p3: Long
         ) {
             if (parent?.id == R.id.inspectionHospitalSpinner) {
-                tempRepair.repairStateId = parent.getItemAtPosition(position).toString()
+                repair.repairStateId = parent.getItemAtPosition(position).toString()
             }
         }
 
@@ -146,7 +143,7 @@ class EditRepairFragment() : Fragment() {
         override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
             var date: Calendar = Calendar.getInstance()
             date.set(year, month, dayOfMonth)
-            tempRepair.openingDate = date.timeInMillis.toString()
+            repair.openingDate = date.timeInMillis.toString()
             binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))
         }
 
@@ -165,6 +162,8 @@ class EditRepairFragment() : Fragment() {
 
         /* *************************** GET BUNDLE ****************************************** */
         repairId = arguments?.getString("repairId", "") ?: ""
+        deviceId = arguments?.getString("deviceId", "") ?: ""
+
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRepairEditBinding.inflate(layoutInflater)
@@ -177,78 +176,7 @@ class EditRepairFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        /* *************************** COMPONENTS INITIALIZATION ****************************************** */
-
-        initRepairData()
-        binding.editRepairOpeningDateButton.setOnClickListener {
-            val dialog = RepairDatePickerDialog()
-            dialog.show(childFragmentManager, "repair_time_picker")
-        }
-        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            var stateId = group.findViewById<RadioButton>(checkedId)
-            val position = group.indexOfChild(stateId)
-            tempRepair.estStateId = estStateList[position].estStateId
-            /*var stateId = group.findViewById<RadioButton>(checkedId).text.toString()
-                .uppercase()
-                .replace(" ", "_")*/
-        }
-        binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
-        binding.editRepairSignatureImageButton.setOnClickListener {
-            val dialog = SignatureDialog()
-            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
-            requireActivity().supportFragmentManager.setFragmentResultListener(
-                getString(R.string.signature_request_key),
-                viewLifecycleOwner,
-                FragmentResultListener { requestKey, result ->
-                    tempSignatureByteArray = result.getByteArray("signature")!!
-                    binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
-                })
-            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
-        }
-        binding.editRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
-
-        // Save/edit repair button  implementation
-        binding.editRepairEditSaveButton.setOnClickListener {
-            if(isEditable == true) {
-                saveRepair()
-                setComponentsToNotEditable()
-                // binding.editRepairEditSaveButton.setImageResource(R.drawable.accept_icon)
-                isEditable = false
-            } else {
-                setComponentsToEditable()
-                // binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
-                isEditable = true
-            }
-        }
-
-        // TODO cancel repair button  implementation
-        binding.editRepairCancelButton.setOnClickListener {
-            if(isEditable == true ) {
-                setComponentsToNotEditable()
-                isEditable = false
-            } else {
-                childFragmentManager.beginTransaction()
-                    .remove(this)
-                    .addToBackStack(null)
-                    .commit()
-            }
-
-        }
-
-        //  TODO Make photo button implementation
-        /*
-        binding.editRepairMakePhotoButton.setOnClickListener {
-        takePicture()
-        }
-        */
-        // TODO Add photo button implementation
-        /*binding.editRepairAddPhotoButton.setOnClickListener {
-        addPicture()
-        }*/
-
         /* *************************** COLLECT STATE FLOW ****************************************** */
-
         if (repairId != "") {
             // repair
             viewLifecycleOwner.lifecycleScope.launch {
@@ -260,18 +188,12 @@ class EditRepairFragment() : Fragment() {
                         }
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
-                                repair = result.data
-                                if (tempRepair.repairId == "") {
-                                    tempRepair = repair
-                                }
+                                    repair = result.data
                             }
                         }
                         ResourceState.LOADING -> {
                             if (result.data != null) {
                                 repair = result.data
-                                if (tempRepair.repairId == "") {
-                                    tempRepair = repair
-                                }
                             }
                         }
                     }
@@ -281,22 +203,16 @@ class EditRepairFragment() : Fragment() {
             // device
             viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.getDeviceFlow(repair.deviceId).collect { result ->
+                RepairViewModel.getDeviceFlow(deviceId).collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 device = result.data
-                                if (tempDevice.deviceId == "") {
-                                    tempDevice = device
-                                }
                             }
                         }
                         ResourceState.LOADING -> {
                             if (result.data != null) {
                                 device = result.data
-                                if (tempDevice.deviceId == "") {
-                                    tempDevice = device
-                                }
                             }
                         }
                         ResourceState.ERROR -> {
@@ -417,61 +333,230 @@ class EditRepairFragment() : Fragment() {
             }
         }
 
+        /* *************************** COMPONENTS INITIALIZATION ****************************************** */
+        initRepairStateSpinner()
+        initHospitalListSpinner()
+        initEstStateGroupButton()
+        binding.editRepairOpeningDateButton.setOnClickListener {
+            val dialog = RepairDatePickerDialog()
+            dialog.show(childFragmentManager, "repair_time_picker")
+        }
+        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            var stateId = group.findViewById<RadioButton>(checkedId)
+            val position = group.indexOfChild(stateId)
+            repair.estStateId = estStateList[position].estStateId
+            /*var stateId = group.findViewById<RadioButton>(checkedId).text.toString()
+                .uppercase()
+                .replace(" ", "_")*/
+        }
+        binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
+        binding.editRepairSignatureImageButton.setOnClickListener {
+            val dialog = SignatureDialog()
+            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                getString(R.string.signature_request_key),
+                viewLifecycleOwner,
+                FragmentResultListener { requestKey, result ->
+                    tempSignatureByteArray = result.getByteArray("signature")!!
+                    binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
+                })
+            dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
+        }
+        binding.editRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
+        binding.editRepairEditSaveButton.setOnClickListener {
+            if(isEditable == true) {
+                saveRepair()
+                setComponentsToNotEditable()
+                binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
+                isEditable = false
+            } else {
+                setComponentsToEditable()
+                binding.editRepairEditSaveButton.setImageResource(R.drawable.accept_icon)
+                isEditable = true
+            }
+        }
+        binding.editRepairCancelButton.setOnClickListener {
+            if(isEditable == true ) {
+                setComponentsToNotEditable()
+                isEditable = false
+            } else {
+                parentFragmentManager
+                    .beginTransaction()
+                    .remove(this)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+        }
+
+        //  TODO Make photo button implementation
+        /*
+        binding.editRepairMakePhotoButton.setOnClickListener {
+        takePicture()
+        }
+        */
+        // TODO Add photo button implementation
+        /*binding.editRepairAddPhotoButton.setOnClickListener {
+        addPicture()
+        }*/
+
+        setComponentsToNotEditable()
+        bindData()
    }
-
-
 
     /* ***************************** FUNCTIONS ************************************************** */
 
     private fun saveRepair(): Boolean {
         if (arguments?.getString("id") != null) {
             //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
-            RepairViewModel.updateRepairFlow(tempRepair)
+            RepairViewModel.updateRepairFlow(repair)
         } else {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    RepairViewModel.createDeviceFlow(tempDevice).collect() { data ->
+                    RepairViewModel.createDeviceFlow(device).collect() { data ->
                         val deviceId: String? = data.data
                         if (deviceId != null) {
-                            tempRepair.deviceId = deviceId
+                            repair.deviceId = deviceId
                         }
                     }
                 }
             }
 
-            RepairViewModel.createRepairFlow(tempRepair)
+            RepairViewModel.createRepairFlow(repair)
         }
         return true
     }
     private fun bindData(){
-        bindDeviceData(tempDevice)
-        bindRepairData(tempRepair)
-        bindEstRadioButton(tempRepair)
-        bindHospitalListSpinner(tempRepair)
+        bindDeviceData(device)
+        bindRepairData(repair)
+        bindEstRadioButton(repair)
+        bindHospitalListSpinner(repair)
         bindSignatureImageButton(signatureByteArray)
-        bindRepairStateSpinner(tempRepair)
+        bindRepairStateSpinner(repair)
         //binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
         //binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
     }
-    private fun initRepairData() {
-        initRepairStateSpinner()
-        initHospitalListSpinner()
-        initEstStateGroupButton()
+    private fun setComponentsToNotEditable() {
+        binding.editRepairOpeningDateButton.isEnabled = false
+        binding.editRepairOpeningDateButton.isClickable = false
+        binding.editRepairOpeningDateButton.isFocusableInTouchMode = false
+
+        binding.editRepairNameEditText.isEnabled = false
+        binding.editRepairNameEditText.isClickable = false
+        binding.editRepairNameEditText.isFocusableInTouchMode = false
+        binding.editRepairManufacturerEditText.isEnabled = false
+        binding.editRepairManufacturerEditText.isClickable = false
+        binding.editRepairManufacturerEditText.isFocusableInTouchMode = false
+        binding.editRepairModelEditText.isEnabled = false
+        binding.editRepairModelEditText.isClickable = false
+        binding.editRepairModelEditText.isFocusableInTouchMode = false
+        binding.editRepairSerialNumberEditText.isEnabled = false
+        binding.editRepairSerialNumberEditText.isClickable = false
+        binding.editRepairSerialNumberEditText.isFocusableInTouchMode = false
+        binding.editRepairInventoryNumberEditText.isEnabled = false
+        binding.editRepairInventoryNumberEditText.isClickable = false
+        binding.editRepairInventoryNumberEditText.isFocusableInTouchMode = false
+
+        binding.editRepairWardEditText.isEnabled = false
+        binding.editRepairWardEditText.isClickable = false
+        binding.editRepairWardEditText.isFocusableInTouchMode = false
+
+        binding.editRepairDefectDescriptionEditText.isEnabled = false
+        binding.editRepairDefectDescriptionEditText.isClickable = false
+        binding.editRepairDefectDescriptionEditText.isFocusableInTouchMode = false
+
+        binding.editRepairRepairDescriptionEditText.isEnabled = false
+        binding.editRepairRepairDescriptionEditText.isClickable = false
+        binding.editRepairRepairDescriptionEditText.isFocusableInTouchMode = false
+
+        binding.editRepairRepairingDateButton.isEnabled = false
+        binding.editRepairRepairingDateButton.isClickable = false
+        binding.editRepairRepairingDateButton.isFocusableInTouchMode = false
+
+        binding.editRepairPartDescriptionEditText.isEnabled = false
+        binding.editRepairPartDescriptionEditText.isClickable = false
+        binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = false
+
+        binding.editRepairStateSpinner.isEnabled = false
+        binding.editRepairStateSpinner.isClickable = false
+        binding.editRepairStateSpinner.isFocusableInTouchMode = false
+
+        binding.editRepairESTRadioGroup.isEnabled = false
+        binding.editRepairESTRadioGroup.isClickable = false
+        binding.editRepairESTRadioGroup.isFocusableInTouchMode = false
+
+        binding.editRepairESTFailedRadioButton.isEnabled = false
+        binding.editRepairESTFailedRadioButton.isClickable = false
+        binding.editRepairESTFailedRadioButton.isFocusableInTouchMode = false
+
+        binding.editRepairESTPassedRadioButton.isEnabled = false
+        binding.editRepairESTPassedRadioButton.isClickable = false
+        binding.editRepairESTPassedRadioButton.isFocusableInTouchMode = false
+
+        binding.editRepairESTNotApplicableRadioButton.isEnabled = false
+        binding.editRepairESTNotApplicableRadioButton.isClickable = false
+        binding.editRepairESTNotApplicableRadioButton.isFocusableInTouchMode = false
     }
     private fun setComponentsToEditable() {
-        TODO("Not yet implemented")
-    }
-    private fun setComponentsToNotEditable() {
-        TODO("Not yet implemented")
+        // TODO Signature not editable to implement
+        // TODO Spinners not editable bug to reapir
+        binding.editRepairOpeningDateButton.isEnabled = true
+        binding.editRepairOpeningDateButton.isClickable = true
+        binding.editRepairOpeningDateButton.isFocusable = true
+        binding.editRepairNameEditText.isEnabled = true
+        binding.editRepairNameEditText.isClickable = true
+        binding.editRepairNameEditText.isFocusableInTouchMode = true
+        binding.editRepairManufacturerEditText.isEnabled = true
+        binding.editRepairManufacturerEditText.isClickable = true
+        binding.editRepairManufacturerEditText.isFocusableInTouchMode = true
+        binding.editRepairModelEditText.isEnabled = true
+        binding.editRepairModelEditText.isClickable = true
+        binding.editRepairModelEditText.isFocusableInTouchMode = true
+        binding.editRepairSerialNumberEditText.isEnabled = true
+        binding.editRepairSerialNumberEditText.isClickable = true
+        binding.editRepairSerialNumberEditText.isFocusableInTouchMode = true
+        binding.editRepairInventoryNumberEditText.isEnabled = true
+        binding.editRepairInventoryNumberEditText.isClickable = true
+        binding.editRepairInventoryNumberEditText.isFocusableInTouchMode = true
+        binding.editRepairWardEditText.isEnabled = true
+        binding.editRepairWardEditText.isClickable = true
+        binding.editRepairWardEditText.isFocusableInTouchMode = true
+        binding.editRepairDefectDescriptionEditText.isEnabled = true
+        binding.editRepairDefectDescriptionEditText.isClickable = true
+        binding.editRepairDefectDescriptionEditText.isFocusableInTouchMode = true
+        binding.editRepairRepairDescriptionEditText.isEnabled = true
+        binding.editRepairRepairDescriptionEditText.isClickable = true
+        binding.editRepairRepairDescriptionEditText.isFocusableInTouchMode = true
+        binding.editRepairRepairingDateButton.isEnabled = true
+        binding.editRepairRepairingDateButton.isClickable = true
+        binding.editRepairRepairingDateButton.isFocusableInTouchMode = true
+        binding.editRepairPartDescriptionEditText.isEnabled = true
+        binding.editRepairPartDescriptionEditText.isClickable = true
+        binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = true
+        binding.editRepairStateSpinner.isEnabled = true
+        binding.editRepairStateSpinner.isClickable = true
+        binding.editRepairStateSpinner.isFocusableInTouchMode = true
+        binding.editRepairESTRadioGroup.isEnabled = true
+        binding.editRepairESTRadioGroup.isClickable = true
+        binding.editRepairESTRadioGroup.isFocusableInTouchMode = true
+        binding.editRepairESTFailedRadioButton.isEnabled = true
+        binding.editRepairESTFailedRadioButton.isClickable = true
+        binding.editRepairESTFailedRadioButton.isFocusableInTouchMode = true
+        binding.editRepairESTPassedRadioButton.isEnabled = true
+        binding.editRepairESTPassedRadioButton.isClickable = true
+        binding.editRepairESTPassedRadioButton.isFocusableInTouchMode = true
+        binding.editRepairESTNotApplicableRadioButton.isEnabled = true
+        binding.editRepairESTNotApplicableRadioButton.isClickable = true
+        binding.editRepairESTNotApplicableRadioButton.isFocusableInTouchMode = true
     }
 
     // Binding data functions
     private fun bindRepairData(repair: Repair) {
-        binding.editRepairIdTextView.append(tempRepair.repairId)
-        binding.editRepairWardTextInputEditText.setText(tempRepair.ward)
-        binding.editRepairDefectDescriptionTextInputEditText.setText(tempRepair.defectDescription)
-        binding.editRepairRepairDescriptionTextInputEditText.setText(tempRepair.repairDescription)
-        binding.editRepairPartDescriptionTextInputEditText.setText(tempRepair.repairDescription)
+        binding.editRepairIdTextView.setText("ID: "+ repair.repairId)
+        binding.editRepairWardEditText.setText(repair.ward)
+        binding.editRepairDefectDescriptionEditText.setText(repair.defectDescription)
+        binding.editRepairRepairDescriptionEditText.setText(repair.repairDescription)
+        binding.editRepairPartDescriptionEditText.setText(repair.partDescription)
     }
     private fun bindRepairStateSpinner(tempRepair: Repair) {
         var position = 0

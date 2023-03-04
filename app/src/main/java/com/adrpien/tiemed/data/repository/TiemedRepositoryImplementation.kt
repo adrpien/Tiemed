@@ -184,7 +184,8 @@ class  TiemedRepositoryImplementation(
     }
     override fun getRepair(repairId: String): Flow<Resource<Repair>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val repair = tiemedDao.getRepair(repairId).toRepair()
+        val repair = null
+        //val repair = tiemedDao.getRepair(repairId).toRepair()
         emit(Resource(ResourceState.SUCCESS, repair))
     }.flatMapConcat {
         repairFlow(repairId)
@@ -207,14 +208,15 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         deviceListFlow()
     }
-    private fun deviceFlow(deviceId: String): Flow<Resource<Device>> = flow {
-        firebaseApi.getDevice(deviceId)
+    private fun deviceFlow(deviceId: String): Flow<Resource<Device>> {
+        return firebaseApi.getDevice(deviceId)
     }
     override fun getDevice(deviceId: String): Flow<Resource<Device>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val device = tiemedDao.getDevice(deviceId).toDevice()
+        val device = null
+        // val device = tiemedDao.getDevice(deviceId).toDevice()
         emit(Resource(ResourceState.SUCCESS, device))
-    }.flatMapLatest {
+    }.flatMapConcat {
         deviceFlow(deviceId)
     }
     override fun insertDevice(device: Device): Flow<Resource<String?>> = flow {

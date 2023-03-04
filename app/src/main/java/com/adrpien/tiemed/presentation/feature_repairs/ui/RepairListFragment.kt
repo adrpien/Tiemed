@@ -47,7 +47,6 @@ class RepairListFragment: Fragment() {
 
     private var repairList: List<Repair> = listOf()
         set(value) {
-
             RepairListViewModel.updateRoomRepairListFlow(value)
             field = value
             preparedRepairList = value
@@ -88,6 +87,8 @@ class RepairListFragment: Fragment() {
 
     lateinit var hospitalSpinnerItem: MenuItem
     lateinit var repairListHospitalSpinner: Spinner
+    private val spinnerHospitalList = mutableListOf<String>()
+
 
     private var filteringCondition: Bundle = bundleOf()
     private var sortingConditions: Bundle = bundleOf()
@@ -99,7 +100,10 @@ class RepairListFragment: Fragment() {
         override fun setOnRepairItemClick(itemView: View, position: Int) {
             if (requireActivity().resources.configuration.screenLayout >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
                 val fragment = EditRepairFragment()
-                fragment.arguments = bundleOf("id" to repairList[position].repairId)
+                fragment.arguments = bundleOf(
+                    "repairId" to repairList[position].repairId,
+                    "deviceId" to repairList[position].deviceId
+                    )
                 childFragmentManager.beginTransaction()
                     .add(R.id.detailsFragmentContainerView, fragment)
                     .addToBackStack(null)
@@ -132,7 +136,6 @@ class RepairListFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("today","onViewCreated fragment")
 
 
         /* ********************** MENU ******************************************** */
@@ -145,19 +148,16 @@ class RepairListFragment: Fragment() {
                         ACTION_BAR_TITLE
 
                     // Hospital spinner in action bar implementation
-                    // TODO Hospital spinner in RepairListFragment to implement...
-                    val hospitalNameList = mutableListOf<String>()
                     hospitalList.forEach {
-                        hospitalNameList.add(it.hospitalName)
+                        spinnerHospitalList.add(it.hospitalName)
                     }
                     hospitalSpinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
                     repairListHospitalSpinner = hospitalSpinnerItem.actionView as Spinner
-                    //spinnerItem.setActionView(R.id.hospitalSpinnerActionBar)
                     val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
                         ArrayAdapter(
                             it,
                             android.R.layout.simple_spinner_item,
-                            hospitalNameList
+                            spinnerHospitalList
                         )
                     }
                     repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
@@ -370,7 +370,7 @@ class RepairListFragment: Fragment() {
 
     /* ***************************** FUNCTIONS ************************************************** */
     private fun selectHospital(position: Int) {
-        val selection = hospitalList[position].hospitalName
+        val selection = hospitalList[position].hospitalId
         preparedRepairList = repairList.filter { it.hospitalId == selection }
         binding.repairRecyclerView.adapter =
             RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)

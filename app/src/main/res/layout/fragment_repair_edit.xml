@@ -38,7 +38,7 @@
                     android:layout_height="@dimen/default_height"
                     android:layout_marginEnd="20dp"
                     android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_edit"
+                    android:src="@drawable/edit_icon"
                     android:background="@android:color/transparent"/>
 
                 <ImageButton
@@ -48,7 +48,7 @@
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitCenter"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel" />
+                    android:src="@drawable/cancel_icon" />
 
             </LinearLayout>
 
@@ -91,6 +91,18 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editRepairNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editRepairManufacturerEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/manufacturer" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/editRepairModelTextInputLayout"
                     android:layout_width="match_parent"
@@ -120,11 +132,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairNameEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -144,11 +151,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairManufacturerEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/manufacturer" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -177,7 +179,7 @@
                     style="@style/EditTextStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairWardTextInputEditText"
+                        android:id="@+id/editRepairWardEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/ward" />
@@ -204,7 +206,7 @@
                     android:layout_height="98dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairDefectDescriptionTextInputEditText"
+                        android:id="@+id/edit_repair_defect_description_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
@@ -231,7 +233,7 @@
                     style="@style/EditTextStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairRepairDescriptionTextInputEditText"
+                        android:id="@+id/editRepairRepairDescriptionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
@@ -266,7 +268,7 @@
                     style="@style/EditTextStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editRepairPartDescriptionTextInputEditText"
+                        android:id="@+id/editRepairPartDescriptionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
