@@ -12,7 +12,6 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,8 +30,6 @@ import com.adrpien.tiemed.databinding.FragmentRepairEditBinding
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -76,18 +73,21 @@ class EditRepairFragment() : Fragment() {
             field =value
             RepairViewModel.updateRoomHospitalListFlow(value)
             initHospitalListSpinner()
+            bindHospitalListSpinner(tempRepair)
         }
     private var estStateList = listOf<EstState>()
         set(value) {
             field =value
             RepairViewModel.updateRoomEstStateListFlow(value)
             initEstStateGroupButton()
+            bindEstStateSpinner(tempRepair)
         }
     private var repairStateList = listOf<RepairState>()
         set(value) {
             field =value
             RepairViewModel.updateRoomRepairStateListFlow(value)
             initRepairStateSpinner()
+            bindRepairStateSpinner(tempRepair)
 
         }
     private var device = Device()
@@ -99,8 +99,11 @@ class EditRepairFragment() : Fragment() {
     private var repair = Repair()
         set(value) {
             field =value
-            bindRepairData(value)
             tempRepair = value
+            bindRepairData(value)
+            bindEstStateSpinner(value)
+            bindHospitalListSpinner(value)
+            bindRepairStateSpinner(value)
         }
     private var signatureByteArray = byteArrayOf()
         set(value) {
@@ -115,11 +118,14 @@ class EditRepairFragment() : Fragment() {
             position: Int,
             p3: Long
         ) {
-            if (parent?.id == R.id.inspectionHospitalSpinner) {
-                tempRepair.hospitalId = parent.getItemAtPosition(position).toString()
+            if (parent?.id == R.id.editRepairHospitalSpinner) {
+                val hospitalName = parent.getItemAtPosition(position).toString()
+                val hospital = hospitalList.find { it.hospitalName == hospitalName }
+                if (hospital != null) {
+                    tempRepair.hospitalId = hospital.hospitalId
+                }
             }
         }
-
         override fun onNothingSelected(p0: AdapterView<*>?) {
             // lave empty here, i think
         }
@@ -132,15 +138,39 @@ class EditRepairFragment() : Fragment() {
             position: Int,
             p3: Long
         ) {
-            if (parent?.id == R.id.inspectionHospitalSpinner) {
-                tempRepair.repairStateId = parent.getItemAtPosition(position).toString()
+            if (parent?.id == R.id.editRepairRepairStateSpinner) {
+                val repairStateName = parent.getItemAtPosition(position).toString()
+                val repairState = repairStateList.find { it.repairState == repairStateName }
+                if(repairState != null){
+                    tempRepair.repairStateId = repairState.repairStateId
+                }
             }
         }
-
         override fun onNothingSelected(p0: AdapterView<*>?) {
             // lave empty here, i think
         }
     }
+
+    val repairEstStateSpinnerListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            p1: View?,
+            position: Int,
+            p3: Long
+        ) {
+            if (parent?.id == R.id.editRepairEstStateSpinner) {
+                val estStateName = parent.getItemAtPosition(position).toString()
+                val estState = estStateList.find { it.estState == estStateName }
+                if(estState != null){
+                    tempRepair.estStateId = estState.estStateId
+                }
+            }
+        }
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+            // lave empty here, i think
+        }
+    }
+
 
     val datePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -296,19 +326,6 @@ class EditRepairFragment() : Fragment() {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Repair state list collecting error")
                         }
                     }
-                    for (item in hospitalList) {
-                        item.hospitalName.let {
-                            spinnerRepairStateList.add(item.hospitalName)
-                        }
-                    }
-                    val repairStateListArrayAdapter = activity?.baseContext?.let { it ->
-                        ArrayAdapter(
-                            it,
-                            android.R.layout.simple_spinner_item,
-                            spinnerRepairStateList
-                        )
-                    }
-                    binding.editRepairHospitalSpinner.adapter = repairStateListArrayAdapter
 
                 }
             }
@@ -344,14 +361,6 @@ class EditRepairFragment() : Fragment() {
             val dialog = RepairDatePickerDialog()
             dialog.show(childFragmentManager, "repair_time_picker")
         }
-        binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            var stateId = group.findViewById<RadioButton>(checkedId)
-            val position = group.indexOfChild(stateId)
-            tempRepair.estStateId = estStateList[position].estStateId
-            /*var stateId = group.findViewById<RadioButton>(checkedId).text.toString()
-                .uppercase()
-                .replace(" ", "_")*/
-        }
         binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
         binding.editRepairSignatureImageButton.setOnClickListener {
             val dialog = SignatureDialog()
@@ -365,7 +374,9 @@ class EditRepairFragment() : Fragment() {
                 })
             dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
         }
-        binding.editRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
+        binding.editRepairRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
+        binding.editRepairEstStateSpinner.onItemSelectedListener = repairEstStateSpinnerListener
+
         binding.editRepairEditSaveButton.setOnClickListener {
             if(isEditable == true) {
                 updateTempDevice()
@@ -419,20 +430,18 @@ class EditRepairFragment() : Fragment() {
 
     /* ***************************** FUNCTIONS ************************************************** */
 
-    // TODO How to manage the this???
     private fun createDevice() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.createDeviceFlow(tempDevice).onCompletion {
-                    createRepair()
-                    createSignature()
-                }.collect() { result ->
+                RepairViewModel.createDeviceFlow(tempDevice).collect() { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 tempRepair.deviceId = result.data
                                 tempDevice.deviceId = result.data
                                 Log.d(EDIT_REPAIR_FRAGMENT, "Create device success")
+                                createRepair()
+                                createSignature()
                             }
                         }
                         ResourceState.LOADING -> {
@@ -522,7 +531,7 @@ class EditRepairFragment() : Fragment() {
     private fun bindData(){
         bindDeviceData(device)
         bindRepairData(repair)
-        bindEstRadioButton(repair)
+        bindEstStateSpinner(repair)
         bindHospitalListSpinner(repair)
         bindSignatureImageButton(signatureByteArray)
         bindRepairStateSpinner(repair)
@@ -570,25 +579,14 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairPartDescriptionEditText.isClickable = false
         binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = false
 
-        binding.editRepairStateSpinner.isEnabled = false
-        binding.editRepairStateSpinner.isClickable = false
-        binding.editRepairStateSpinner.isFocusableInTouchMode = false
+        binding.editRepairRepairStateSpinner.isEnabled = false
+        binding.editRepairRepairStateSpinner.isClickable = false
+        binding.editRepairRepairStateSpinner.isFocusableInTouchMode = false
 
-        binding.editRepairESTRadioGroup.isEnabled = false
-        binding.editRepairESTRadioGroup.isClickable = false
-        binding.editRepairESTRadioGroup.isFocusableInTouchMode = false
+        binding.editRepairEstStateSpinner.isEnabled = false
+        binding.editRepairEstStateSpinner.isClickable = false
+        binding.editRepairEstStateSpinner.isFocusableInTouchMode = false
 
-        binding.editRepairESTFailedRadioButton.isEnabled = false
-        binding.editRepairESTFailedRadioButton.isClickable = false
-        binding.editRepairESTFailedRadioButton.isFocusableInTouchMode = false
-
-        binding.editRepairESTPassedRadioButton.isEnabled = false
-        binding.editRepairESTPassedRadioButton.isClickable = false
-        binding.editRepairESTPassedRadioButton.isFocusableInTouchMode = false
-
-        binding.editRepairESTNotApplicableRadioButton.isEnabled = false
-        binding.editRepairESTNotApplicableRadioButton.isClickable = false
-        binding.editRepairESTNotApplicableRadioButton.isFocusableInTouchMode = false
     }
     private fun setComponentsToEditable() {
         // TODO Signature not editable to implement
@@ -626,22 +624,14 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairPartDescriptionEditText.isEnabled = true
         binding.editRepairPartDescriptionEditText.isClickable = true
         binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = true
-        binding.editRepairStateSpinner.isEnabled = true
-        binding.editRepairStateSpinner.isClickable = true
-        binding.editRepairStateSpinner.isFocusableInTouchMode = true
-        binding.editRepairESTRadioGroup.isEnabled = true
-        binding.editRepairESTRadioGroup.isClickable = true
-        binding.editRepairESTRadioGroup.isFocusableInTouchMode = true
-        binding.editRepairESTFailedRadioButton.isEnabled = true
-        binding.editRepairESTFailedRadioButton.isClickable = true
-        binding.editRepairESTFailedRadioButton.isFocusableInTouchMode = true
-        binding.editRepairESTPassedRadioButton.isEnabled = true
-        binding.editRepairESTPassedRadioButton.isClickable = true
-        binding.editRepairESTPassedRadioButton.isFocusableInTouchMode = true
-        binding.editRepairESTNotApplicableRadioButton.isEnabled = true
-        binding.editRepairESTNotApplicableRadioButton.isClickable = true
-        binding.editRepairESTNotApplicableRadioButton.isFocusableInTouchMode = true
+        binding.editRepairRepairStateSpinner.isEnabled = true
+        binding.editRepairRepairStateSpinner.isClickable = true
+        binding.editRepairRepairStateSpinner.isFocusableInTouchMode = true
+        binding.editRepairEstStateSpinner.isEnabled = true
+        binding.editRepairEstStateSpinner.isClickable = true
+        binding.editRepairEstStateSpinner.isFocusableInTouchMode = true
     }
+
     private fun updateTempRepair(){
         tempRepair.ward = binding.editRepairWardEditText.text.toString()
         tempRepair.defectDescription = binding.editRepairDefectDescriptionEditText.text.toString()
@@ -664,11 +654,18 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairRepairDescriptionEditText.setText(repair.repairDescription)
         binding.editRepairPartDescriptionEditText.setText(repair.partDescription)
     }
-    private fun bindRepairStateSpinner(tempRepair: Repair) {
+    private fun bindDeviceData(device: Device) {
+        binding.editRepairManufacturerEditText.setText(device.manufacturer)
+        binding.editRepairModelEditText.setText(device.model)
+        binding.editRepairNameEditText.setText(device.name)
+        binding.editRepairSerialNumberEditText.setText(device.serialNumber)
+        binding.editRepairInventoryNumberEditText.setText(device.inventoryNumber)
+    }
+    private fun bindRepairStateSpinner(repair: Repair) {
         var position = 0
         for (item in repairStateList) {
-            if (repair.hospitalId == item.repairStateId) {
-                binding.editRepairHospitalSpinner.setSelection(position)
+            if (repair.repairStateId == item.repairStateId) {
+                binding.editRepairRepairStateSpinner.setSelection(position)
                 position += 1
             }
         }
@@ -682,11 +679,11 @@ class EditRepairFragment() : Fragment() {
             }
         }
     }
-    private fun bindEstRadioButton(repair: Repair) {
+    private fun bindEstStateSpinner(repair: Repair) {
         var position = 0
         for (item in estStateList) {
-            if (repair.estStateId == item.toString()) {
-                binding.editRepairESTRadioGroup.check(binding.editRepairESTRadioGroup.getChildAt(position).id)
+            if (repair.estStateId == item.estStateId) {
+                binding.editRepairEstStateSpinner.setSelection(position)
             }
             position += 1
         }
@@ -703,18 +700,11 @@ class EditRepairFragment() : Fragment() {
         )
         binding.editRepairSignatureImageButton.setImageBitmap(bmp)
     }
-    private fun bindDeviceData(device: Device) {
-        binding.editRepairManufacturerEditText.setText(device.manufacturer)
-        binding.editRepairModelEditText.setText(device.model)
-        binding.editRepairNameEditText.setText(device.name)
-        binding.editRepairSerialNumberEditText.setText(device.serialNumber)
-        binding.editRepairInventoryNumberEditText.setText(device.inventoryNumber)
-    }
 
     // Components initialization
     private fun initEstStateGroupButton() {
-        for (item in hospitalList) {
-            spinnerEstStateList.add(item.hospitalName)
+        for (item in estStateList) {
+            spinnerEstStateList.add(item.estState)
         }
         val estStateListArrayAdapter =
             activity?.baseContext?.let { it ->
@@ -724,12 +714,12 @@ class EditRepairFragment() : Fragment() {
                     spinnerEstStateList
                 )
             }
-        binding.editRepairHospitalSpinner.adapter =
+        binding.editRepairEstStateSpinner.adapter =
             estStateListArrayAdapter
     }
     private fun initRepairStateSpinner() {
-        for (item in hospitalList) {
-                spinnerRepairStateList.add(item.hospitalName)
+        for (item in repairStateList) {
+                spinnerRepairStateList.add(item.repairState)
         }
         val repairStateListArrayAdapter = activity?.baseContext?.let { it ->
             ArrayAdapter(
@@ -738,7 +728,7 @@ class EditRepairFragment() : Fragment() {
                 spinnerRepairStateList
             )
         }
-        binding.editRepairHospitalSpinner.adapter = repairStateListArrayAdapter
+        binding.editRepairRepairStateSpinner.adapter = repairStateListArrayAdapter
 
     }
     private fun initHospitalListSpinner() {

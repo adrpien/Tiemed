@@ -219,7 +219,7 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         deviceFlow(deviceId)
     }
-    override fun insertDevice(device: Device): Flow<Resource<String?>>  {
+    override fun insertDevice(device: Device): Flow<Resource<String>> {
         return firebaseApi.createDevice(device)
     }
     override fun updateDevice(device: Device): Flow<Resource<Boolean>> {

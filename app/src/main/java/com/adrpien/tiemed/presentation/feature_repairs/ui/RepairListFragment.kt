@@ -349,9 +349,9 @@ class RepairListFragment: Fragment() {
                 val fragment = EditRepairFragment()
                 fragment.arguments = bundleOf("id" to "")
                 childFragmentManager.beginTransaction()
-                    ?.add(R.id.detailsFragmentContainerView, fragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                    .replace(R.id.detailsFragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit()
             } else {
                 findNavController().navigate(RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())
             }

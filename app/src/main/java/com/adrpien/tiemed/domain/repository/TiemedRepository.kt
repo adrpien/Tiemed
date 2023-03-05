@@ -1,7 +1,6 @@
 package com.adrpien.tiemed.domain.repository
 
 import com.adrpien.dictionaryapp.core.util.Resource
-import com.adrpien.tiemed.data.remote.dto.InspectionDto
 import com.adrpien.tiemed.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
@@ -34,7 +33,7 @@ interface TiemedRepository {
 
     fun getDevice(deviceId: String): Flow<Resource<Device>>
     fun getDeviceList(): Flow<Resource<List<Device>>>
-    fun insertDevice (device: Device): Flow<Resource<String?>>
+    fun insertDevice (device: Device): Flow<Resource<String>>
     fun updateDevice (device: Device): Flow<Resource<Boolean>>
 
     /* ***** Parts ****************************************************************************** */

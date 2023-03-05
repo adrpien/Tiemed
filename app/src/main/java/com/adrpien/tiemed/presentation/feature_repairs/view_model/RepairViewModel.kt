@@ -79,7 +79,7 @@ class RepairViewModel @Inject constructor(
             scope = viewModelScope,
             initialValue = Resource(ResourceState.LOADING, false),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<Boolean>>
+        )
 
     /* ************************** HOSPITAL LIST ************************************************* */
     fun getHospitalListFlow(): StateFlow<Resource<List<Hospital>>> = getHospitalList().stateIn(
@@ -103,7 +103,7 @@ class RepairViewModel @Inject constructor(
             scope = viewModelScope,
             initialValue = Resource(ResourceState.LOADING, byteArrayOf()),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<ByteArray>>
+        )
     fun createSignatureFlow(
         signatureId: String,
         byteArray: ByteArray
@@ -126,13 +126,13 @@ class RepairViewModel @Inject constructor(
         scope = viewModelScope,
         initialValue = Resource(ResourceState.LOADING, Device(deviceId = "")),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<Device>>
-    fun createDeviceFlow(device: Device): StateFlow<Resource<String?>> =
+    )
+    fun createDeviceFlow(device: Device): StateFlow<Resource<String>> =
         createDevice(device).stateIn(
             scope = viewModelScope,
-            initialValue = Resource(ResourceState.LOADING, false),
+            initialValue = Resource(ResourceState.LOADING, ""),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<String?>>
+        )
     fun updateDeviceFlow(device: Device): StateFlow<Resource<Boolean>> =
         updateDevice(device).stateIn(
             scope = viewModelScope,
@@ -168,32 +168,32 @@ class RepairViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateRoomDeviceListFlow(deviceList: List<Device>): StateFlow<Resource<Boolean>> = updateRoomDeviceList(deviceList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateRoomEstStateListFlow(estStateList: List<EstState>): StateFlow<Resource<Boolean>> = updateRoomEstStateList(estStateList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateRoomRepairListFlow(repairList: List<Repair>): StateFlow<Resource<Boolean>> = updateRoomRepairList(repairList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateRoomRepairStateListFlow(repairStateList: List<RepairState>): StateFlow<Resource<Boolean>> = updateRoomRepairStateList(repairStateList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateRoomTechnicianListFlow(technicianList: List<Technician>): StateFlow<Resource<Boolean>> = updateRoomTechnicianList(technicianList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         Resource(ResourceState.LOADING, null)
-    ) as StateFlow<Resource<Boolean>>
+    )
 
 }
 

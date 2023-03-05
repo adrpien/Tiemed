@@ -199,7 +199,7 @@ class  FirebaseApi(
             "repairDescription" to repair.repairDescription,
             "partDescription" to repair.partDescription,
             "comment" to repair.comment,
-            "estTestId" to repair.estStateId,
+            "estStateId" to repair.estStateId,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
             "repairingDate" to repair.repairingDate,
@@ -256,7 +256,7 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device list fetch error")
         }
     }
-    fun createDevice(device: Device): Flow<Resource<String?>> = flow {
+    fun createDevice(device: Device): Flow<Resource<String>> = flow {
         // TODO Need to implement caching mechanism in createDevice fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
         var documentReference = firebaseFirestore.collection("repairs")

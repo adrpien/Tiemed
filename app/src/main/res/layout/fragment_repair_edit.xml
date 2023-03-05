@@ -295,7 +295,7 @@
                     android:text="@string/state" />
 
                 <Spinner
-                    android:id="@+id/editRepairStateSpinner"
+                    android:id="@+id/editRepairRepairStateSpinner"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -307,34 +307,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/electrical_safety_test" />
 
-                <RadioGroup
-                    android:id="@+id/editRepairESTRadioGroup"
+                <Spinner
+                    android:id="@+id/editRepairEstStateSpinner"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/editRepairESTPassedRadioButton"
-                        style="@style/RadioButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:text="@string/passed" />
-
-                    <RadioButton
-                        android:id="@+id/editRepairESTFailedRadioButton"
-                        style="@style/RadioButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:text="@string/failed" />
-
-                    <RadioButton
-                        android:id="@+id/editRepairESTNotApplicableRadioButton"
-                        style="@style/RadioButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:text="@string/not_required" />
-                </RadioGroup>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
 
                 <ImageButton
                     android:id="@+id/editRepairSignatureImageButton"
