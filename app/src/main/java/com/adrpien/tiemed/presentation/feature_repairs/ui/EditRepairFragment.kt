@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -26,15 +27,15 @@ import com.adrpien.tiemed.R
 import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.core.util.Helper.Companion.getDateString
-import com.adrpien.tiemed.data.remote.FirebaseApi
 import com.adrpien.tiemed.databinding.FragmentRepairEditBinding
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditRepairFragment() : Fragment() {
@@ -93,11 +94,13 @@ class EditRepairFragment() : Fragment() {
         set(value) {
             field =value
             bindDeviceData(value)
+            tempDevice = value
         }
     private var repair = Repair()
         set(value) {
             field =value
             bindRepairData(value)
+            tempRepair = value
         }
     private var signatureByteArray = byteArrayOf()
         set(value) {
@@ -113,7 +116,7 @@ class EditRepairFragment() : Fragment() {
             p3: Long
         ) {
             if (parent?.id == R.id.inspectionHospitalSpinner) {
-                repair.hospitalId = parent.getItemAtPosition(position).toString()
+                tempRepair.hospitalId = parent.getItemAtPosition(position).toString()
             }
         }
 
@@ -130,7 +133,7 @@ class EditRepairFragment() : Fragment() {
             p3: Long
         ) {
             if (parent?.id == R.id.inspectionHospitalSpinner) {
-                repair.repairStateId = parent.getItemAtPosition(position).toString()
+                tempRepair.repairStateId = parent.getItemAtPosition(position).toString()
             }
         }
 
@@ -143,7 +146,7 @@ class EditRepairFragment() : Fragment() {
         override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
             var date: Calendar = Calendar.getInstance()
             date.set(year, month, dayOfMonth)
-            repair.openingDate = date.timeInMillis.toString()
+            tempRepair.openingDate = date.timeInMillis.toString()
             binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))
         }
 
@@ -344,7 +347,7 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairESTRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             var stateId = group.findViewById<RadioButton>(checkedId)
             val position = group.indexOfChild(stateId)
-            repair.estStateId = estStateList[position].estStateId
+            tempRepair.estStateId = estStateList[position].estStateId
             /*var stateId = group.findViewById<RadioButton>(checkedId).text.toString()
                 .uppercase()
                 .replace(" ", "_")*/
@@ -365,7 +368,17 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
         binding.editRepairEditSaveButton.setOnClickListener {
             if(isEditable == true) {
-                saveRepair()
+                updateTempDevice()
+                updateTempRepair()
+                if (repairId != "") {
+                    updateDevice()
+                    updateRepair()
+                    updateSignature()
+                } else {
+                    // TODO how to wait for deviceID ???????
+                    createDevice()
+                    createSignature()
+                }
                 setComponentsToNotEditable()
                 binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
                 isEditable = false
@@ -406,26 +419,106 @@ class EditRepairFragment() : Fragment() {
 
     /* ***************************** FUNCTIONS ************************************************** */
 
-    private fun saveRepair(): Boolean {
-        if (arguments?.getString("id") != null) {
-            //viewModelProvider.updateRepair(mapOf("id" to binding.idEditText.text.toString()))
-            RepairViewModel.updateRepairFlow(repair)
-        } else {
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    RepairViewModel.createDeviceFlow(device).collect() { data ->
-                        val deviceId: String? = data.data
-                        if (deviceId != null) {
-                            repair.deviceId = deviceId
+    // TODO How to manage the this???
+    private fun createDevice() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.createDeviceFlow(tempDevice).onCompletion {
+                    createRepair()
+                    createSignature()
+                }.collect() { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            if (result.data != null) {
+                                tempRepair.deviceId = result.data
+                                tempDevice.deviceId = result.data
+                                Log.d(EDIT_REPAIR_FRAGMENT, "Create device success")
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            if (result.data != null) {
+                                tempRepair.deviceId = result.data
+                                tempDevice.deviceId = result.data
+                            }
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create device loading")
+
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create repair error")
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    private fun createRepair() {
+        viewLifecycleOwner.lifecycleScope.launch() {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.createRepairFlow(tempRepair).collect() { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            Toast.makeText(requireContext(), "Repair created!", Toast.LENGTH_SHORT).show()
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create repair success")
+
+                        }
+                        ResourceState.LOADING -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create repair loading")
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create repair error")
+                            Toast.makeText(requireContext(), "Repair NOT created!", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             }
-
-            RepairViewModel.createRepairFlow(repair)
         }
-        return true
     }
+    private fun createSignature() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                RepairViewModel.createSignatureFlow(tempRepair.repairId, tempSignatureByteArray).collect() { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
+                        }
+                        ResourceState.LOADING -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature error")
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun updateDevice() {
+        viewLifecycleOwner.lifecycleScope.launch(){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.updateDeviceFlow(tempDevice).collect() {
+                }
+            }
+        }
+    }
+    private fun updateRepair() {
+        viewLifecycleOwner.lifecycleScope.launch(){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.updateRepairFlow(tempRepair).collect() {
+                }
+            }
+        }
+    }
+    private fun updateSignature() {
+        viewLifecycleOwner.lifecycleScope.launch(){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.updateSignatureFlow(tempRepair.deviceId, tempSignatureByteArray).collect() {
+                }
+            }
+        }    }
+
     private fun bindData(){
         bindDeviceData(device)
         bindRepairData(repair)
@@ -548,6 +641,19 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairESTNotApplicableRadioButton.isEnabled = true
         binding.editRepairESTNotApplicableRadioButton.isClickable = true
         binding.editRepairESTNotApplicableRadioButton.isFocusableInTouchMode = true
+    }
+    private fun updateTempRepair(){
+        tempRepair.ward = binding.editRepairWardEditText.text.toString()
+        tempRepair.defectDescription = binding.editRepairDefectDescriptionEditText.text.toString()
+        tempRepair.repairDescription = binding.editRepairRepairDescriptionEditText.text.toString()
+        tempRepair.partDescription = binding.editRepairPartDescriptionEditText.text.toString()
+    }
+    private fun updateTempDevice(){
+        tempDevice.name = binding.editRepairNameEditText.text.toString()
+        tempDevice.manufacturer = binding.editRepairManufacturerEditText.text.toString()
+        tempDevice.model = binding.editRepairModelEditText.text.toString()
+        tempDevice.inventoryNumber = binding.editRepairInventoryNumberEditText.text.toString()
+        tempDevice.serialNumber = binding.editRepairSerialNumberEditText.text.toString()
     }
 
     // Binding data functions

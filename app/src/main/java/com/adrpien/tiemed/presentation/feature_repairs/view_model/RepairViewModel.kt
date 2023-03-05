@@ -71,13 +71,13 @@ class RepairViewModel @Inject constructor(
     fun createRepairFlow(repair: Repair): StateFlow<Resource<Boolean>> =
         createRepair(repair).stateIn(
             scope = viewModelScope,
-            initialValue = false,
+            initialValue = Resource(ResourceState.LOADING, false),
             started = SharingStarted.Lazily
         ) as StateFlow<Resource<Boolean>>
     fun updateRepairFlow(repair: Repair): StateFlow<Resource<Boolean>> =
         updateRepair(repair).stateIn(
             scope = viewModelScope,
-            initialValue = false,
+            initialValue = Resource(ResourceState.LOADING, false),
             started = SharingStarted.Lazily
         ) as StateFlow<Resource<Boolean>>
 
@@ -86,15 +86,15 @@ class RepairViewModel @Inject constructor(
         scope = viewModelScope,
         initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<List<Hospital>>>
+    )
     val hospitalListStateFlow = getHospitalListFlow()
 
     /* ************************** HOSPITAL LIST ************************************************* */
     fun getTechnicianListFlow(): StateFlow<Resource<List<Technician>>> = getTechnicianList().stateIn(
         scope = viewModelScope,
-        initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
+        initialValue = Resource(ResourceState.LOADING, emptyList<Technician>()),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<List<Technician>>>
+    )
     val technicianListStateFlow = getTechnicianListFlow()
 
     /* ************************** SIGNATURES ******************************************************* */
@@ -109,7 +109,7 @@ class RepairViewModel @Inject constructor(
         byteArray: ByteArray
     ): StateFlow<Resource<Boolean>> = createSignature(signatureId, byteArray).stateIn(
         scope = viewModelScope,
-        initialValue = false,
+        initialValue = Resource(ResourceState.LOADING, false),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<Boolean>>
     fun updateSignatureFlow(
@@ -117,7 +117,7 @@ class RepairViewModel @Inject constructor(
         byteArray: ByteArray
     ): StateFlow<Resource<Boolean>> = updateSignature(signatureId, byteArray).stateIn(
         scope = viewModelScope,
-        initialValue = false,
+        initialValue = Resource(ResourceState.LOADING, false),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<Boolean>>
 
@@ -130,28 +130,28 @@ class RepairViewModel @Inject constructor(
     fun createDeviceFlow(device: Device): StateFlow<Resource<String?>> =
         createDevice(device).stateIn(
             scope = viewModelScope,
-            initialValue = false,
+            initialValue = Resource(ResourceState.LOADING, false),
             started = SharingStarted.Lazily
         ) as StateFlow<Resource<String?>>
     fun updateDeviceFlow(device: Device): StateFlow<Resource<Boolean>> =
         updateDevice(device).stateIn(
             scope = viewModelScope,
-            initialValue = false,
+            initialValue = Resource(ResourceState.LOADING, false),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<Boolean>>
-    fun getDeviceListFlow(): StateFlow<Resource<List<Device>>> = getDeviceListFlow().stateIn(
+        )
+    fun getDeviceListFlow(): StateFlow<Resource<List<Device>>> = getDeviceList().stateIn(
         scope = viewModelScope,
         initialValue = Resource(ResourceState.LOADING, emptyList<Device>()),
         started = SharingStarted.Lazily
     )
-    val deviceListStateFlow = getDeviceList()
+    val deviceListStateFlow = getDeviceListFlow()
 
     /* ************************** EST STATE LIST ************************************************* */
     fun getEstStateListFlow(): StateFlow<Resource<List<EstState>>> = getEstStateList().stateIn(
         scope = viewModelScope,
-        initialValue = Resource(ResourceState.LOADING, emptyList<Hospital>()),
+        initialValue = Resource(ResourceState.LOADING, emptyList<EstState>()),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<List<EstState>>>
+    )
     val estStateListStateFlow = getHospitalListFlow()
 
     /* ************************** REPAIR STATE LIST ************************************************* */
@@ -160,7 +160,7 @@ class RepairViewModel @Inject constructor(
             scope = viewModelScope,
             initialValue = Resource(ResourceState.LOADING, emptyList<RepairState>()),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<List<RepairState>>>
+        )
     val repairStateListStateFlow = getRepairStateListFlow()
 
     /* ************************** ROOM ********************************************************** */

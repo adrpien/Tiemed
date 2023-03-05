@@ -105,7 +105,7 @@ class RepairListFragment: Fragment() {
                     "deviceId" to repairList[position].deviceId
                     )
                 childFragmentManager.beginTransaction()
-                    .add(R.id.detailsFragmentContainerView, fragment)
+                    .replace(R.id.detailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {

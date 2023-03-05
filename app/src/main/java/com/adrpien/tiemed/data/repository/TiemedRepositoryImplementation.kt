@@ -161,11 +161,11 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         inspectionFlow(inspectionId)
     }
-    override fun insertInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
-        firebaseApi.createInspection(inspection)
+    override fun insertInspection(inspection: Inspection): Flow<Resource<String?>> {
+        return firebaseApi.createInspection(inspection)
     }
-    override fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
-        firebaseApi.updateInspection(inspection)
+    override fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> {
+        return firebaseApi.updateInspection(inspection)
     }
 
     /* ********************************* REPAIRS ************************************************ */
@@ -190,11 +190,11 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         repairFlow(repairId)
     }
-    override fun insertRepair(repair: Repair): Flow<Resource<String?>> = flow {
-        firebaseApi.createRepair(repair)
+    override fun insertRepair(repair: Repair): Flow<Resource<String?>> {
+        return firebaseApi.createRepair(repair)
     }
-    override fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
-        firebaseApi.updateRepair(repair)
+    override fun updateRepair(repair: Repair): Flow<Resource<Boolean>> {
+        return firebaseApi.updateRepair(repair)
     }
 
     /* ********************************* DEVICES ************************************************ */
@@ -219,14 +219,12 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         deviceFlow(deviceId)
     }
-    override fun insertDevice(device: Device): Flow<Resource<String?>> = flow {
-        firebaseApi.createDevice(device)
-
+    override fun insertDevice(device: Device): Flow<Resource<String?>>  {
+        return firebaseApi.createDevice(device)
     }
-    override fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
-        firebaseApi.updateDevice(device)
+    override fun updateDevice(device: Device): Flow<Resource<Boolean>> {
+        return firebaseApi.updateDevice(device)
     }
-
 
     /* ********************************* PARTS ************************************************** */
     private fun partListFlow(): Flow<Resource<List<Part>>>{
@@ -249,11 +247,11 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         partFlow(partId)
     }
-    override fun insertPart(part: Part): Flow<Resource<String>> = flow {
-        firebaseApi.createPart(part)
+    override fun insertPart(part: Part): Flow<Resource<String?>> {
+         return firebaseApi.createPart(part)
     }
-    override fun updatePart(part: Part): Flow<Resource<Boolean>> = flow {
-        firebaseApi.updatePart(part)
+    override fun updatePart(part: Part): Flow<Resource<Boolean>> {
+        return firebaseApi.updatePart(part)
     }
 
     /* ********************************* SIGNATURES ********************************************* */

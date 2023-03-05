@@ -159,10 +159,8 @@ class  FirebaseApi(
             "deviceId" to repair.deviceId,
             "hospitalId" to repair.hospitalId,
             "ward" to repair.ward,
-            // "photoList"  to repair.photoList,
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
-            // "partList" to repair.partList,
             "partDescription" to repair.partDescription,
             "comment" to repair.comment,
             "estTestId" to repair.estStateId,
@@ -197,10 +195,8 @@ class  FirebaseApi(
             "deviceId" to repair.deviceId,
             "hospitalId" to repair.hospitalId,
             "ward" to repair.ward,
-            // "photoList"  to repair.photoList,
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
-            // "partList" to repair.partList,
             "partDescription" to repair.partDescription,
             "comment" to repair.comment,
             "estTestId" to repair.estStateId,
@@ -282,14 +278,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, documentReference.id))
+            emit(Resource(ResourceState.ERROR, null))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Device record creation error")
 
         }
     }
-    fun updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
+    fun  updateDevice(device: Device): Flow<Resource<Boolean>> = flow {
         // TODO Need to implement caching mechanism in updateDevice fun in FirebaseApi
-        emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, false))
         var map = mapOf<String, String>(
             "deviceId" to device.deviceId,
             "name" to device.name,
@@ -297,10 +293,8 @@ class  FirebaseApi(
             "model" to device.model,
             "serialNumber" to device.serialNumber,
             "inventoryNumber" to device.inventoryNumber,
-            // "inspections" to device.inspections,
-            // "repairs" to device.repairs
         )
-        val documentReference = firebaseFirestore.collection("repairs").document(device.deviceId)
+        val documentReference = firebaseFirestore.collection("devices").document(device.deviceId)
         val result = documentReference.update(map)
         result.await()
         if (result.isSuccessful) {
@@ -350,7 +344,7 @@ class  FirebaseApi(
     /* ********************************* PARTS ************************************************** */
     fun getPartList(): Flow<Resource<List<Part>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("repairs")
+        val documentReference = firebaseFirestore.collection("parts")
         val result = documentReference.get()
         result.await()
         if (result.isSuccessful) {
@@ -382,7 +376,7 @@ class  FirebaseApi(
     fun createPart(part: Part): Flow<Resource<String?>> = flow {
         // TODO Need to implement caching mechanism in createPart fun in FirebaseApi
         emit(Resource(ResourceState.LOADING, null))
-        var documentReference = firebaseFirestore.collection("repairs")
+        var documentReference = firebaseFirestore.collection("parts")
             .document()
         var map = mapOf<String, String>(
             "partId" to part.partId,
@@ -409,7 +403,7 @@ class  FirebaseApi(
             "name" to part.name,
             "quantity" to part.quantity,
         )
-        val documentReference = firebaseFirestore.collection("repairs").document(part.partId)
+        val documentReference = firebaseFirestore.collection("parts").document(part.partId)
         val result = documentReference.update(map)
         result.await()
         if (result.isSuccessful) {
@@ -442,7 +436,7 @@ class  FirebaseApi(
     /* ********************************* TECHNICIANS ******************************************** */
     fun getTechnicianList(): Flow<Resource<List<Technician>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("hospitals")
+        val documentReference = firebaseFirestore.collection("technicians")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
@@ -459,7 +453,7 @@ class  FirebaseApi(
     /* ********************************* EST STATES ********************************************* */
     fun getEstStateList(): Flow<Resource<List<EstState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("hospitals")
+        val documentReference = firebaseFirestore.collection("est_states")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
@@ -493,7 +487,7 @@ class  FirebaseApi(
     /* ********************************* INSPECTIONS STATES ************************************* */
     fun getInspectionStateList(): Flow<Resource<List<InspectionState>>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val documentReference = firebaseFirestore.collection("repair_states")
+        val documentReference = firebaseFirestore.collection("inspection_states")
         val data = documentReference.get()
         data.await()
         if(data.isSuccessful) {
