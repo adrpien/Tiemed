@@ -142,7 +142,6 @@ class EditRepairFragment() : Fragment() {
             // lave empty here, i think
         }
     }
-
     val repairStateSpinnerListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(
             parent: AdapterView<*>?,
@@ -162,7 +161,6 @@ class EditRepairFragment() : Fragment() {
             // leave empty here, i think
         }
     }
-
     val repairEstStateSpinnerListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(
             parent: AdapterView<*>?,
@@ -182,8 +180,6 @@ class EditRepairFragment() : Fragment() {
             // lave empty here, i think
         }
     }
-
-
     val datePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
             var date: Calendar = Calendar.getInstance()
@@ -366,9 +362,6 @@ class EditRepairFragment() : Fragment() {
         }
 
         /* *************************** COMPONENTS INITIALIZATION ****************************************** */
-        // initRepairStateSpinner()
-        // initHospitalListSpinner()
-        // initEstStateGroupButton()
         binding.editRepairOpeningDateButton.setOnClickListener {
             val dialog = RepairDatePickerDialog()
             dialog.show(childFragmentManager, "repair_time_picker")
@@ -376,19 +369,17 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
         binding.editRepairSignatureImageButton.setOnClickListener {
             val dialog = SignatureDialog()
-            // Saves ByteArray stored in bundle and converts to Bitmap; sets this bitmap as signatureImageButton image
+            // childFragmentManager ?
             requireActivity().supportFragmentManager.setFragmentResultListener(
                 getString(R.string.signature_request_key),
                 viewLifecycleOwner,
                 FragmentResultListener { requestKey, result ->
                     signatureByteArray = result.getByteArray("signature")!!
-                    // binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
                 })
             dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
         }
         binding.editRepairRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
         binding.editRepairEstStateSpinner.onItemSelectedListener = repairEstStateSpinnerListener
-
         binding.editRepairEditSaveButton.setOnClickListener {
             if(isEditable == true) {
                 updateTempDevice()
@@ -436,9 +427,7 @@ class EditRepairFragment() : Fragment() {
         addPicture()
         }*/
 
-        setComponentsToNotEditable()
-        // bindData()
-   }
+        setComponentsToNotEditable() }
 
     /* ***************************** FUNCTIONS ************************************************** */
 
@@ -502,6 +491,9 @@ class EditRepairFragment() : Fragment() {
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
+                            if (result.data != null) {
+                                tempRepair.recipientSignatureId = result.data
+                            }
                         }
                         ResourceState.LOADING -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")
@@ -535,21 +527,25 @@ class EditRepairFragment() : Fragment() {
     private fun updateSignature() {
         viewLifecycleOwner.lifecycleScope.launch(){
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.updateSignatureFlow(tempRepair.deviceId, tempSignatureByteArray).collect() {
+                RepairViewModel.updateSignatureFlow(tempRepair.repairId, tempSignatureByteArray).collect() { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
+                            if (result.data != null) {
+                                tempRepair.recipientSignatureId = result.data
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature error")
+                        }
+                    }
                 }
             }
         }    }
 
-    private fun bindData(){
-        bindDeviceData(device)
-        bindRepairData(repair)
-        bindEstStateSpinner(repair)
-        bindHospitalListSpinner(repair)
-        bindSignatureImageButton(signatureByteArray)
-        bindRepairStateSpinner(repair)
-        //binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
-        //binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
-    }
     private fun setComponentsToNotEditable() {
         binding.editRepairOpeningDateButton.isEnabled = false
         binding.editRepairOpeningDateButton.isClickable = false
@@ -703,16 +699,9 @@ class EditRepairFragment() : Fragment() {
         }
 
     }
+    // TODO HERE DOESN'T WORK
     private fun bindSignatureImageButton(bytes: ByteArray) {
-        val options = BitmapFactory.Options()
-        options.inMutable = true
-        val bmp = BitmapFactory.decodeByteArray(
-            bytes,
-            0,
-            bytes.size,
-            options
-        )
-        binding.editRepairSignatureImageButton.setImageBitmap(bmp)
+        // binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap(bytes))
     }
 
     // Components initialization
@@ -761,14 +750,14 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairHospitalSpinner.adapter = hospitalListArrayAdapter
     }
 
-
-    private fun convertByteArrayToBitmap(): Bitmap? {
+    // Other
+    private fun convertByteArrayToBitmap(bytes: ByteArray): Bitmap {
         val options = BitmapFactory.Options()
         options.inMutable = true
         val bmp = BitmapFactory.decodeByteArray(
-            tempSignatureByteArray,
+            bytes,
             0,
-            tempSignatureByteArray.size,
+            bytes.size,
             options
         )
         return bmp
@@ -823,4 +812,15 @@ class EditRepairFragment() : Fragment() {
                 }
             }
     }
+    private fun bindData(){
+        bindDeviceData(device)
+        bindRepairData(repair)
+        bindEstStateSpinner(repair)
+        bindHospitalListSpinner(repair)
+        bindSignatureImageButton(signatureByteArray)
+        bindRepairStateSpinner(repair)
+        //binding.editRepairRepairingDateButton.setText(getDateString(tempRepair.repairingDate.toLong()))
+        //binding.editRepairOpeningDateButton.setText(getDateString(tempRepair.openingDate.toLong()))
+    }
+
 }

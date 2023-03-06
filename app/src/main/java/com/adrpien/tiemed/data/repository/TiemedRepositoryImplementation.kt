@@ -263,10 +263,10 @@ class  TiemedRepositoryImplementation(
     override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> = flow {
         signatureFlow(signatureId)
     }
-    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
+    override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String>> {
         return firebaseApi.uploadSignature(signatureId, byteArray)
     }
-    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
+    override fun createSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String>> {
         return firebaseApi.uploadSignature(signatureId, byteArray)
     }
 

@@ -44,8 +44,8 @@ interface TiemedRepository {
 
     /* ***** Signatures ************************************************************************* */
     fun getSignature(signatureId: String): Flow<Resource<ByteArray>>
-    fun updateSignature (signatureId: String, byteArray: ByteArray): Flow<Resource<String?>>
-    fun createSignature (signatureId: String, byteArray: ByteArray): Flow<Resource<String?>>
+    fun updateSignature (signatureId: String, byteArray: ByteArray): Flow<Resource<String>>
+    fun createSignature (signatureId: String, byteArray: ByteArray): Flow<Resource<String>>
 
     /* ***** Hospitals ************************************************************************** */
     fun getHospitalList(): Flow<Resource<List<Hospital>>>

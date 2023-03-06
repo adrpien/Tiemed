@@ -107,19 +107,19 @@ class RepairViewModel @Inject constructor(
     fun createSignatureFlow(
         signatureId: String,
         byteArray: ByteArray
-    ): StateFlow<Resource<Boolean>> = createSignature(signatureId, byteArray).stateIn(
+    ): StateFlow<Resource<String>> = createSignature(signatureId, byteArray).stateIn(
         scope = viewModelScope,
-        initialValue = Resource(ResourceState.LOADING, false),
+        initialValue = Resource(ResourceState.LOADING, ""),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<Boolean>>
+    )
     fun updateSignatureFlow(
         signatureId: String,
         byteArray: ByteArray
-    ): StateFlow<Resource<Boolean>> = updateSignature(signatureId, byteArray).stateIn(
+    ): StateFlow<Resource<String>> = updateSignature(signatureId, byteArray).stateIn(
         scope = viewModelScope,
-        initialValue = Resource(ResourceState.LOADING, false),
+        initialValue = Resource(ResourceState.LOADING, ""),
         started = SharingStarted.Lazily
-    ) as StateFlow<Resource<Boolean>>
+    )
 
     /* ************************** DEVICES ******************************************************* */
     fun getDeviceFlow(deviceId: String): StateFlow<Resource<Device>> = getDevice(deviceId).stateIn(

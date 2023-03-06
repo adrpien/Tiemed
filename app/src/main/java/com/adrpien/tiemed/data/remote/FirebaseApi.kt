@@ -309,7 +309,7 @@ class  FirebaseApi(
 
 
     /* ********************************* SIGNATURES ********************************************* */
-    fun uploadSignature(signatureId: String, signatureBytes: ByteArray): Flow<Resource<String?>> = flow {
+    fun uploadSignature(signatureId: String, signatureBytes: ByteArray): Flow<Resource<String>> = flow {
         emit(Resource(ResourceState.LOADING, null))
         val documentReference = firebaseStorage.getReference("signatures")
             .child("${signatureId}.jpg")

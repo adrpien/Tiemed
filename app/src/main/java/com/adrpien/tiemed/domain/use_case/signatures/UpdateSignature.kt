@@ -10,7 +10,7 @@ class UpdateSignature @Inject constructor (
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(signatureId: String, byteArray: ByteArray): Flow<Resource<String?>> {
+    operator fun invoke(signatureId: String, byteArray: ByteArray): Flow<Resource<String>> {
         return repository.updateSignature(signatureId, byteArray)
     }
 
