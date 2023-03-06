@@ -172,7 +172,7 @@ class  FirebaseApi(
             "returnTechnicianId" to repair.returnTechnicianId,
             "rate" to repair.rate,
             "recipient" to repair.recipient,
-            "recipientSignature" to repair.recipientSignatureId,
+            "recipientSignatureId" to repair.repairId,
         )
         val result = documentReference.set(map)
         result.await()

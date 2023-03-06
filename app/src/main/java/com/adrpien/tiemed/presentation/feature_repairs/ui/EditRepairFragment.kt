@@ -70,45 +70,57 @@ class EditRepairFragment() : Fragment() {
     // Fetched data
     private var hospitalList = listOf<Hospital>()
         set(value) {
-            field =value
-            RepairViewModel.updateRoomHospitalListFlow(value)
-            initHospitalListSpinner()
-            bindHospitalListSpinner(tempRepair)
+            if(value.isNotEmpty()) {
+                field = value
+                RepairViewModel.updateRoomHospitalListFlow(value)
+                initHospitalListSpinner()
+                if (tempRepair.hospitalId != "") { bindHospitalListSpinner(tempRepair) }
+            }
         }
     private var estStateList = listOf<EstState>()
         set(value) {
-            field =value
-            RepairViewModel.updateRoomEstStateListFlow(value)
-            initEstStateGroupButton()
-            bindEstStateSpinner(tempRepair)
+            if(value.isNotEmpty()) {
+                field = value
+                RepairViewModel.updateRoomEstStateListFlow(value)
+                initEstStateGroupButton()
+                if(tempRepair.estStateId != ""){ bindRepairStateSpinner(tempRepair)}
+            }
         }
     private var repairStateList = listOf<RepairState>()
         set(value) {
-            field =value
-            RepairViewModel.updateRoomRepairStateListFlow(value)
-            initRepairStateSpinner()
-            bindRepairStateSpinner(tempRepair)
-
+            if(value.isNotEmpty()) {
+                field = value
+                RepairViewModel.updateRoomRepairStateListFlow(value)
+                initRepairStateSpinner()
+                if(tempRepair.repairStateId != "") { bindRepairStateSpinner(tempRepair) }
+            }
         }
     private var device = Device()
         set(value) {
-            field =value
-            bindDeviceData(value)
-            tempDevice = value
+            if(value.deviceId != "") {
+                field =value
+                bindDeviceData(value)
+                tempDevice = value
+            }
         }
     private var repair = Repair()
         set(value) {
-            field =value
-            tempRepair = value
-            bindRepairData(value)
-            bindEstStateSpinner(value)
-            bindHospitalListSpinner(value)
-            bindRepairStateSpinner(value)
+            if(value.repairId != "") {
+                field =value
+                tempRepair = value
+                bindRepairData(tempRepair)
+                if(estStateList.isNotEmpty()){ bindEstStateSpinner(tempRepair)}
+                if(hospitalList.isNotEmpty()) { bindHospitalListSpinner(tempRepair)}
+                if(repairStateList.isNotEmpty()){ bindRepairStateSpinner(tempRepair)}
+            }
         }
     private var signatureByteArray = byteArrayOf()
         set(value) {
-            field = value
-            bindSignatureImageButton(value)
+            if(value.isNotEmpty()) {
+                field = value
+                tempSignatureByteArray = value
+                bindSignatureImageButton(value)
+            }
         }
 
     val hospitalSpinnerListener = object : AdapterView.OnItemSelectedListener {
@@ -147,7 +159,7 @@ class EditRepairFragment() : Fragment() {
             }
         }
         override fun onNothingSelected(p0: AdapterView<*>?) {
-            // lave empty here, i think
+            // leave empty here, i think
         }
     }
 
@@ -354,9 +366,9 @@ class EditRepairFragment() : Fragment() {
         }
 
         /* *************************** COMPONENTS INITIALIZATION ****************************************** */
-        initRepairStateSpinner()
-        initHospitalListSpinner()
-        initEstStateGroupButton()
+        // initRepairStateSpinner()
+        // initHospitalListSpinner()
+        // initEstStateGroupButton()
         binding.editRepairOpeningDateButton.setOnClickListener {
             val dialog = RepairDatePickerDialog()
             dialog.show(childFragmentManager, "repair_time_picker")
@@ -369,8 +381,8 @@ class EditRepairFragment() : Fragment() {
                 getString(R.string.signature_request_key),
                 viewLifecycleOwner,
                 FragmentResultListener { requestKey, result ->
-                    tempSignatureByteArray = result.getByteArray("signature")!!
-                    binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
+                    signatureByteArray = result.getByteArray("signature")!!
+                    // binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap())
                 })
             dialog.show(childFragmentManager, SIGNATURE_DIALOG_TAG)
         }
@@ -425,7 +437,7 @@ class EditRepairFragment() : Fragment() {
         }*/
 
         setComponentsToNotEditable()
-        bindData()
+        // bindData()
    }
 
     /* ***************************** FUNCTIONS ************************************************** */
@@ -666,8 +678,9 @@ class EditRepairFragment() : Fragment() {
         for (item in repairStateList) {
             if (repair.repairStateId == item.repairStateId) {
                 binding.editRepairRepairStateSpinner.setSelection(position)
-                position += 1
             }
+            position += 1
+
         }
     }
     private fun bindHospitalListSpinner(repair: Repair) {
@@ -675,8 +688,9 @@ class EditRepairFragment() : Fragment() {
         for (item in hospitalList) {
             if (repair.hospitalId == item.hospitalId) {
                 binding.editRepairHospitalSpinner.setSelection(position)
-                position += 1
             }
+            position += 1
+
         }
     }
     private fun bindEstStateSpinner(repair: Repair) {
