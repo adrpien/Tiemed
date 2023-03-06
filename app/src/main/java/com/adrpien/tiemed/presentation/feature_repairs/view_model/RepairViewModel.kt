@@ -68,12 +68,12 @@ class RepairViewModel @Inject constructor(
         initialValue = Resource(ResourceState.LOADING, Repair(repairId = "")),
         started = SharingStarted.Lazily
     ) as StateFlow<Resource<Repair>>
-    fun createRepairFlow(repair: Repair): StateFlow<Resource<Boolean>> =
+    fun createRepairFlow(repair: Repair): StateFlow<Resource<String>> =
         createRepair(repair).stateIn(
             scope = viewModelScope,
-            initialValue = Resource(ResourceState.LOADING, false),
+            initialValue = Resource(ResourceState.LOADING, ""),
             started = SharingStarted.Lazily
-        ) as StateFlow<Resource<Boolean>>
+        )
     fun updateRepairFlow(repair: Repair): StateFlow<Resource<Boolean>> =
         updateRepair(repair).stateIn(
             scope = viewModelScope,

@@ -440,10 +440,10 @@ class EditRepairFragment() : Fragment() {
                             if (result.data != null) {
                                 tempRepair.deviceId = result.data
                                 tempDevice.deviceId = result.data
-                                Log.d(EDIT_REPAIR_FRAGMENT, "Create device success")
                                 createRepair()
-                                createSignature()
                             }
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Create device success")
+
                         }
                         ResourceState.LOADING -> {
                             if (result.data != null) {
@@ -470,7 +470,11 @@ class EditRepairFragment() : Fragment() {
                         ResourceState.SUCCESS -> {
                             Toast.makeText(requireContext(), "Repair created!", Toast.LENGTH_SHORT).show()
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create repair success")
-
+                            if(result.data != null) {
+                                tempRepair.recipientSignatureId = result.data
+                                tempRepair.repairId = result.data
+                                createSignature()
+                            }
                         }
                         ResourceState.LOADING -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create repair loading")
@@ -491,9 +495,6 @@ class EditRepairFragment() : Fragment() {
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
-                            if (result.data != null) {
-                                tempRepair.recipientSignatureId = result.data
-                            }
                         }
                         ResourceState.LOADING -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")

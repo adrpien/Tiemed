@@ -190,7 +190,7 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         repairFlow(repairId)
     }
-    override fun insertRepair(repair: Repair): Flow<Resource<String?>> {
+    override fun insertRepair(repair: Repair): Flow<Resource<String>> {
         return firebaseApi.createRepair(repair)
     }
     override fun updateRepair(repair: Repair): Flow<Resource<Boolean>> {
