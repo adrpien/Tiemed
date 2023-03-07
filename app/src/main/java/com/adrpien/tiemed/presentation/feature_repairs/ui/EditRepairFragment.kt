@@ -204,6 +204,8 @@ class EditRepairFragment() : Fragment() {
         /* *************************** GET BUNDLE ****************************************** */
         repairId = arguments?.getString("repairId", "") ?: ""
         deviceId = arguments?.getString("deviceId", "") ?: ""
+        isEditable = arguments?.getBoolean("isEditable", false) ?: false
+
 
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -221,100 +223,101 @@ class EditRepairFragment() : Fragment() {
         if (repairId != "") {
             // repair
             viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.getRepairFlow(repairId).collect { result ->
-                    when (result.resourceState) {
-                        ResourceState.ERROR -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Repair collecting error")
-                        }
-                        ResourceState.SUCCESS -> {
-                            if (result.data != null) {
-                                    repair = result.data
-                            }
-                        }
-                        ResourceState.LOADING -> {
-                            if (result.data != null) {
-                                repair = result.data
-                            }
-                        }
-                    }
-                }
-            }
-        }
-            // device
-            viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.getDeviceFlow(deviceId).collect { result ->
-                    when (result.resourceState) {
-                        ResourceState.SUCCESS -> {
-                            if (result.data != null) {
-                                device = result.data
-                            }
-                        }
-                        ResourceState.LOADING -> {
-                            if (result.data != null) {
-                                device = result.data
-                            }
-                        }
-                        ResourceState.ERROR -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Device collecting error")
-                        }
-                    }
-                }
-            }
-        }
-            // signature
-            viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.getSignatureFlow(repair.recipientSignatureId).collect { result ->
-                    when (result.resourceState) {
-                        ResourceState.SUCCESS -> {
-                            if (result.data != null) {
-                                signatureByteArray = result.data
-                                if (tempSignatureByteArray.isEmpty()) {
-                                    tempSignatureByteArray = signatureByteArray
-                                }
-                            }
-                        }
-                        ResourceState.LOADING -> {
-                            if (result.data != null) {
-                                signatureByteArray = result.data
-                                if (tempSignatureByteArray.isEmpty()) {
-                                    tempSignatureByteArray = signatureByteArray
-                                }
-                            }
-                        }
-                        ResourceState.ERROR -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Signature collectin error")
-                        }
-
-                    }
-                }
-            }
-        }
-        }
-        // hospitalList
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    RepairViewModel.getHospitalListFlow().collect { result ->
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RepairViewModel.getRepairFlow(repairId).collect { result ->
                         when (result.resourceState) {
                             ResourceState.ERROR -> {
-                                Log.d(EDIT_REPAIR_FRAGMENT, "Hospital list collecting error")
+                                Log.d(EDIT_REPAIR_FRAGMENT, "Repair collecting error")
                             }
                             ResourceState.SUCCESS -> {
                                 if (result.data != null) {
-                                    hospitalList = result.data
+                                    repair = result.data
                                 }
                             }
                             ResourceState.LOADING -> {
                                 if (result.data != null) {
-                                    hospitalList = result.data
+                                    repair = result.data
                                 }
                             }
                         }
                     }
                 }
             }
+            // device
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RepairViewModel.getDeviceFlow(deviceId).collect { result ->
+                        when (result.resourceState) {
+                            ResourceState.SUCCESS -> {
+                                if (result.data != null) {
+                                    device = result.data
+                                }
+                            }
+                            ResourceState.LOADING -> {
+                                if (result.data != null) {
+                                    device = result.data
+                                }
+                            }
+                            ResourceState.ERROR -> {
+                                Log.d(EDIT_REPAIR_FRAGMENT, "Device collecting error")
+                            }
+                        }
+                    }
+                }
+            }
+            // signature
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RepairViewModel.getSignatureFlow(repair.recipientSignatureId)
+                        .collect { result ->
+                            when (result.resourceState) {
+                                ResourceState.SUCCESS -> {
+                                    if (result.data != null) {
+                                        signatureByteArray = result.data
+                                        if (tempSignatureByteArray.isEmpty()) {
+                                            tempSignatureByteArray = signatureByteArray
+                                        }
+                                    }
+                                }
+                                ResourceState.LOADING -> {
+                                    if (result.data != null) {
+                                        signatureByteArray = result.data
+                                        if (tempSignatureByteArray.isEmpty()) {
+                                            tempSignatureByteArray = signatureByteArray
+                                        }
+                                    }
+                                }
+                                ResourceState.ERROR -> {
+                                    Log.d(EDIT_REPAIR_FRAGMENT, "Signature collectin error")
+                                }
+
+                            }
+                        }
+                }
+            }
+        }
+        // hospitalList
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                RepairViewModel.getHospitalListFlow().collect { result ->
+                    when (result.resourceState) {
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Hospital list collecting error")
+                        }
+                        ResourceState.SUCCESS -> {
+                            if (result.data != null) {
+                                hospitalList = result.data
+                            }
+                        }
+                        ResourceState.LOADING -> {
+                            if (result.data != null) {
+                                hospitalList = result.data
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // repairStateList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -381,7 +384,7 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairRepairStateSpinner.onItemSelectedListener = repairStateSpinnerListener
         binding.editRepairEstStateSpinner.onItemSelectedListener = repairEstStateSpinnerListener
         binding.editRepairEditSaveButton.setOnClickListener {
-            if(isEditable == true) {
+            if (isEditable == true) {
                 updateTempDevice()
                 updateTempRepair()
                 if (repairId != "") {
@@ -403,7 +406,7 @@ class EditRepairFragment() : Fragment() {
             }
         }
         binding.editRepairCancelButton.setOnClickListener {
-            if(isEditable == true ) {
+            if (isEditable == true) {
                 setComponentsToNotEditable()
                 isEditable = false
             } else {
@@ -427,7 +430,13 @@ class EditRepairFragment() : Fragment() {
         addPicture()
         }*/
 
-        setComponentsToNotEditable() }
+        if (isEditable) {
+            setComponentsToEditable()
+        } else {
+            setComponentsToNotEditable()
+        }
+    }
+
 
     /* ***************************** FUNCTIONS ************************************************** */
 

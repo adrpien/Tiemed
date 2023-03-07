@@ -89,7 +89,6 @@ class RepairListFragment: Fragment() {
     lateinit var repairListHospitalSpinner: Spinner
     private val spinnerHospitalList = mutableListOf<String>()
 
-
     private var filteringCondition: Bundle = bundleOf()
     private var sortingConditions: Bundle = bundleOf()
     private var groupingCondition: Bundle = bundleOf()
@@ -102,7 +101,8 @@ class RepairListFragment: Fragment() {
                 val fragment = EditRepairFragment()
                 fragment.arguments = bundleOf(
                     "repairId" to repairList[position].repairId,
-                    "deviceId" to repairList[position].deviceId
+                    "deviceId" to repairList[position].deviceId,
+                    "editFlag" to false
                     )
                 childFragmentManager.beginTransaction()
                     .replace(R.id.detailsFragmentContainerView, fragment)
@@ -347,7 +347,7 @@ class RepairListFragment: Fragment() {
         binding.addRepairFABButton.setOnClickListener {
             if (requireActivity().resources.configuration.screenLayout >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
                 val fragment = EditRepairFragment()
-                fragment.arguments = bundleOf("id" to "")
+                fragment.arguments = bundleOf("isEditable" to true)
                 childFragmentManager.beginTransaction()
                     .replace(R.id.detailsFragmentContainerView, fragment)
                     .addToBackStack(null)
