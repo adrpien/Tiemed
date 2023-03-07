@@ -735,7 +735,7 @@ class EditRepairFragment() : Fragment() {
         }
 
     }
-    // TODO HERE DOESN'T WORK
+    // TODO bindSignatureImageButton to repair
     private fun bindSignatureImageButton(bytes: ByteArray) {
         binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap(bytes))
     }
