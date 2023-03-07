@@ -82,7 +82,7 @@ class EditRepairFragment() : Fragment() {
             if(value.isNotEmpty()) {
                 field = value
                 RepairViewModel.updateRoomEstStateListFlow(value)
-                initEstStateGroupButton()
+                initEstStateSpinner()
                 if(tempRepair.estStateId != ""){ bindRepairStateSpinner(tempRepair)}
             }
         }
@@ -745,7 +745,8 @@ class EditRepairFragment() : Fragment() {
     }
 
     // Components initialization
-    private fun initEstStateGroupButton() {
+    private fun initEstStateSpinner() {
+        spinnerEstStateList.clear()
         for (item in estStateList) {
             spinnerEstStateList.add(item.estState)
         }
@@ -761,6 +762,7 @@ class EditRepairFragment() : Fragment() {
             estStateListArrayAdapter
     }
     private fun initRepairStateSpinner() {
+        spinnerRepairStateList.clear()
         for (item in repairStateList) {
                 spinnerRepairStateList.add(item.repairState)
         }
@@ -775,6 +777,7 @@ class EditRepairFragment() : Fragment() {
 
     }
     private fun initHospitalListSpinner() {
+        spinnerHospitalList.clear()
         for (item in hospitalList) {
             item.hospitalName.let {
                 spinnerHospitalList.add(item.hospitalName)
