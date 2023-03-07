@@ -422,73 +422,77 @@ class RepairListFragment: Fragment() {
         )
     }
 
+
+    // TODO Sorting, filtering and grouping
     private fun groupRepairListItemClick() {
-        groupingCondition = getGroupingConditions()
-        groupRepairList(groupingCondition)
+        Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
+
+        // groupingCondition = getGroupingConditions()
+        // groupRepairList(groupingCondition)
     }
     private fun filterRepairListItemClick() {
-        filteringCondition = getFilteringConditions()
-        filterRepairList(filteringCondition)
+        Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
+
+        // filteringCondition = getFilteringConditions()
+        // filterRepairList(filteringCondition)
     }
     private fun sortRepairListItemClick() {
-        sortingConditions = getSortingConditions()
-        sortRepairList(sortingConditions)
+        Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
+
+        // sortingConditions = getSortingConditions()
+        // sortRepairList(sortingConditions)
     }
 
     private fun getSortingConditions(): Bundle {
-        val dialog = FilteringDialog()
-        dialog.show(parentFragmentManager, "SORTING ALERT DIALOG")
-        childFragmentManager.setFragmentResultListener(SORTING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
-            filteringCondition = bundle
-        }
-        return  filteringCondition
+        // val dialog = FilteringDialog()
+        // dialog.show(parentFragmentManager, "SORTING ALERT DIALOG")
+        // childFragmentManager.setFragmentResultListener(SORTING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
+        //     filteringCondition = bundle
+        // }
+        return  sortingConditions
     }
     private fun getGroupingConditions(): Bundle {
-        // TODO Open AlertDialog and return bundle with conditions
-        val condition = bundleOf()
-        return  condition
+        // val condition = bundleOf()
+        return  groupingCondition
     }
     private fun getFilteringConditions(): Bundle {
-        val dialog = FilteringDialog()
-        dialog.show(parentFragmentManager, "FILTERING ALERT DIALOG")
-        childFragmentManager.setFragmentResultListener(FILTERING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
-            filteringCondition = bundle
-        }
+        // val dialog = FilteringDialog()
+        // dialog.show(parentFragmentManager, "FILTERING ALERT DIALOG")
+        // childFragmentManager.setFragmentResultListener(FILTERING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
+        //     filteringCondition = bundle
+        // }
         return  filteringCondition
     }
 
     private fun groupRepairList(bundle: Bundle) {
-        val condition = bundle.get("")
-        val condition2 = bundle.get("")
-        // TODO Repairs grouping and update adapter
-        Toast.makeText(context, getString(R.string.WAIT_FOR_IMPLEMENTATION), Toast.LENGTH_SHORT).show()
+        // val condition = bundle.get("")
     }
     private fun sortRepairList(bundle: Bundle) {
-        val bundleType = bundle.getString("bundle_type")
-        val switch = bundle.getBoolean("switch")
-        val value = bundle.getLong("switch")
-        preparedRepairList = repairList.sortedBy { repair ->
-            if (switch) {
-                repair.openingDate.toLong() > value
-            } else {
-                repair.openingDate.toLong() < value
-            }
-        }
-        binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
+        // val bundleType = bundle.getString("bundle_type")
+        // val switch = bundle.getBoolean("switch")
+        // val value = bundle.getLong("switch")
+        // preparedRepairList = repairList.sortedBy { repair ->
+        //     if (switch) {
+        //         repair.openingDate.toLong() > value
+        //     } else {
+        //         repair.openingDate.toLong() < value
+        //     }
+        // }
+        // binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
 
     }
     private fun filterRepairList(bundle: Bundle) {
-        val bundleType = bundle.getString("bundle_type")
-        val switch = bundle.getBoolean("switch")
-        val value = bundle.getLong("value")
-        preparedRepairList = repairList.filter { repair ->
-                if (switch) {
-                    repair.openingDate.toLong() > value
-                } else {
-                    repair.openingDate.toLong() < value
-                }
-        }
-        binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
+        // val bundleType = bundle.getString("bundle_type")
+        // val switch = bundle.getBoolean("switch")
+        // val value = bundle.getLong("value")
+        // preparedRepairList = repairList.filter { repair ->
+        //         if (switch) {
+        //             repair.openingDate.toLong() > value
+        //         } else {
+        //             repair.openingDate.toLong() < value
+        //         }
+        // }
+        // binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
     }
 
 
