@@ -47,36 +47,46 @@ class RepairListFragment: Fragment() {
 
     private var repairList: List<Repair> = listOf()
         set(value) {
-            RepairListViewModel.updateRoomRepairListFlow(value)
-            field = value
-            preparedRepairList = value
-            prepareRepairList()
+            if(value.isNotEmpty()){
+                RepairListViewModel.updateRoomRepairListFlow(value)
+                field = value
+                preparedRepairList = value
+                prepareRepairList()
+            }
         }
     private var deviceList: List<Device> = listOf()
         set(value) {
-            field = value
-            RepairListViewModel.updateRoomDeviceListFlow(value)
-            updateRecyclerViewAdapter()
+            if(value.isNotEmpty()){
+                field = value
+                RepairListViewModel.updateRoomDeviceListFlow(value)
+                updateRecyclerViewAdapter()
+            }
         }
     private var hospitalList: List<Hospital> = listOf()
         set(value) {
-            field =value
-            RepairListViewModel.updateRoomHospitalListFlow(value)
-            updateRecyclerViewAdapter()
-            activity?.invalidateOptionsMenu()
+            if(value.isNotEmpty()){
+                field =value
+                RepairListViewModel.updateRoomHospitalListFlow(value)
+                updateRecyclerViewAdapter()
+                activity?.invalidateOptionsMenu()
+            }
+
         }
     private var repairStateList: List<RepairState> = listOf()
         set(value) {
-            field =value
-            RepairListViewModel.updateRoomRepairStateListFlow(value)
-            updateRecyclerViewAdapter()
-
+            if(value.isNotEmpty()){
+                field =value
+                RepairListViewModel.updateRoomRepairStateListFlow(value)
+                updateRecyclerViewAdapter()
+            }
         }
     private var technicianList: List<Technician> = listOf()
         set(value) {
-            field =value
-            RepairListViewModel.updateRoomTechnicianListFlow(value)
-            updateRecyclerViewAdapter()
+            if(value.isNotEmpty()){
+                field =value
+                RepairListViewModel.updateRoomTechnicianListFlow(value)
+                updateRecyclerViewAdapter()
+            }
         }
 
     private var preparedRepairList: List<Repair> = listOf()
@@ -136,67 +146,6 @@ class RepairListFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        /* ********************** MENU ******************************************** */
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(
-            object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.repair_list_options_menu, menu)
-                    (requireActivity() as AppCompatActivity).supportActionBar?.title =
-                        ACTION_BAR_TITLE
-
-                    // Hospital spinner in action bar implementation
-                    hospitalList.forEach {
-                        spinnerHospitalList.add(it.hospitalName)
-                    }
-                    hospitalSpinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
-                    repairListHospitalSpinner = hospitalSpinnerItem.actionView as Spinner
-                    val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
-                        ArrayAdapter(
-                            it,
-                            android.R.layout.simple_spinner_item,
-                            spinnerHospitalList
-                        )
-                    }
-                    repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
-                    repairListHospitalSpinner.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                selectHospital(position)
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                            }
-                        }
-                }
-                override fun onMenuItemSelected(item: MenuItem): Boolean {
-                    return when (item.itemId) {
-                        R.id.repairSortItem -> {
-                            sortRepairListItemClick()
-                            true
-                        }
-                        R.id.repairFilterItem -> {
-                            filterRepairListItemClick()
-                            true
-                        }
-                        R.id.repairGroupItem -> {
-                            groupRepairListItemClick()
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            },
-            viewLifecycleOwner,
-            Lifecycle.State.RESUMED
-        )
 
         /* ********************** RECYCLER VIEW ******************************************** */
         // Setting RecyclerView
@@ -260,6 +209,10 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
+                                /* ********************** MENU ************************************************************ */
+                                // TODO I SEE ERROR HERE, SPINNER ADAPTER CAN BE CREATED  WHEN HOSPITAL LIST IS EMPTY
+                                // Need to wait
+                                initMenu()
                             }
                         }
                         ResourceState.LOADING -> {
@@ -357,6 +310,8 @@ class RepairListFragment: Fragment() {
             }
         }
     }
+
+
     override fun onResume() {
         super.onResume()
         activity?.invalidateOptionsMenu()
@@ -369,12 +324,104 @@ class RepairListFragment: Fragment() {
 
 
     /* ***************************** FUNCTIONS ************************************************** */
+
     private fun selectHospital(position: Int) {
-        val selection = hospitalList[position].hospitalId
-        preparedRepairList = repairList.filter { it.hospitalId == selection }
+        if(position != 0) {
+            val selection = hospitalList[position].hospitalId
+            preparedRepairList = repairList.filter { it.hospitalId == selection }
+            binding.repairRecyclerView.adapter =
+                RepairListAdapter(
+                    preparedRepairList,
+                    hospitalList,
+                    deviceList,
+                    repairStateList,
+                    recyclerViewListener
+                )
+        } else {
+            preparedRepairList = repairList
+            binding.repairRecyclerView.adapter =
+                RepairListAdapter(
+                    preparedRepairList,
+                    hospitalList,
+                    deviceList,
+                    repairStateList,
+                    recyclerViewListener
+                )
+        }
+    }
+    private fun prepareRepairList() {
+        //filterRepairList(filteringCondition)
+        //sortRepairList(sortingConditions)
+        //groupRepairList(groupingCondition)
+    }
+    private fun updateRecyclerViewAdapter(){
         binding.repairRecyclerView.adapter =
             RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
     }
+    private fun initMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(
+            object : MenuProvider
+            {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.repair_list_options_menu, menu)
+                    (requireActivity() as AppCompatActivity).supportActionBar?.title =
+                        ACTION_BAR_TITLE
+
+                    // Hospital spinner in action bar implementation
+                    spinnerHospitalList.clear()
+                    spinnerHospitalList.add(0, "")
+                    hospitalList.forEach {
+                        spinnerHospitalList.add(it.hospitalName)
+                    }
+                    hospitalSpinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
+                    repairListHospitalSpinner = hospitalSpinnerItem.actionView as Spinner
+                    val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
+                        ArrayAdapter(
+                            it,
+                            android.R.layout.simple_spinner_item,
+                            spinnerHospitalList
+                        )
+                    }
+                    repairListHospitalSpinner.adapter = hospitalSpinnerAdapter
+                    repairListHospitalSpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                selectHospital(position)
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                            }
+                        }
+                }
+                override fun onMenuItemSelected(item: MenuItem): Boolean {
+                    return when (item.itemId) {
+                        R.id.repairSortItem -> {
+                            sortRepairListItemClick()
+                            true
+                        }
+                        R.id.repairFilterItem -> {
+                            filterRepairListItemClick()
+                            true
+                        }
+                        R.id.repairGroupItem -> {
+                            groupRepairListItemClick()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
+    }
+
     private fun groupRepairListItemClick() {
         groupingCondition = getGroupingConditions()
         groupRepairList(groupingCondition)
@@ -387,12 +434,7 @@ class RepairListFragment: Fragment() {
         sortingConditions = getSortingConditions()
         sortRepairList(sortingConditions)
     }
-    private fun groupRepairList(bundle: Bundle) {
-        val condition = bundle.get("")
-        val condition2 = bundle.get("")
-        // TODO Repairs grouping and update adapter
-        Toast.makeText(context, getString(R.string.WAIT_FOR_IMPLEMENTATION), Toast.LENGTH_SHORT).show()
-    }
+
     private fun getSortingConditions(): Bundle {
         val dialog = FilteringDialog()
         dialog.show(parentFragmentManager, "SORTING ALERT DIALOG")
@@ -400,6 +442,26 @@ class RepairListFragment: Fragment() {
             filteringCondition = bundle
         }
         return  filteringCondition
+    }
+    private fun getGroupingConditions(): Bundle {
+        // TODO Open AlertDialog and return bundle with conditions
+        val condition = bundleOf()
+        return  condition
+    }
+    private fun getFilteringConditions(): Bundle {
+        val dialog = FilteringDialog()
+        dialog.show(parentFragmentManager, "FILTERING ALERT DIALOG")
+        childFragmentManager.setFragmentResultListener(FILTERING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
+            filteringCondition = bundle
+        }
+        return  filteringCondition
+    }
+
+    private fun groupRepairList(bundle: Bundle) {
+        val condition = bundle.get("")
+        val condition2 = bundle.get("")
+        // TODO Repairs grouping and update adapter
+        Toast.makeText(context, getString(R.string.WAIT_FOR_IMPLEMENTATION), Toast.LENGTH_SHORT).show()
     }
     private fun sortRepairList(bundle: Bundle) {
         val bundleType = bundle.getString("bundle_type")
@@ -415,11 +477,6 @@ class RepairListFragment: Fragment() {
         binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
 
     }
-    private fun getGroupingConditions(): Bundle {
-        // TODO Open AlertDialog and return bundle with conditions
-        val condition = bundleOf()
-        return  condition
-    }
     private fun filterRepairList(bundle: Bundle) {
         val bundleType = bundle.getString("bundle_type")
         val switch = bundle.getBoolean("switch")
@@ -433,21 +490,6 @@ class RepairListFragment: Fragment() {
         }
         binding.repairRecyclerView.adapter = RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
     }
-    private fun getFilteringConditions(): Bundle {
-        val dialog = FilteringDialog()
-        dialog.show(parentFragmentManager, "FILTERING ALERT DIALOG")
-        childFragmentManager.setFragmentResultListener(FILTERING_REQUEST_KEY, viewLifecycleOwner) { string, bundle ->
-            filteringCondition = bundle
-        }
-        return  filteringCondition
-    }
-    private fun prepareRepairList() {
-        //filterRepairList(filteringCondition)
-        //sortRepairList(sortingConditions)
-        //groupRepairList(groupingCondition)
-    }
-    private fun updateRecyclerViewAdapter(){
-        binding.repairRecyclerView.adapter =
-            RepairListAdapter(preparedRepairList, hospitalList, deviceList, repairStateList , recyclerViewListener)
-    }
+
+
 }

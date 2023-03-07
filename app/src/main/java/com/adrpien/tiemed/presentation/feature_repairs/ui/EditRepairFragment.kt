@@ -37,12 +37,10 @@ import java.util.*
 @AndroidEntryPoint
 class EditRepairFragment() : Fragment() {
 
-    // ViewBinding
     private var _binding: FragmentRepairEditBinding? = null
     private val binding
         get() = _binding!!
 
-    // ViewModel
     val RepairViewModel by viewModels<RepairViewModel>()
 
     private val EDIT_REPAIR_FRAGMENT = "EDIT_REPAIR_FRAGMENT"
@@ -59,7 +57,6 @@ class EditRepairFragment() : Fragment() {
     private var repairId: String = ""
     private var deviceId: String = ""
 
-    // Temp data
     private var tempRepair = Repair()
     private var tempDevice = Device()
     private var tempSignatureByteArray = byteArrayOf()
@@ -67,7 +64,6 @@ class EditRepairFragment() : Fragment() {
 
     private var isEditable = false
 
-    // Fetched data
     private var hospitalList = listOf<Hospital>()
         set(value) {
             if(value.isNotEmpty()) {
