@@ -557,22 +557,22 @@ class EditRepairFragment() : Fragment() {
         }    }
 
     private fun setComponentsToNotEditable() {
-        binding.editRepairOpeningDateButton.isEnabled = false
-        binding.editRepairOpeningDateButton.isClickable = false
-        binding.editRepairOpeningDateButton.isFocusableInTouchMode = false
-
         binding.editRepairNameEditText.isEnabled = false
         binding.editRepairNameEditText.isClickable = false
         binding.editRepairNameEditText.isFocusableInTouchMode = false
+
         binding.editRepairManufacturerEditText.isEnabled = false
         binding.editRepairManufacturerEditText.isClickable = false
         binding.editRepairManufacturerEditText.isFocusableInTouchMode = false
+
         binding.editRepairModelEditText.isEnabled = false
         binding.editRepairModelEditText.isClickable = false
         binding.editRepairModelEditText.isFocusableInTouchMode = false
+
         binding.editRepairSerialNumberEditText.isEnabled = false
         binding.editRepairSerialNumberEditText.isClickable = false
         binding.editRepairSerialNumberEditText.isFocusableInTouchMode = false
+
         binding.editRepairInventoryNumberEditText.isEnabled = false
         binding.editRepairInventoryNumberEditText.isClickable = false
         binding.editRepairInventoryNumberEditText.isFocusableInTouchMode = false
@@ -589,65 +589,95 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairRepairDescriptionEditText.isClickable = false
         binding.editRepairRepairDescriptionEditText.isFocusableInTouchMode = false
 
-        binding.editRepairRepairingDateButton.isEnabled = false
-        binding.editRepairRepairingDateButton.isClickable = false
-        binding.editRepairRepairingDateButton.isFocusableInTouchMode = false
-
         binding.editRepairPartDescriptionEditText.isEnabled = false
         binding.editRepairPartDescriptionEditText.isClickable = false
         binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = false
 
         binding.editRepairRepairStateSpinner.isEnabled = false
         binding.editRepairRepairStateSpinner.isClickable = false
-        binding.editRepairRepairStateSpinner.isFocusableInTouchMode = false
+        binding.editRepairRepairStateSpinner.isFocusable = false
+
+
+        binding.editRepairHospitalSpinner.isEnabled = false
+        binding.editRepairHospitalSpinner.isClickable = false
+        binding.editRepairHospitalSpinner.isFocusable = false
 
         binding.editRepairEstStateSpinner.isEnabled = false
         binding.editRepairEstStateSpinner.isClickable = false
-        binding.editRepairEstStateSpinner.isFocusableInTouchMode = false
+        binding.editRepairEstStateSpinner.isFocusable = false
 
+        binding.editRepairRepairingDateButton.isEnabled = false
+        binding.editRepairRepairingDateButton.isClickable = false
+        binding.editRepairRepairingDateButton.isFocusable = false
+
+        binding.editRepairOpeningDateButton.isEnabled = false
+        binding.editRepairOpeningDateButton.isClickable = false
+        binding.editRepairOpeningDateButton.isFocusable = false
+
+        binding.editRepairSignatureImageButton.isEnabled = false
+        binding.editRepairSignatureImageButton.isClickable = false
+        binding.editRepairSignatureImageButton.isFocusable = false
     }
     private fun setComponentsToEditable() {
-        // TODO Signature not editable to implement
-        // TODO Spinners not editable bug to reapir
-        binding.editRepairOpeningDateButton.isEnabled = true
-        binding.editRepairOpeningDateButton.isClickable = true
-        binding.editRepairOpeningDateButton.isFocusable = true
         binding.editRepairNameEditText.isEnabled = true
         binding.editRepairNameEditText.isClickable = true
         binding.editRepairNameEditText.isFocusableInTouchMode = true
+
         binding.editRepairManufacturerEditText.isEnabled = true
         binding.editRepairManufacturerEditText.isClickable = true
         binding.editRepairManufacturerEditText.isFocusableInTouchMode = true
+
         binding.editRepairModelEditText.isEnabled = true
         binding.editRepairModelEditText.isClickable = true
         binding.editRepairModelEditText.isFocusableInTouchMode = true
+
         binding.editRepairSerialNumberEditText.isEnabled = true
         binding.editRepairSerialNumberEditText.isClickable = true
         binding.editRepairSerialNumberEditText.isFocusableInTouchMode = true
+
         binding.editRepairInventoryNumberEditText.isEnabled = true
         binding.editRepairInventoryNumberEditText.isClickable = true
         binding.editRepairInventoryNumberEditText.isFocusableInTouchMode = true
+
         binding.editRepairWardEditText.isEnabled = true
         binding.editRepairWardEditText.isClickable = true
         binding.editRepairWardEditText.isFocusableInTouchMode = true
+
         binding.editRepairDefectDescriptionEditText.isEnabled = true
         binding.editRepairDefectDescriptionEditText.isClickable = true
         binding.editRepairDefectDescriptionEditText.isFocusableInTouchMode = true
+
         binding.editRepairRepairDescriptionEditText.isEnabled = true
         binding.editRepairRepairDescriptionEditText.isClickable = true
         binding.editRepairRepairDescriptionEditText.isFocusableInTouchMode = true
-        binding.editRepairRepairingDateButton.isEnabled = true
-        binding.editRepairRepairingDateButton.isClickable = true
-        binding.editRepairRepairingDateButton.isFocusableInTouchMode = true
+
         binding.editRepairPartDescriptionEditText.isEnabled = true
         binding.editRepairPartDescriptionEditText.isClickable = true
         binding.editRepairPartDescriptionEditText.isFocusableInTouchMode = true
+
         binding.editRepairRepairStateSpinner.isEnabled = true
         binding.editRepairRepairStateSpinner.isClickable = true
-        binding.editRepairRepairStateSpinner.isFocusableInTouchMode = true
+        binding.editRepairRepairStateSpinner.isFocusable = true
+
+        binding.editRepairHospitalSpinner.isEnabled = true
+        binding.editRepairHospitalSpinner.isClickable = true
+        binding.editRepairHospitalSpinner.isFocusable = true
+
         binding.editRepairEstStateSpinner.isEnabled = true
         binding.editRepairEstStateSpinner.isClickable = true
-        binding.editRepairEstStateSpinner.isFocusableInTouchMode = true
+        binding.editRepairEstStateSpinner.isFocusable = true
+
+        binding.editRepairRepairingDateButton.isEnabled = true
+        binding.editRepairRepairingDateButton.isClickable = true
+        binding.editRepairRepairingDateButton.isFocusable = true
+
+        binding.editRepairOpeningDateButton.isEnabled = true
+        binding.editRepairOpeningDateButton.isClickable = true
+        binding.editRepairOpeningDateButton.isFocusable = true
+
+        binding.editRepairSignatureImageButton.isEnabled = true
+        binding.editRepairSignatureImageButton.isClickable = true
+        binding.editRepairSignatureImageButton.isFocusable = true
     }
 
     private fun updateTempRepair(){
@@ -711,7 +741,7 @@ class EditRepairFragment() : Fragment() {
     }
     // TODO HERE DOESN'T WORK
     private fun bindSignatureImageButton(bytes: ByteArray) {
-        // binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap(bytes))
+        binding.editRepairSignatureImageButton.setImageBitmap(convertByteArrayToBitmap(bytes))
     }
 
     // Components initialization
@@ -834,3 +864,4 @@ class EditRepairFragment() : Fragment() {
     }
 
 }
+
