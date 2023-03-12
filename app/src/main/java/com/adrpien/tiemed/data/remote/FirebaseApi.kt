@@ -316,7 +316,7 @@ class  FirebaseApi(
             val result = documentReference.putBytes(signatureBytes)
             result.await()
                     if (result.isSuccessful) {
-                        // TODO Need implement storing photos in
+                        // TODO Need implement store photos locally and implement caching mechanism in uploadSignature function
                         emit(Resource(ResourceState.SUCCESS, documentReference.downloadUrl.toString()))
                         Log.d(TIEMED_REPOSITORY_DEBUG, "Signature uploaded")
 

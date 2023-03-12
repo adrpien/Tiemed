@@ -24,9 +24,6 @@ class MainActivity : AppCompatActivity() {
     // ViewBinding
     private lateinit var binding: ActivityMainBinding
 
-    // ViewModel
-    val userViewModel by viewModels<UserViewModel>()
-
     // Firebase Authentication required to log out
     private val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -64,8 +61,6 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.logOutItem -> {
-
-                // TODO logoutMenuItem click reaction
                 firebaseAuth.signOut()
                 finish()
                 true

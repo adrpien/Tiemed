@@ -14,7 +14,7 @@ import com.adrpien.tiemed.domain.model.Repair
 
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
 
-
+// TODO Defect description dialog to finish, if used
 class DefectDescriptionDialog: DialogFragment() {
 
     val viewModelProvider by viewModels<InspectionViewModel>()
@@ -34,7 +34,6 @@ class DefectDescriptionDialog: DialogFragment() {
                     bundleOf("defect_description" to defectDescriptionEditText.text)
                 )
                 // Creating
-                // TODO awating for Repair class finish
                 val repair = Repair(
                     defectDescription = defectDescriptionEditText.text.toString()
                 )

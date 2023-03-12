@@ -167,32 +167,32 @@ class RepairViewModel @Inject constructor(
     fun updateRoomHospitalListFlow(hospitalList: List<Hospital>): StateFlow<Resource<Boolean>> = updateRoomHospitalList(hospitalList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
     fun updateRoomDeviceListFlow(deviceList: List<Device>): StateFlow<Resource<Boolean>> = updateRoomDeviceList(deviceList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
     fun updateRoomEstStateListFlow(estStateList: List<EstState>): StateFlow<Resource<Boolean>> = updateRoomEstStateList(estStateList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
     fun updateRoomRepairListFlow(repairList: List<Repair>): StateFlow<Resource<Boolean>> = updateRoomRepairList(repairList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
     fun updateRoomRepairStateListFlow(repairStateList: List<RepairState>): StateFlow<Resource<Boolean>> = updateRoomRepairStateList(repairStateList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
     fun updateRoomTechnicianListFlow(technicianList: List<Technician>): StateFlow<Resource<Boolean>> = updateRoomTechnicianList(technicianList).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        Resource(ResourceState.LOADING, null)
+        Resource(ResourceState.LOADING, false)
     )
 
 }

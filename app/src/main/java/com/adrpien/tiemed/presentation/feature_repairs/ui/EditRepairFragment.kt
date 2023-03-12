@@ -68,7 +68,7 @@ class EditRepairFragment() : Fragment() {
         set(value) {
             if(value.isNotEmpty()) {
                 field = value
-                RepairViewModel.updateRoomHospitalListFlow(value)
+                // RepairViewModel.updateRoomHospitalListFlow(value)
                 initHospitalListSpinner()
                 if (tempRepair.hospitalId != "") { bindHospitalListSpinner(tempRepair) }
             }
@@ -77,7 +77,7 @@ class EditRepairFragment() : Fragment() {
         set(value) {
             if(value.isNotEmpty()) {
                 field = value
-                RepairViewModel.updateRoomEstStateListFlow(value)
+                // RepairViewModel.updateRoomEstStateListFlow(value)
                 initEstStateSpinner()
                 if(tempRepair.estStateId != ""){ bindRepairStateSpinner(tempRepair)}
             }
@@ -86,7 +86,7 @@ class EditRepairFragment() : Fragment() {
         set(value) {
             if(value.isNotEmpty()) {
                 field = value
-                RepairViewModel.updateRoomRepairStateListFlow(value)
+                // RepairViewModel.updateRoomRepairStateListFlow(value)
                 initRepairStateSpinner()
                 if(tempRepair.repairStateId != "") { bindRepairStateSpinner(tempRepair) }
             }
@@ -303,6 +303,9 @@ class EditRepairFragment() : Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
+                                RepairViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
+
+                                }
                             }
                         }
                         ResourceState.LOADING -> {
@@ -322,6 +325,8 @@ class EditRepairFragment() : Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 repairStateList = result.data
+                                RepairViewModel.updateRoomRepairStateListFlow(repairStateList).collect(){
+                                }
                             }
                         }
                         ResourceState.LOADING -> {
@@ -345,6 +350,8 @@ class EditRepairFragment() : Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 estStateList = result.data
+                                RepairViewModel.updateRoomEstStateListFlow(estStateList).collect(){
+                                }
                             }
                         }
                         ResourceState.LOADING -> {

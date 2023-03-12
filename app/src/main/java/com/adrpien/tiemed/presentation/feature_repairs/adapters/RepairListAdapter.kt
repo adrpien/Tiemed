@@ -25,7 +25,7 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
     override fun onBindViewHolder(holder: RepairViewHolder, position: Int) {
 
         // Sets colour of StateMarker
-        // TODO This implementation works terrible, because order of documents in Firestore Database changes when you add new document, but leave this as it is to focus on other problems to solve
+        // TODO Need to enhance setMarkerColour function
         fun setMarkerColour(repair: Repair) {
             if(repairStateList.isNotEmpty()) {
                 when (repair.repairStateId) {

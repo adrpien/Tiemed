@@ -48,7 +48,7 @@ class RepairListFragment: Fragment() {
     private var repairList: List<Repair> = listOf()
         set(value) {
             if(value.isNotEmpty()){
-                RepairListViewModel.updateRoomRepairListFlow(value)
+                // RepairListViewModel.updateRoomRepairListFlow(value)
                 field = value
                 preparedRepairList = value
                 prepareRepairList()
@@ -58,7 +58,7 @@ class RepairListFragment: Fragment() {
         set(value) {
             if(value.isNotEmpty()){
                 field = value
-                RepairListViewModel.updateRoomDeviceListFlow(value)
+                // RepairListViewModel.updateRoomDeviceListFlow(value)
                 updateRecyclerViewAdapter()
             }
         }
@@ -66,7 +66,7 @@ class RepairListFragment: Fragment() {
         set(value) {
             if(value.isNotEmpty()){
                 field =value
-                RepairListViewModel.updateRoomHospitalListFlow(value)
+                // RepairListViewModel.updateRoomHospitalListFlow(value)
                 updateRecyclerViewAdapter()
                 activity?.invalidateOptionsMenu()
             }
@@ -76,7 +76,7 @@ class RepairListFragment: Fragment() {
         set(value) {
             if(value.isNotEmpty()){
                 field =value
-                RepairListViewModel.updateRoomRepairStateListFlow(value)
+                // RepairListViewModel.updateRoomRepairStateListFlow(value)
                 updateRecyclerViewAdapter()
             }
         }
@@ -84,7 +84,7 @@ class RepairListFragment: Fragment() {
         set(value) {
             if(value.isNotEmpty()){
                 field =value
-                RepairListViewModel.updateRoomTechnicianListFlow(value)
+                // RepairListViewModel.updateRoomTechnicianListFlow(value)
                 updateRecyclerViewAdapter()
             }
         }
@@ -123,7 +123,6 @@ class RepairListFragment: Fragment() {
             }
         }
         override fun setOnRepairItemLongClick(itemView: View, position: Int) {
-            // TODO I don't know, i will use this one day
         }
     }
 
@@ -189,6 +188,9 @@ class RepairListFragment: Fragment() {
                                 binding.repairListLoadingPanel.visibility = View.INVISIBLE
                                 if (result.data != null) {
                                     repairList = result.data
+                                    RepairListViewModel.updateRoomRepairListFlow(repairList).collect(){
+                                    }
+
                                 }
                             }
                             ResourceState.ERROR -> {
@@ -196,8 +198,6 @@ class RepairListFragment: Fragment() {
                                 Log.d(REPAIR_LIST_FRAGMENT, "Repair list collecting error")
                             }
                         }
-
-
                     }
             }
         }
@@ -209,9 +209,8 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
-                                /* ********************** MENU ************************************************************ */
-                                // TODO I SEE ERROR HERE, SPINNER ADAPTER CAN BE CREATED  WHEN HOSPITAL LIST IS EMPTY
-                                // Need to wait
+                                RepairListViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
+                                }
                                 initMenu()
                             }
                         }
@@ -235,6 +234,8 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 deviceList = result.data
+                                RepairListViewModel.updateRoomDeviceListFlow(deviceList).collect(){
+                                }
                             }
                         }
                         ResourceState.LOADING -> {
@@ -258,6 +259,8 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 repairStateList = result.data
+                                RepairListViewModel.updateRoomRepairStateListFlow(repairStateList).collect(){
+                                }
                             }
                         }
                         ResourceState.LOADING -> {
@@ -281,6 +284,8 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 technicianList = result.data
+                                RepairListViewModel.updateRoomTechnicianListFlow(technicianList).collect(){
+                                }
                             }
                         }
                         ResourceState.LOADING -> {
@@ -423,22 +428,19 @@ class RepairListFragment: Fragment() {
     }
 
 
-    // TODO Sorting, filtering and grouping
+    // TODO Sorting, filtering and grouping to implement in RepairListFragment
     private fun groupRepairListItemClick() {
         Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
-
         // groupingCondition = getGroupingConditions()
         // groupRepairList(groupingCondition)
     }
     private fun filterRepairListItemClick() {
         Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
-
         // filteringCondition = getFilteringConditions()
         // filterRepairList(filteringCondition)
     }
     private fun sortRepairListItemClick() {
         Toast.makeText(requireActivity(),"Waiting for implementation", Toast.LENGTH_SHORT).show()
-
         // sortingConditions = getSortingConditions()
         // sortRepairList(sortingConditions)
     }

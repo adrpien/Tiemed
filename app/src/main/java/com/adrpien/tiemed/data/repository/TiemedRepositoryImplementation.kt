@@ -36,16 +36,9 @@ class  TiemedRepositoryImplementation(
     }
     override fun updateRoomDeviceList(deviceList: List<Device>): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        try {
-            tiemedDao.deleteAllDevices()
-            for (item in deviceList) {
-                tiemedDao.insertDevice(item.toDeviceEntity())
-            }
-        } catch (e: HttpException) {
-            emit(Resource(ResourceState.ERROR, null))
-        }
-        catch (e: HttpException) {
-            emit(Resource(ResourceState.ERROR, null))
+        tiemedDao.deleteAllDevices()
+        for (item in deviceList) {
+            tiemedDao.insertDevice(item.toDeviceEntity())
         }
         emit(Resource(ResourceState.SUCCESS, null))
 
@@ -110,19 +103,12 @@ class  TiemedRepositoryImplementation(
         emit(Resource(ResourceState.SUCCESS, null))
     }
     override fun updateRoomRepairList(repairList: List<Repair>): Flow<Resource<Boolean>> = flow {
-        emit(Resource(ResourceState.LOADING, null))
-        try {
-            tiemedDao.deleteAllRepairs()
-            for(item in repairList){
-                tiemedDao.insertRepair(item.toRepairEntity())
-            }
-        } catch (e: HttpException) {
-            emit(Resource(ResourceState.ERROR, null))
+        emit(Resource(ResourceState.LOADING, false))
+        tiemedDao.deleteAllRepairs()
+        for(item in repairList){
+            tiemedDao.insertRepair(item.toRepairEntity())
         }
-        catch (e: HttpException) {
-            emit(Resource(ResourceState.ERROR, null))
-        }
-        emit(Resource(ResourceState.SUCCESS, null))
+        emit(Resource(ResourceState.SUCCESS, true))
     }
     override fun updateRoomHospitalList(hospitalList: List<Hospital>): Flow<Resource<Boolean>> = flow {
         emit(Resource(ResourceState.LOADING, null))
