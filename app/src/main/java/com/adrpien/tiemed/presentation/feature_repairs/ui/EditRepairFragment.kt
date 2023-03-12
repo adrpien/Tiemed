@@ -25,6 +25,7 @@ import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
+import com.adrpien.tiemed.core.util.Helper
 import com.adrpien.tiemed.core.util.Helper.Companion.getDateString
 import com.adrpien.tiemed.databinding.FragmentRepairEditBinding
 import com.adrpien.tiemed.domain.model.*
@@ -176,12 +177,30 @@ class EditRepairFragment() : Fragment() {
             // lave empty here, i think
         }
     }
-    val datePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
+    val openingDatePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
             var date: Calendar = Calendar.getInstance()
             date.set(year, month, dayOfMonth)
             tempRepair.openingDate = date.timeInMillis.toString()
             binding.editRepairOpeningDateButton.setText(getDateString(date.timeInMillis))
+        }
+
+    }
+    val closingDatePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+            var date: Calendar = Calendar.getInstance()
+            date.set(year, month, dayOfMonth)
+            tempRepair.closingDate = date.timeInMillis.toString()
+            binding.editRepairClosingDateButton.setText(getDateString(date.timeInMillis))
+        }
+
+    }
+    val repairingDatePickerDialogListener = object : DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+            var date: Calendar = Calendar.getInstance()
+            date.set(year, month, dayOfMonth)
+            tempRepair.repairingDate = date.timeInMillis.toString()
+            binding.editRepairRepairingDateButton.setText(getDateString(date.timeInMillis))
         }
 
     }
@@ -369,7 +388,15 @@ class EditRepairFragment() : Fragment() {
 
         /* *************************** COMPONENTS INITIALIZATION ****************************************** */
         binding.editRepairOpeningDateButton.setOnClickListener {
-            val dialog = RepairDatePickerDialog()
+            val dialog = RepairDatePickerDialog(openingDatePickerDialogListener)
+            dialog.show(childFragmentManager, "repair_time_picker")
+        }
+        binding.editRepairClosingDateButton.setOnClickListener {
+            val dialog = RepairDatePickerDialog(closingDatePickerDialogListener)
+            dialog.show(childFragmentManager, "repair_time_picker")
+        }
+        binding.editRepairRepairingDateButton.setOnClickListener {
+            val dialog = RepairDatePickerDialog(repairingDatePickerDialogListener)
             dialog.show(childFragmentManager, "repair_time_picker")
         }
         binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
@@ -647,6 +674,10 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairSignatureImageButton.isEnabled = false
         binding.editRepairSignatureImageButton.isClickable = false
         binding.editRepairSignatureImageButton.isFocusable = false
+
+        binding.editRepairClosingDateButton.isEnabled = false
+        binding.editRepairClosingDateButton.isClickable = false
+        binding.editRepairClosingDateButton.isFocusable = false
     }
     private fun setComponentsToEditable() {
         binding.editRepairNameEditText.isEnabled = true
@@ -705,6 +736,10 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairOpeningDateButton.isClickable = true
         binding.editRepairOpeningDateButton.isFocusable = true
 
+        binding.editRepairClosingDateButton.isEnabled = true
+        binding.editRepairClosingDateButton.isClickable = true
+        binding.editRepairClosingDateButton.isFocusable = true
+
         binding.editRepairSignatureImageButton.isEnabled = true
         binding.editRepairSignatureImageButton.isClickable = true
         binding.editRepairSignatureImageButton.isFocusable = true
@@ -731,6 +766,15 @@ class EditRepairFragment() : Fragment() {
         binding.editRepairDefectDescriptionEditText.setText(repair.defectDescription)
         binding.editRepairRepairDescriptionEditText.setText(repair.repairDescription)
         binding.editRepairPartDescriptionEditText.setText(repair.partDescription)
+        if(repair.openingDate != "") {
+            binding.editRepairOpeningDateButton.setText(Helper.getDateString(repair.openingDate.toLong()))
+        }
+        if(repair.closingDate != "") {
+            binding.editRepairClosingDateButton.setText(Helper.getDateString(repair.closingDate.toLong()))
+        }
+        if(repair.repairingDate != "") {
+            binding.editRepairRepairingDateButton.setText(Helper.getDateString(repair.repairingDate.toLong()))
+        }
     }
     private fun bindDeviceData(device: Device) {
         binding.editRepairManufacturerEditText.setText(device.manufacturer)

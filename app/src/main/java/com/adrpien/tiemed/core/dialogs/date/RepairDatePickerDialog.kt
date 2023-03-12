@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import java.util.*
 
 
-class RepairDatePickerDialog: DialogFragment() {
+class RepairDatePickerDialog(val listener: DatePickerDialog.OnDateSetListener): DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -24,6 +24,6 @@ class RepairDatePickerDialog: DialogFragment() {
         beacuse MainActivity is component which should receive data from listener.
         Our Main Activity should be listener.
          */
-        return DatePickerDialog(requireActivity(), parentFragment as DatePickerDialog.OnDateSetListener, year, month, day)
+        return DatePickerDialog(requireActivity(), listener, year, month, day)
     }
 }
