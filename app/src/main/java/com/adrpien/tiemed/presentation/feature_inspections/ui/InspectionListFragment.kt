@@ -114,7 +114,7 @@ class InspectionListFragment() : Fragment(){
                     "editFlag" to false
                 )
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.repairDetailsFragmentContainerView, fragment)
+                    .replace(R.id.inspectionDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {

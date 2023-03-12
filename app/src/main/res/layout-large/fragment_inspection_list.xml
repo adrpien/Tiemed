@@ -39,7 +39,7 @@
 
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/inspectionDetailsContainerView"
+        android:id="@+id/inspectionDetailsFragmentContainerView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/verticalDivider"
         app:layout_constraintBottom_toBottomOf="parent"

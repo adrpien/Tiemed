@@ -1,6 +1,7 @@
 package com.adrpien.tiemed.core.dialogs.grouping_dialog
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,7 +11,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.core.dialogs.date.DatePickerDialog
 import android.app.DatePickerDialog.*
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import java.util.Calendar
@@ -32,9 +32,9 @@ class GroupingDialog: DialogFragment(), OnDateSetListener {
         val alertDialogButton = filteringDialogView.findViewById<Switch>(R.id.filteringAlertDialogDateButton)
         alertDialogButton.setOnClickListener {
             // Create TimePicker
-            val dialog = DatePickerDialog(Calendar.getInstance().timeInMillis)
+            // val dialog = DatePickerDialog(Calendar.getInstance().timeInMillis)
             // show MyTimePicker
-            dialog.show(childFragmentManager, "date_time_picker")
+            // dialog.show(childFragmentManager, "date_time_picker")
         }
         val alertDialogSwitch = filteringDialogView.findViewById<Switch>(R.id.alertDialogSortingSwitch)
         val builder = AlertDialog.Builder(activity)

@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.core.dialogs.date.RepairDatePickerDialog
 import com.adrpien.tiemed.core.dialogs.signature_dialog.SignatureDialog
 import com.adrpien.tiemed.core.util.Helper
 import com.adrpien.tiemed.core.util.Helper.Companion.getDateString
@@ -388,15 +387,15 @@ class EditRepairFragment() : Fragment() {
 
         /* *************************** COMPONENTS INITIALIZATION ****************************************** */
         binding.editRepairOpeningDateButton.setOnClickListener {
-            val dialog = RepairDatePickerDialog(openingDatePickerDialogListener)
+            val dialog = com.adrpien.tiemed.core.dialogs.date.TiemedDatePickerDialog(openingDatePickerDialogListener)
             dialog.show(childFragmentManager, "repair_time_picker")
         }
         binding.editRepairClosingDateButton.setOnClickListener {
-            val dialog = RepairDatePickerDialog(closingDatePickerDialogListener)
+            val dialog = com.adrpien.tiemed.core.dialogs.date.TiemedDatePickerDialog(closingDatePickerDialogListener)
             dialog.show(childFragmentManager, "repair_time_picker")
         }
         binding.editRepairRepairingDateButton.setOnClickListener {
-            val dialog = RepairDatePickerDialog(repairingDatePickerDialogListener)
+            val dialog = com.adrpien.tiemed.core.dialogs.date.TiemedDatePickerDialog(repairingDatePickerDialogListener)
             dialog.show(childFragmentManager, "repair_time_picker")
         }
         binding.editRepairHospitalSpinner.onItemSelectedListener = hospitalSpinnerListener
