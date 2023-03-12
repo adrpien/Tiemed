@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.core.dialogs.filtering_dialog.FilteringDialog
 import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
 import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
@@ -103,7 +102,7 @@ class RepairListFragment: Fragment() {
     private var sortingConditions: Bundle = bundleOf()
     private var groupingCondition: Bundle = bundleOf()
 
-    val RepairListViewModel by viewModels<RepairViewModel>()
+    val RepairViewModel by viewModels<RepairViewModel>()
 
     val recyclerViewListener: OnRepairItemClickListener = object: OnRepairItemClickListener {
         override fun setOnRepairItemClick(itemView: View, position: Int) {
@@ -115,7 +114,7 @@ class RepairListFragment: Fragment() {
                     "editFlag" to false
                     )
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.detailsFragmentContainerView, fragment)
+                    .replace(R.id.repairDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
@@ -128,9 +127,6 @@ class RepairListFragment: Fragment() {
 
 
     /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onPause() {
         super.onPause()
         updateRecyclerViewAdapter()
@@ -172,7 +168,7 @@ class RepairListFragment: Fragment() {
         // repairList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairListViewModel
+                RepairViewModel
                     .repairListStateFlow
                     .collect { result ->
                         when (result.resourceState) {
@@ -188,7 +184,7 @@ class RepairListFragment: Fragment() {
                                 binding.repairListLoadingPanel.visibility = View.INVISIBLE
                                 if (result.data != null) {
                                     repairList = result.data
-                                    RepairListViewModel.updateRoomRepairListFlow(repairList).collect(){
+                                    RepairViewModel.updateRoomRepairListFlow(repairList).collect(){
                                     }
 
                                 }
@@ -204,12 +200,12 @@ class RepairListFragment: Fragment() {
         // hospitalList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairListViewModel.hospitalListStateFlow.collect { result ->
+                RepairViewModel.hospitalListStateFlow.collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
-                                RepairListViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
+                                RepairViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
                                 }
                                 initMenu()
                             }
@@ -229,12 +225,12 @@ class RepairListFragment: Fragment() {
         // deviceList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairListViewModel.deviceListStateFlow.collect { result ->
+                RepairViewModel.deviceListStateFlow.collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 deviceList = result.data
-                                RepairListViewModel.updateRoomDeviceListFlow(deviceList).collect(){
+                                RepairViewModel.updateRoomDeviceListFlow(deviceList).collect(){
                                 }
                             }
                         }
@@ -254,12 +250,12 @@ class RepairListFragment: Fragment() {
         // repairStateList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairListViewModel.repairStateListStateFlow.collect { result ->
+                RepairViewModel.repairStateListStateFlow.collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 repairStateList = result.data
-                                RepairListViewModel.updateRoomRepairStateListFlow(repairStateList).collect(){
+                                RepairViewModel.updateRoomRepairStateListFlow(repairStateList).collect(){
                                 }
                             }
                         }
@@ -279,12 +275,12 @@ class RepairListFragment: Fragment() {
         // technician list
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairListViewModel.technicianListStateFlow.collect { result ->
+                RepairViewModel.technicianListStateFlow.collect { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 technicianList = result.data
-                                RepairListViewModel.updateRoomTechnicianListFlow(technicianList).collect(){
+                                RepairViewModel.updateRoomTechnicianListFlow(technicianList).collect(){
                                 }
                             }
                         }
@@ -300,6 +296,7 @@ class RepairListFragment: Fragment() {
                 }
             }
         }
+
         /* ********************** FAB BUTTON ******************************************** */
         // Adding new repair record
         binding.addRepairFABButton.setOnClickListener {
@@ -307,7 +304,7 @@ class RepairListFragment: Fragment() {
                 val fragment = EditRepairFragment()
                 fragment.arguments = bundleOf("isEditable" to true)
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.detailsFragmentContainerView, fragment)
+                    .replace(R.id.repairDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
@@ -354,6 +351,7 @@ class RepairListFragment: Fragment() {
                 )
         }
     }
+    // TODO prepareInspectionList() in RepairListFragment
     private fun prepareRepairList() {
         //filterRepairList(filteringCondition)
         //sortRepairList(sortingConditions)

@@ -10,7 +10,7 @@ class CreateInspection @Inject constructor (
     private val repository: TiemedRepository
 ) {
 
-    operator fun invoke(inspection:Inspection): Flow<Resource<String?>> {
+    operator fun invoke(inspection:Inspection): Flow<Resource<String>> {
         return repository.insertInspection(inspection)
     }
 }

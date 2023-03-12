@@ -3,21 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/inspectionListHospitalSpinner"
-        android:title="@string/repair_hospital_spinner"
+        android:title="@string/inspection_hospital_spinner"
+        app:actionViewClass="android.widget.Spinner"
         app:showAsAction="always" />
+
     <item
-        android:id="@+id/inspectionSortItemClick"
+        android:id="@+id/inspectionSortItem"
         android:icon="@drawable/sort_icon"
         android:title="@string/sort"
-        app:showAsAction="always" />
+        app:showAsAction="withText" />
     <item
-        android:id="@+id/inspectionGroupItemClick"
-        android:icon="@drawable/group_icon"
+        android:id="@+id/inspectionGroupItem"
         android:title="@string/groupitem"
-        app:showAsAction="always" />
+        app:showAsAction="withText"
+        android:icon="@drawable/group_icon"/>
     <item
-        android:id="@+id/inspectionFilterItemClick"
-        android:icon="@drawable/filter_icon"
+        android:id="@+id/inspectionFilterItem"
         android:title="@string/filterItem"
-        app:showAsAction="always" />
+        app:showAsAction="withText"
+        android:icon="@drawable/filter_icon"/>
+
+
 </menu>

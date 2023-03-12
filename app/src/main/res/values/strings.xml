@@ -76,4 +76,5 @@
     <string name="part_description">Part description</string>
     <string name="inspection_date">Inspection date</string>
     <string name="comment">Comment</string>
+    <string name="inspection_hospital_spinner">Inspection Hospital Spinner</string>
 </resources>

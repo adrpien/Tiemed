@@ -147,7 +147,7 @@ class  TiemedRepositoryImplementation(
     }.flatMapConcat {
         inspectionFlow(inspectionId)
     }
-    override fun insertInspection(inspection: Inspection): Flow<Resource<String?>> {
+    override fun insertInspection(inspection: Inspection): Flow<Resource<String>> {
         return firebaseApi.createInspection(inspection)
     }
     override fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> {
@@ -170,8 +170,7 @@ class  TiemedRepositoryImplementation(
     }
     override fun getRepair(repairId: String): Flow<Resource<Repair>> = flow {
         emit(Resource(ResourceState.LOADING, null))
-        val repair = null
-        //val repair = tiemedDao.getRepair(repairId).toRepair()
+        val repair = tiemedDao.getRepair(repairId).toRepair()
         emit(Resource(ResourceState.SUCCESS, repair))
     }.flatMapConcat {
         repairFlow(repairId)

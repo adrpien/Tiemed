@@ -20,7 +20,7 @@ interface TiemedRepository {
     /* ***** Inspections ************************************************************************ */
     fun getInspection(inspectionId: String): Flow<Resource<Inspection>>
     fun getInspectionList() : Flow<Resource<List<Inspection>>>
-    fun insertInspection (inspection: Inspection): Flow<Resource<String?>>
+    fun insertInspection (inspection: Inspection): Flow<Resource<String>>
     fun updateInspection (inspection: Inspection): Flow<Resource<Boolean>>
 
     /* ***** Repairs **************************************************************************** */

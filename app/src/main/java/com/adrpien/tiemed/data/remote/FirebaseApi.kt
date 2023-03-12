@@ -56,9 +56,9 @@ class  FirebaseApi(
                 Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection list fetch error")
             }
     }
-    fun createInspection(inspection: Inspection): Flow<Resource<String?>> = flow {
+    fun createInspection(inspection: Inspection): Flow<Resource<String>> = flow {
         // TODO Need to implement caching mechanism in createInspection fun in FirebaseApi
-        emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, ""))
         var documentReference = firebaseFirestore.collection("inspections")
             .document()
         var map = mapOf<String, String>(
@@ -81,14 +81,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, null))
+            emit(Resource(ResourceState.ERROR, ""))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Inspection record creation error")
 
         }
     }
     fun updateInspection(inspection: Inspection): Flow<Resource<Boolean>> = flow {
         // TODO Need to implement caching mechanism in updateInspection fun in FirebaseApi
-        emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, false))
         var map = mapOf<String, String>(
             "inspectionId" to inspection.inspectionId,
             "inspectionStateId" to inspection.inspectionStateId,
@@ -150,7 +150,7 @@ class  FirebaseApi(
     }
     fun createRepair(repair: Repair): Flow<Resource<String>> = flow {
         // TODO Need to implement caching mechanism in createRepair fun in FirebaseApi
-        emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, ""))
         var documentReference = firebaseFirestore.collection("repairs")
             .document()
         var map = mapOf<String, String>(
@@ -181,14 +181,14 @@ class  FirebaseApi(
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record created")
 
         } else {
-            emit(Resource(ResourceState.ERROR, documentReference.id))
+            emit(Resource(ResourceState.ERROR, ""))
             Log.d(TIEMED_REPOSITORY_DEBUG, "Repair record creation error")
 
         }
     }
     fun updateRepair(repair: Repair): Flow<Resource<Boolean>> = flow {
         // TODO Need to implement caching mechanism in updateRepair fun in FirebaseApi
-        emit(Resource(ResourceState.LOADING, null))
+        emit(Resource(ResourceState.LOADING, false))
         var map = mapOf<String, String>(
             "repairId" to repair.repairId,
             "repairStateId" to repair.repairStateId,
