@@ -6,6 +6,11 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="false" />
 
+    <!-- Some Chromebooks don't support touch.  -->
+    <uses-feature android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+
     <application
         android:name=".core.App"
         android:allowBackup="true"

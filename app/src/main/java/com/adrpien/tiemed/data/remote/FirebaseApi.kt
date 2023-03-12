@@ -335,6 +335,7 @@ class  FirebaseApi(
                     if (result.isSuccessful){
                         val data =  result.result
                         emit(Resource(ResourceState.SUCCESS, data))
+                        Log.d(TIEMED_REPOSITORY_DEBUG, "Signature fetch success")
                     } else {
                         emit(Resource(ResourceState.LOADING, null))
                         Log.d(TIEMED_REPOSITORY_DEBUG, "Signature fetch error")

@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Name"
-            app:layout_constraintStart_toEndOf="@id/repairRowIdTextView"
+            app:layout_constraintStart_toEndOf="@id/inspectionRowIdTextView"
             app:layout_constraintTop_toTopOf="parent" />
 <!--        Manufacturer -->
         <TextView
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_margin="5dp"
-            android:text="IN: "
+            android:text="Inventory number: "
             app:layout_constraintStart_toEndOf="@+id/inspectionRowSNTextView"
             app:layout_constraintTop_toBottomOf="@+id/inspectionRowManufacturerTextView" />
 <!--        Ward -->

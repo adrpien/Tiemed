@@ -38,7 +38,6 @@
                     android:layout_height="@dimen/default_height"
                     android:layout_marginEnd="20dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/edit_icon"
                     android:background="@android:color/transparent"/>
 
                 <ImageButton

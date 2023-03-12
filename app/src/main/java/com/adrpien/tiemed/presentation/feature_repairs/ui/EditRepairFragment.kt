@@ -264,13 +264,13 @@ class EditRepairFragment() : Fragment() {
             // signature
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    RepairViewModel.getSignatureFlow(repair.recipientSignatureId)
+                    RepairViewModel.getSignatureFlow(repairId)
                         .collect { result ->
                             when (result.resourceState) {
                                 ResourceState.SUCCESS -> {
                                     if (result.data != null) {
                                         signatureByteArray = result.data
-                                        if (tempSignatureByteArray.isEmpty()) {
+                                        if (tempSignatureByteArray.isNotEmpty()) {
                                             tempSignatureByteArray = signatureByteArray
                                         }
                                     }
@@ -385,12 +385,8 @@ class EditRepairFragment() : Fragment() {
                 updateTempRepair()
                 if (repairId != "") {
                     updateDevice()
-                    updateRepair()
-                    updateSignature()
                 } else {
-                    // TODO how to wait for deviceID ???????
                     createDevice()
-                    createSignature()
                 }
                 setComponentsToNotEditable()
                 binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
@@ -428,8 +424,10 @@ class EditRepairFragment() : Fragment() {
 
         if (isEditable) {
             setComponentsToEditable()
+            binding.editRepairEditSaveButton.setImageResource(R.drawable.accept_icon)
         } else {
             setComponentsToNotEditable()
+            binding.editRepairEditSaveButton.setImageResource(R.drawable.edit_icon)
         }
     }
 
@@ -445,6 +443,7 @@ class EditRepairFragment() : Fragment() {
                             if (result.data != null) {
                                 tempRepair.deviceId = result.data
                                 tempDevice.deviceId = result.data
+                                // createSignature()
                                 createRepair()
                             }
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create device success")
@@ -476,7 +475,8 @@ class EditRepairFragment() : Fragment() {
                             Toast.makeText(requireContext(), "Repair created!", Toast.LENGTH_SHORT).show()
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create repair success")
                             if(result.data != null) {
-                                tempRepair.recipientSignatureId = result.data
+                                //tempRepair.recipientSignatureId = result.data
+                                repairId = result.data
                                 tempRepair.repairId = result.data
                                 createSignature()
                             }
@@ -500,6 +500,10 @@ class EditRepairFragment() : Fragment() {
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
+                            if(result.data != null ) {
+                                //tempRepair.recipientSignatureId = result.data
+                                //createRepair()
+                            }
                         }
                         ResourceState.LOADING -> {
                             Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")
@@ -511,13 +515,24 @@ class EditRepairFragment() : Fragment() {
                 }
             }
         }
-
     }
 
     private fun updateDevice() {
         viewLifecycleOwner.lifecycleScope.launch(){
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.updateDeviceFlow(tempDevice).collect() {
+                RepairViewModel.updateDeviceFlow(tempDevice).collect() {result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update device success")
+                            updateRepair()
+                        }
+                        ResourceState.LOADING -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update device loading")
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update device error")
+                        }
+                    }
                 }
             }
         }
@@ -525,7 +540,19 @@ class EditRepairFragment() : Fragment() {
     private fun updateRepair() {
         viewLifecycleOwner.lifecycleScope.launch(){
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                RepairViewModel.updateRepairFlow(tempRepair).collect() {
+                RepairViewModel.updateRepairFlow(tempRepair).collect() { result ->
+                    when (result.resourceState) {
+                        ResourceState.SUCCESS -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update repair success")
+                            updateSignature()
+                        }
+                        ResourceState.LOADING -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update repair loading")
+                        }
+                        ResourceState.ERROR -> {
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update repair error")
+                        }
+                    }
                 }
             }
         }
@@ -536,16 +563,16 @@ class EditRepairFragment() : Fragment() {
                 RepairViewModel.updateSignatureFlow(tempRepair.repairId, tempSignatureByteArray).collect() { result ->
                     when (result.resourceState) {
                         ResourceState.SUCCESS -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature success")
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update signature success")
                             if (result.data != null) {
-                                tempRepair.recipientSignatureId = result.data
+                                //tempRepair.recipientSignatureId = result.data
                             }
                         }
                         ResourceState.LOADING -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature loading")
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update signature loading")
                         }
                         ResourceState.ERROR -> {
-                            Log.d(EDIT_REPAIR_FRAGMENT, "Create signature error")
+                            Log.d(EDIT_REPAIR_FRAGMENT, "Update signature error")
                         }
                     }
                 }

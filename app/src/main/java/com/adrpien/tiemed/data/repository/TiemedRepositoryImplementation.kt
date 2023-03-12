@@ -256,12 +256,11 @@ class  TiemedRepositoryImplementation(
 
     /* ********************************* SIGNATURES ********************************************* */
 
-    private fun signatureFlow(signatureId: String): Flow<Resource<String>> = flow {
+    private fun signatureFlow(signatureId: String): Flow<Resource<ByteArray>> = flow {
         firebaseApi.getSignature(signatureId)
-
     }
-    override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> = flow {
-        signatureFlow(signatureId)
+    override fun getSignature(signatureId: String): Flow<Resource<ByteArray>> {
+        return firebaseApi.getSignature(signatureId)
     }
     override fun updateSignature(signatureId: String, byteArray: ByteArray): Flow<Resource<String>> {
         return firebaseApi.uploadSignature(signatureId, byteArray)
