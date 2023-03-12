@@ -27,6 +27,7 @@
             android:id="@+id/inspectionRowIdTextView"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:clickable="false"
             android:text="ID"
             android:layout_margin="5dp"
@@ -37,6 +38,7 @@
             android:id="@+id/inspectionRowDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:text="Inspection date: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

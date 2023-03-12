@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrpien.tiemed.R
+import com.adrpien.tiemed.core.util.Helper
 import com.adrpien.tiemed.domain.model.Device
 import com.adrpien.tiemed.domain.model.Hospital
 import com.adrpien.tiemed.domain.model.Repair
@@ -83,29 +84,22 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
         holder.repairInNumberTextView.append(device?.inventoryNumber.toString())
         holder.repairRowWardTextView.setText(repairList[position].ward)
         setMarkerColour(repairList[position])
-        // holder.repairRowOpeningDateTextView.append(
-        //     com.adrpien.tiemed.presentation.feature_inspections.getDateString(
-        //         repairList[position].openingDate.toLong()
-        //     )
-        // )
-
+        if (repairList[position].openingDate != "") {
+            holder.repairRowOpeningDateTextView.setText(
+                "Opening date: " + Helper.getDateString(
+                    repairList[position].openingDate.toLong()
+                )
+            )
+        }
 
     }
 
-
-
-    // getItemCount implementation
     override fun getItemCount(): Int {
         return repairList.size
     }
 
-    // ViewHolder class implementation
     inner class RepairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-
-        // State marker
         val stateMarker = itemView.findViewById<View>(R.id.repairRowStateMarker)
-
-        // TextViews
         val repairRowOpeningDateTextView = itemView.findViewById<TextView>(R.id.repairRowOpeningDateTextView)
         val repairRowIdRepairTextView = itemView.findViewById<TextView>(R.id.repairRowIdTextView)
         val repairRowNameRepairTextView = itemView.findViewById<TextView>(R.id.repairRowNameTextView)
@@ -114,7 +108,6 @@ class RepairListAdapter(val repairList: List<Repair>, val hospitalList: List<Hos
         val repairRowSnNumberTextView = itemView.findViewById<TextView>(R.id.repairRowSNTextView)
         val repairInNumberTextView = itemView.findViewById<TextView>(R.id.repairRowINTextView)
         val repairRowWardTextView = itemView.findViewById<TextView>(R.id.repairRowWardTextView)
-
     }
 }
 
@@ -124,37 +117,5 @@ interface OnRepairItemClickListener{
     fun setOnRepairItemLongClick(itemView: View, position: Int)
 }
 
-// Returns date in format YYYY/MM/DD String representation using date in millis
-fun getDateString(date: String): String {
-
-    var text: String = ""
-
-    // Parsing millis in String to Calendar Object
-    val millis: Long = java.lang.Long.parseLong(date).toLong()
-    val date = Calendar.getInstance()
-    date.timeInMillis = millis
-
-    // Creating String with with date
-    val yearString = date.get(Calendar.YEAR). toString()
-
-    val month = date.get(Calendar.MONTH) + 1
-    val monthString = if(month<10){
-        "0" + month.toString()
-    } else {
-        month.toString()
-    }
-
-    val day = date.get(Calendar.DAY_OF_MONTH)
-    val dayString = if(date.get(Calendar.DAY_OF_MONTH)<10){
-        "0" + day.toString()
-    }
-    else {
-        day.toString()
-    }
-
-    text = "$yearString/$monthString/$dayString"
-
-    return text
-}
 
 
