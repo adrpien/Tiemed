@@ -71,7 +71,7 @@ class  FirebaseApi(
             "comment" to inspection.comment,
             "inspectionDate" to inspection.inspectionDate,
             "recipient" to inspection.recipient,
-            "signature" to inspection.recipientSignature,
+            "signatureId" to inspection.recipientSignature,
             "technicianId" to inspection.technicianId
         )
         val result = documentReference.set(map)
@@ -99,7 +99,7 @@ class  FirebaseApi(
             "comment" to inspection.comment,
             "inspectionDate" to inspection.inspectionDate,
             "recipient" to inspection.recipient,
-            "signature" to inspection.recipientSignature,
+            "signatureId" to inspection.recipientSignature,
             "technicianId" to inspection.technicianId
         )
         val documentReference = firebaseFirestore.collection("inspections").document(inspection.inspectionId)
@@ -162,7 +162,6 @@ class  FirebaseApi(
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
             "partDescription" to repair.partDescription,
-            "comment" to repair.comment,
             "estTestId" to repair.estStateId,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
@@ -172,7 +171,7 @@ class  FirebaseApi(
             "returnTechnicianId" to repair.returnTechnicianId,
             "rate" to repair.rate,
             "recipient" to repair.recipient,
-            "recipientSignatureId" to repair.repairId,
+            "signatureId" to repair.repairId,
         )
         val result = documentReference.set(map)
         result.await()
@@ -198,7 +197,6 @@ class  FirebaseApi(
             "defectDescription" to repair.defectDescription,
             "repairDescription" to repair.repairDescription,
             "partDescription" to repair.partDescription,
-            "comment" to repair.comment,
             "estStateId" to repair.estStateId,
             "closingDate" to repair.closingDate,
             "openingDate" to repair.openingDate,
@@ -208,7 +206,7 @@ class  FirebaseApi(
             "returnTechnicianId" to repair.returnTechnicianId,
             "rate" to repair.rate,
             "recipient" to repair.recipient,
-            "recipientSignature" to repair.recipientSignatureId,
+            "signatureId" to repair.recipientSignatureId,
         )
         val documentReference = firebaseFirestore.collection("repairs").document(repair.repairId)
         val result = documentReference.update(map)

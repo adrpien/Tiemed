@@ -264,35 +264,35 @@ class EditInspectionFragment() : Fragment() {
                 }
             }
             // signature
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    InspectionViewModel.getSignatureFlow(inspectionId)
-                        .collect { result ->
-                            when (result.resourceState) {
-                                ResourceState.SUCCESS -> {
-                                    if (result.data != null) {
-                                        signatureByteArray = result.data
-                                        if (tempSignatureByteArray.isNotEmpty()) {
-                                            tempSignatureByteArray = signatureByteArray
-                                        }
-                                    }
-                                }
-                                ResourceState.LOADING -> {
-                                    if (result.data != null) {
-                                        signatureByteArray = result.data
-                                        if (tempSignatureByteArray.isEmpty()) {
-                                            tempSignatureByteArray = signatureByteArray
-                                        }
-                                    }
-                                }
-                                ResourceState.ERROR -> {
-                                    Log.d(EDIT_REPAIR_FRAGMENT, "Signature collectin error")
-                                }
-
-                            }
-                        }
-                }
-            }
+           //  viewLifecycleOwner.lifecycleScope.launch {
+           //      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+           //          InspectionViewModel.getSignatureFlow(inspectionId)
+           //              .collect { result ->
+           //                  when (result.resourceState) {
+           //                      ResourceState.SUCCESS -> {
+           //                          if (result.data != null) {
+           //                              signatureByteArray = result.data
+           //                              if (tempSignatureByteArray.isNotEmpty()) {
+           //                                  tempSignatureByteArray = signatureByteArray
+           //                              }
+           //                          }
+           //                      }
+           //                      ResourceState.LOADING -> {
+           //                          if (result.data != null) {
+           //                              signatureByteArray = result.data
+           //                              if (tempSignatureByteArray.isEmpty()) {
+           //                                  tempSignatureByteArray = signatureByteArray
+           //                              }
+           //                          }
+           //                      }
+           //                      ResourceState.ERROR -> {
+           //                          Log.d(EDIT_REPAIR_FRAGMENT, "Signature collectin error")
+           //                      }
+//
+           //                  }
+           //              }
+           //      }
+           //  }
         }
         // hospitalList
         viewLifecycleOwner.lifecycleScope.launch {
@@ -319,6 +319,8 @@ class EditInspectionFragment() : Fragment() {
                 }
             }
         }
+
+        // TODO inspectionStateList does not work
         // inspectionStateList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -696,6 +698,7 @@ class EditInspectionFragment() : Fragment() {
     private fun bindInspectionData(inspection: Inspection) {
         binding.editInspectionIdTextView.setText("ID: "+ inspection.inspectionId)
         binding.editInspectionWardEditText.setText(inspection.ward)
+        binding.editInspectionCommentEditText.setText(inspection.comment)
         if(inspection.inspectionDate != "") {
             binding.editInspectionInspectionDateButton.setText(Helper.getDateString(inspection.inspectionDate.toLong()))
         }
