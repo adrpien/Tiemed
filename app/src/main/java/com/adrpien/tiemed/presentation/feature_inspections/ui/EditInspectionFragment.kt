@@ -320,7 +320,6 @@ class EditInspectionFragment() : Fragment() {
             }
         }
 
-        // TODO inspectionStateList does not work
         // inspectionStateList
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
