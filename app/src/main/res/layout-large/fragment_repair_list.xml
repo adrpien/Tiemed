@@ -49,7 +49,6 @@
         android:layout_height="0dp"
         android:layout_margin="20sp"
         tools:layout="@layout/fragment_repair_edit"/>
-
     <RelativeLayout
         android:id="@+id/repairListLoadingPanel"
         android:layout_width="match_parent"
@@ -57,7 +56,6 @@
         android:gravity="center"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="-352dp">
-
         <ProgressBar
             android:id="@+id/repairListLoadingBar"
             style="?android:attr/progressBarStyle"
@@ -65,8 +63,6 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="gone" />
-
     </RelativeLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

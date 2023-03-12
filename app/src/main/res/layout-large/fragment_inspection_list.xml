@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/list_row_inspection">
-
     </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -40,7 +39,7 @@
 
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/inspectionDetailsFragmentContainerView"
+        android:id="@+id/inspectionDetailsContainerView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/verticalDivider"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,8 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-416dp">
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="-352dp">
 
         <ProgressBar
             android:id="@+id/inspectionListLoadingBar"
@@ -65,8 +64,6 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="gone" />
-
     </RelativeLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

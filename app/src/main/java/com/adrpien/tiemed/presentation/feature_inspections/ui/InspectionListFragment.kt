@@ -165,7 +165,7 @@ class InspectionListFragment() : Fragment(){
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentInspectionListBinding.inflate(layoutInflater)
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        _binding = FragmentInspectionListBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -333,7 +333,7 @@ class InspectionListFragment() : Fragment(){
                 val fragment = EditInspectionFragment()
                 fragment.arguments = bundleOf("isEditable" to true)
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.inspectionDetailsFragmentContainerView, fragment)
+                    // .replace(R.id.inspectionDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
