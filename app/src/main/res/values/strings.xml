@@ -75,4 +75,5 @@
     <string name="filter_repair">Repair filter</string>
     <string name="part_description">Part description</string>
     <string name="inspection_date">Inspection date</string>
+    <string name="comment">Comment</string>
 </resources>
