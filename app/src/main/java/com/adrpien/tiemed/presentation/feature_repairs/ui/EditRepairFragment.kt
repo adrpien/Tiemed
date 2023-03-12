@@ -288,7 +288,7 @@ class EditRepairFragment() : Fragment() {
                                 ResourceState.SUCCESS -> {
                                     if (result.data != null) {
                                         signatureByteArray = result.data
-                                        if (tempSignatureByteArray.isNotEmpty()) {
+                                        if (tempSignatureByteArray.isEmpty()) {
                                             tempSignatureByteArray = signatureByteArray
                                         }
                                     }
