@@ -1,6 +1,7 @@
 package com.adrpien.tiemed.presentation.feature_repairs.ui
 
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -27,6 +28,8 @@ import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
 import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 import com.adrpien.tiemed.domain.model.*
+import com.adrpien.tiemed.presentation.feature_inspections.ui.EditInspectionFragment
+import com.adrpien.tiemed.presentation.feature_inspections.ui.InspectionListFragmentDirections
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -106,19 +109,27 @@ class RepairListFragment: Fragment() {
 
     val recyclerViewListener: OnRepairItemClickListener = object: OnRepairItemClickListener {
         override fun setOnRepairItemClick(itemView: View, position: Int) {
-            if (requireActivity().resources.configuration.screenLayout >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
-                val fragment = EditRepairFragment()
-                fragment.arguments = bundleOf(
-                    "repairId" to repairList[position].repairId,
-                    "deviceId" to repairList[position].deviceId,
-                    "editFlag" to false
-                    )
+            val bundle = bundleOf(
+                "repairId" to repairList[position].repairId,
+                "deviceId" to repairList[position].deviceId,
+                "editFlag" to false
+            )
+
+            val displayHeightInInches = (Resources.getSystem().displayMetrics.heightPixels) / (Resources.getSystem().displayMetrics.ydpi)
+            val displayWidthInInches = (Resources.getSystem().displayMetrics.widthPixels) / (Resources.getSystem().displayMetrics.xdpi)
+            val x = Math.pow(displayWidthInInches.toDouble(), 2.0)
+            val y = Math.pow(displayHeightInInches.toDouble(), 2.0)
+            val screenSizeInInches = Math.sqrt(x + y)
+
+            if (screenSizeInInches > 7 ) {
+                val fragment = EditInspectionFragment()
+                fragment.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(R.id.repairDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
-                findNavController().navigate(RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment())
+                findNavController().navigate(RepairListFragmentDirections.actionRepairListFragmentToEditRepairFragment().actionId, bundle)
             }
         }
         override fun setOnRepairItemLongClick(itemView: View, position: Int) {

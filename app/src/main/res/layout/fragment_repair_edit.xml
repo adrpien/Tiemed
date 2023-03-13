@@ -30,7 +30,8 @@
                     android:layout_height="@dimen/default_height"
                     android:gravity="center_vertical|start"
                     android:text="ID: "
-                    android:textSize="28sp"/>
+                    android:textSize="28sp"
+                    android:maxLines="1"/>
 
                 <ImageButton
                     android:id="@+id/editRepairEditSaveButton"

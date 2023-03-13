@@ -1,7 +1,9 @@
 package com.adrpien.tiemed.presentation.feature_inspections.ui
 
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -29,6 +31,7 @@ import com.adrpien.tiemed.presentation.feature_inspections.view_model.Inspection
 import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.math.pow
 
 @AndroidEntryPoint
 class InspectionListFragment() : Fragment(){
@@ -106,19 +109,27 @@ class InspectionListFragment() : Fragment(){
 
     val recyclerViewListener: OnInspectionItemClickListener = object: OnInspectionItemClickListener {
         override fun setOnInspectionItemClick(itemView: View, position: Int) {
-            if (requireActivity().resources.configuration.screenLayout >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            val bundle = bundleOf(
+                "inspectionId" to inspectionList[position].inspectionId,
+                "deviceId" to inspectionList[position].deviceId,
+                "editFlag" to false
+            )
+
+            val displayHeightInInches = (Resources.getSystem().displayMetrics.heightPixels) / (Resources.getSystem().displayMetrics.ydpi)
+            val displayWidthInInches = (Resources.getSystem().displayMetrics.widthPixels) / (Resources.getSystem().displayMetrics.xdpi)
+            val x = Math.pow(displayWidthInInches.toDouble(), 2.0)
+            val y = Math.pow(displayHeightInInches.toDouble(), 2.0)
+            val screenSizeInInches = Math.sqrt(x + y)
+
+            if (screenSizeInInches > 7 ) {
                 val fragment = EditInspectionFragment()
-                fragment.arguments = bundleOf(
-                    "inspectionId" to inspectionList[position].inspectionId,
-                    "deviceId" to inspectionList[position].deviceId,
-                    "editFlag" to false
-                )
+                fragment.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(R.id.inspectionDetailsFragmentContainerView, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
-                findNavController().navigate(InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment())
+                findNavController().navigate(InspectionListFragmentDirections.actionInspectionListFragmentToEditInspectionFragment().actionId, bundle)
             }
         }
         override fun setOnInspectionItemLongClick(itemView: View, position: Int) {
@@ -130,23 +141,6 @@ class InspectionListFragment() : Fragment(){
         // Options Menu configuration
         setHasOptionsMenu(true)
 
-    }
-
-    val listener: OnInspectionItemClickListener = object : OnInspectionItemClickListener {
-        // onInspectionItemClickListener interface implementation
-        // Fetching id of clicked record and startinng fragment
-        override fun setOnInspectionItemClick(itemView: View, position: Int) {
-            val fragment = EditInspectionFragment()
-            fragment.arguments = bundleOf("id" to inspectionList[position].inspectionId)
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.add(R.id.repairDetailsFragmentContainerView, fragment)
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-
-        override fun setOnInspectionItemLongClick(itemView: View, position: Int) {
-            // TODO Wait for implementation
-        }
     }
 
     /* *************************** LIFECYCLE FUNCTIONS ****************************************** */
