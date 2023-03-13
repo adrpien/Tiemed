@@ -3,7 +3,6 @@ package com.adrpien.tiemed.presentation.feature_inspections.ui
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -23,15 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
 import com.adrpien.tiemed.databinding.FragmentInspectionListBinding
-import com.adrpien.tiemed.core.dialogs.filtering_dialog.FilteringDialog
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_inspections.InspectionListAdapter
 import com.adrpien.tiemed.presentation.feature_inspections.OnInspectionItemClickListener
 import com.adrpien.tiemed.presentation.feature_inspections.view_model.InspectionViewModel
-import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlin.math.pow
 
 @AndroidEntryPoint
 class InspectionListFragment() : Fragment(){

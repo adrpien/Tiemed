@@ -25,7 +25,8 @@
     <fragment
         android:id="@+id/inspectionListFragment"
         android:name="com.adrpien.tiemed.presentation.feature_inspections.ui.InspectionListFragment"
-        android:label="InspectionListFragment" >
+        android:label="InspectionListFragment"
+        tools:layout="@layout/fragment_inspection_list">
         <action
             android:id="@+id/action_inspectionListFragment_to_editInspectionFragment"
             app:destination="@id/editInspectionFragment" />
@@ -39,4 +40,9 @@
             android:id="@+id/action_editInspectionFragment_to_inspectionListFragment"
             app:destination="@id/inspectionListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userPanelFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_user_panel.UserPanelFragment"
+        android:label="fragment_user_panel"
+        tools:layout="@layout/fragment_user_panel" />
 </navigation>

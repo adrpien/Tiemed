@@ -1,4 +1,4 @@
-package com.adrpien.tiemed.presentation.feature_users
+package com.adrpien.tiemed.presentation.feature_authentication
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

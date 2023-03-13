@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/repairListFragment"
-        android:title="Repairs" />
+        android:title="Repairs"
+        android:icon="@drawable/repair_icon"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/inspectionListFragment"
-        android:title="Inspections" />
+        android:title="Inspections"
+        android:icon="@drawable/inspection_icon"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/userPanelFragment"
+        android:title="User Panel"
+        android:icon="@drawable/user_icon"
+        app:showAsAction="ifRoom"/>
 </menu>

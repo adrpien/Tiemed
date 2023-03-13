@@ -24,12 +24,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrpien.dictionaryapp.core.util.ResourceState
 import com.adrpien.tiemed.R
-import com.adrpien.tiemed.presentation.feature_users.RepairListAdapter
-import com.adrpien.tiemed.presentation.feature_users.OnRepairItemClickListener
+import com.adrpien.tiemed.presentation.feature_authentication.RepairListAdapter
+import com.adrpien.tiemed.presentation.feature_authentication.OnRepairItemClickListener
 import com.adrpien.tiemed.databinding.FragmentRepairListBinding
 import com.adrpien.tiemed.domain.model.*
 import com.adrpien.tiemed.presentation.feature_inspections.ui.EditInspectionFragment
-import com.adrpien.tiemed.presentation.feature_inspections.ui.InspectionListFragmentDirections
 import com.adrpien.tiemed.presentation.feature_repairs.view_model.RepairViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

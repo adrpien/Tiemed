@@ -1,6 +1,5 @@
-package com.adrpien.tiemed.presentation.feature_users
+package com.adrpien.tiemed.presentation.feature_authentication
 
-import android.icu.util.Calendar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.feature_users.LoginActivity">
+    tools:context=".presentation.feature_authentication.LoginActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:name="com.adrpien.tiemed.presentation.feature_users.LoginFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_authentication.LoginFragment"
         android:id="@+id/loginFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

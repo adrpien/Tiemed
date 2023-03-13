@@ -33,7 +33,7 @@
             android:name=".main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.feature_users.LoginActivity"
+            android:name=".presentation.feature_authentication.LoginActivity"
             android:exported="false" />
     </application>
 
