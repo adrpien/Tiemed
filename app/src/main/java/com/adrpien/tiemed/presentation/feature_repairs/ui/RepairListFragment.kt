@@ -215,9 +215,9 @@ class RepairListFragment: Fragment() {
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
+                                initMenu()
                                 RepairViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
                                 }
-                                initMenu()
                             }
                         }
                         ResourceState.LOADING -> {

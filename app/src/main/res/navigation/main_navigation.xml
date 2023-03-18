@@ -42,7 +42,12 @@
     </fragment>
     <fragment
         android:id="@+id/userPanelFragment"
-        android:name="com.adrpien.tiemed.presentation.feature_user_panel.UserPanelFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_user_panel.ui.UserPanelFragment"
         android:label="fragment_user_panel"
         tools:layout="@layout/fragment_user_panel" />
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.adrpien.tiemed.presentation.feature_tasks.ui.TasksFragment"
+        android:label="fragment_tasks"
+        tools:layout="@layout/fragment_tasks" />
 </navigation>

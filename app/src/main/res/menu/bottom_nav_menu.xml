@@ -13,6 +13,11 @@
         android:icon="@drawable/inspection_icon"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/tasksFragment"
+        android:title="Tasks"
+        android:icon="@drawable/task_icon"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/userPanelFragment"
         android:title="User Panel"
         android:icon="@drawable/user_icon"

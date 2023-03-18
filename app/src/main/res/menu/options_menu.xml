@@ -16,5 +16,6 @@
                 android:id="@+id/aboutItem"
                 android:icon="@drawable/info_icon"
                 android:title="@string/about"
-                app:showAsAction="never|withText" />
+                app:showAsAction="never|withText"/>
+
 </menu>

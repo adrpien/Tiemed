@@ -224,9 +224,9 @@ class InspectionListFragment() : Fragment(){
                         ResourceState.SUCCESS -> {
                             if (result.data != null) {
                                 hospitalList = result.data
+                                initMenu()
                                 InspectionViewModel.updateRoomHospitalListFlow(hospitalList).collect(){
                                 }
-                                initMenu()
                             }
                         }
                         ResourceState.LOADING -> {
@@ -381,7 +381,7 @@ class InspectionListFragment() : Fragment(){
                     hospitalList.forEach {
                         spinnerHospitalList.add(it.hospitalName)
                     }
-                    hospitalSpinnerItem = menu.findItem(R.id.repairListHospitalSpinner)
+                    hospitalSpinnerItem = menu.findItem(R.id.inspectionListHospitalSpinner)
                     inspectionListHospitalSpinner = hospitalSpinnerItem.actionView as Spinner
                     val hospitalSpinnerAdapter = activity?.baseContext?.let { it ->
                         ArrayAdapter(
