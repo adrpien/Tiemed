@@ -773,7 +773,7 @@ class EditInspectionFragment() : Fragment() {
         binding.editInspectionInspectionStateSpinner.adapter = inspectionStateListArrayAdapter
 
     }
-    private fun initHospitalListSpinner() {
+    fun initHospitalListSpinner() {
         spinnerHospitalList.clear()
         for (item in hospitalList) {
             item.hospitalName.let {
